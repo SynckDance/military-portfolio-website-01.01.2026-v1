@@ -1,4 +1,4 @@
-const CACHE_NAME = 'emoghene-v2';
+const CACHE_NAME = 'emoghene-v3';
 const urlsToCache = [
   '/',
   '/index.html',
