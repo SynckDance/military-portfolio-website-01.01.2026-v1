@@ -82,6 +82,7 @@
       z-index: 10001;
       width: 0%;
       transition: width 0.1s linear;
+      pointer-events: none;
     }
 
     /* Header */
@@ -235,6 +236,8 @@
       padding: 80px 60px;
       max-width: 1400px;
       margin: 0 auto;
+      position: relative;
+      z-index: 20;
     }
 
     /* Article Image */
@@ -304,7 +307,15 @@
       cursor: pointer;
       transition: all 0.4s ease;
       position: relative;
-      z-index: 10;
+      z-index: 50;
+    }
+
+    .article-card * {
+      pointer-events: none;
+    }
+
+    .article-card-btn {
+      display: none;
     }
 
     .article-card:hover {
@@ -1109,6 +1120,7 @@
       background: linear-gradient(to bottom, transparent, var(--gray-300), transparent);
       z-index: 100;
       opacity: 0.5;
+      pointer-events: none;
     }
 
     .floating-dot {
@@ -1120,6 +1132,7 @@
       border-radius: 50%;
       z-index: 101;
       transition: top 0.1s ease;
+      pointer-events: none;
     }
 
     /* Responsive */
@@ -1387,7 +1400,7 @@
       <span class="section-title">LATEST TRANSMISSIONS</span>
     </div>
 
-    <article class="article-card fade-in visible" onclick="showArticle('confluence-technique')">
+    <div class="article-card fade-in visible" style="cursor:pointer;" onclick="document.getElementById('hero').style.display='none'; document.getElementById('articles-list').style.display='none'; document.getElementById('article-confluence-technique').classList.add('active'); window.scrollTo(0,0);">
       <div class="article-meta">
         <span class="article-date">JANUARY 2026</span>
         <span class="article-category">TECHNIQUE</span>
@@ -1399,14 +1412,14 @@
         </div>
         <h2>Confluence Dance Technique: Naming a Living Practice When the Names Are Already Taken</h2>
         <p class="article-excerpt">A rigorous training practice for dancers living inside shifting vocabularies and shifting definitions of legitimacy. It treats dance as steps and as intelligence, developing multirhythmic skill, repertoire fluency, and cultural responsibility through embodied research.</p>
-        <a class="read-more">
+        <span class="read-more">
           READ TRANSMISSION
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
             <path d="M5 12h14M12 5l7 7-7 7"/>
           </svg>
-        </a>
+        </span>
       </div>
-    </article>
+    </div>
   </section>
 
   <!-- Full Article View -->
@@ -1710,6 +1723,18 @@
       window.scrollTo(0, 0);
     }
 
+    // Show Article
+    function showArticle(id) {
+      document.getElementById('hero').style.display = 'none';
+      document.getElementById('articles-list').style.display = 'none';
+      document.getElementById('article-' + id).classList.add('active');
+      window.scrollTo(0, 0);
+      
+      // Load likes and comments if Supabase is ready
+      if (typeof loadLikes === 'function') loadLikes(id);
+      if (typeof loadComments === 'function') loadComments(id);
+    }
+
     // Share Functions
     function shareTwitter() {
       const url = encodeURIComponent(window.location.href);
@@ -1898,18 +1923,6 @@
         day: 'numeric', 
         year: 'numeric' 
       }).toUpperCase();
-    }
-
-    // Initialize on article view
-    function showArticle(id) {
-      document.getElementById('hero').style.display = 'none';
-      document.getElementById('articles-list').style.display = 'none';
-      document.getElementById('article-' + id).classList.add('active');
-      window.scrollTo(0, 0);
-      
-      // Load likes and comments
-      loadLikes(id);
-      loadComments(id);
     }
   </script>
 
