@@ -1,0 +1,1699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Clerk Authentication Protection -->
+  <script async crossorigin="anonymous" data-clerk-publishable-key="pk_test_bmF0aXZlLWFudGVhdGVyLTY3LmNsZXJrLmFjY291bnRzLmRldiQ" src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js" type="text/javascript"></script>
+  <script>
+    window.addEventListener('load', async () => {
+      if (window.Clerk) {
+        try { await window.Clerk.load(); if (!window.Clerk.user) { window.location.href = 'index.html'; } }
+        catch (err) { window.location.href = 'index.html'; }
+      } else { setTimeout(() => { if (!window.Clerk?.user) { window.location.href = 'index.html'; } }, 2000); }
+    });
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TRANSMISSIONS // EMOGHENE</title>
+  
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="EMOGHENE">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <meta name="description" content="Essays on dance, technology, embodied knowledge, and the politics of movement by Sinclair Emoghene.">
+  
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Space+Mono:wght@400;700&family=Orbitron:wght@400;500;700;900&display=swap');
+
+    :root {
+      --white: #ffffff;
+      --off-white: #fafafa;
+      --cream: #f5f5f0;
+      --black: #0a0a0a;
+      --gray-900: #1a1a1a;
+      --gray-700: #404040;
+      --gray-500: #6b6b6b;
+      --gray-300: #b0b0b0;
+      --gray-100: #e5e5e5;
+      --accent: #0a0a0a;
+      --font-serif: 'Cormorant Garamond', Georgia, serif;
+      --font-mono: 'Space Mono', monospace;
+      --font-display: 'Orbitron', sans-serif;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--white);
+      color: var(--black);
+      font-family: var(--font-serif);
+      line-height: 1.7;
+      cursor: default;
+      overflow-x: hidden;
+    }
+
+    ::selection {
+      background: var(--black);
+      color: var(--white);
+    }
+
+    /* Scroll Progress */
+    .scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 2px;
+      background: var(--black);
+      z-index: 10001;
+      width: 0%;
+      transition: width 0.1s linear;
+    }
+
+    /* Header */
+    .site-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 70px;
+      background: var(--white);
+      border-bottom: 1px solid var(--gray-100);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 60px;
+      z-index: 1000;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .site-header.scrolled {
+      box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+    }
+
+    .site-logo {
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 4px;
+      color: var(--black);
+      text-decoration: none;
+    }
+
+    .header-nav {
+      display: flex;
+      gap: 30px;
+    }
+
+    .header-nav a {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--gray-500);
+      text-decoration: none;
+      transition: color 0.3s;
+      text-transform: uppercase;
+    }
+
+    .header-nav a:hover {
+      color: var(--black);
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 25px;
+    }
+
+    .subscribe-btn {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 2px;
+      padding: 10px 20px;
+      background: var(--black);
+      color: var(--white);
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+
+    .subscribe-btn:hover {
+      background: var(--gray-700);
+    }
+
+    /* Hero Section */
+    .hero {
+      padding: 180px 60px 100px;
+      max-width: 1400px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .hero-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 4px;
+      color: var(--gray-500);
+      margin-bottom: 30px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .hero-label::before {
+      content: '';
+      width: 40px;
+      height: 1px;
+      background: var(--gray-300);
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: 64px;
+      font-weight: 900;
+      letter-spacing: 8px;
+      line-height: 1;
+      margin-bottom: 30px;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeUp 0.8s ease forwards 0.2s;
+    }
+
+    .hero-subtitle {
+      font-family: var(--font-serif);
+      font-size: 24px;
+      font-weight: 400;
+      font-style: italic;
+      color: var(--gray-700);
+      max-width: 600px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.8s ease forwards 0.4s;
+    }
+
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Decorative Elements */
+    .hero-decoration {
+      position: absolute;
+      top: 150px;
+      right: 60px;
+      width: 300px;
+      height: 300px;
+      opacity: 0.03;
+      pointer-events: none;
+    }
+
+    .hero-decoration svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Article List */
+    .articles-section {
+      padding: 80px 60px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    /* Article Image */
+    .article-image {
+      width: 100%;
+      height: 280px;
+      object-fit: cover;
+      filter: grayscale(1) contrast(1.1);
+      opacity: 0.7;
+      transition: all 0.5s ease;
+    }
+
+    .article-card:hover .article-image {
+      opacity: 0.9;
+      filter: grayscale(0.5) contrast(1.05);
+    }
+
+    .article-image-container {
+      overflow: hidden;
+      margin-bottom: 25px;
+    }
+
+    /* Full Article Image */
+    .article-feature-image {
+      width: 100%;
+      margin: 40px 0;
+      filter: grayscale(0.8) contrast(1.1);
+      opacity: 0.85;
+      transition: all 0.5s ease;
+    }
+
+    .article-feature-image:hover {
+      filter: grayscale(0.3) contrast(1);
+      opacity: 1;
+    }
+
+    .article-image-caption {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--gray-500);
+      margin-top: 10px;
+      letter-spacing: 1px;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 60px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--gray-100);
+    }
+
+    .section-title {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: var(--gray-500);
+    }
+
+    .article-card {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 60px;
+      padding: 60px 0;
+      border-bottom: 1px solid var(--gray-100);
+      cursor: pointer;
+      transition: all 0.4s ease;
+    }
+
+    .article-card:hover {
+      background: var(--off-white);
+      margin: 0 -30px;
+      padding: 60px 30px;
+    }
+
+    .article-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .article-date {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: var(--gray-500);
+    }
+
+    .article-category {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 2px;
+      color: var(--black);
+      padding: 6px 12px;
+      border: 1px solid var(--black);
+      display: inline-block;
+      width: fit-content;
+    }
+
+    .article-reading-time {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--gray-500);
+    }
+
+    .article-content h2 {
+      font-family: var(--font-serif);
+      font-size: 32px;
+      font-weight: 600;
+      line-height: 1.3;
+      margin-bottom: 20px;
+      transition: color 0.3s;
+    }
+
+    .article-card:hover .article-content h2 {
+      color: var(--gray-700);
+    }
+
+    .article-excerpt {
+      font-size: 17px;
+      color: var(--gray-700);
+      line-height: 1.8;
+    }
+
+    .read-more {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 25px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--black);
+      text-decoration: none;
+      transition: gap 0.3s;
+    }
+
+    .read-more:hover {
+      gap: 15px;
+    }
+
+    .read-more svg {
+      width: 20px;
+      height: 20px;
+      transition: transform 0.3s;
+    }
+
+    .article-card:hover .read-more svg {
+      transform: translateX(5px);
+    }
+
+    /* Full Article View */
+    .article-full {
+      display: none;
+      padding: 140px 60px 100px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .article-full.active {
+      display: block;
+    }
+
+    .article-back {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--gray-500);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 60px;
+      transition: color 0.3s;
+    }
+
+    .article-back:hover {
+      color: var(--black);
+    }
+
+    .article-header {
+      margin-bottom: 60px;
+      padding-bottom: 40px;
+      border-bottom: 1px solid var(--gray-100);
+    }
+
+    .article-header .article-category {
+      margin-bottom: 30px;
+    }
+
+    .article-header h1 {
+      font-family: var(--font-serif);
+      font-size: 48px;
+      font-weight: 600;
+      line-height: 1.2;
+      margin-bottom: 25px;
+    }
+
+    .article-header .deck {
+      font-family: var(--font-serif);
+      font-size: 22px;
+      font-style: italic;
+      color: var(--gray-700);
+      line-height: 1.5;
+    }
+
+    .article-info {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+      margin-top: 30px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--gray-500);
+    }
+
+    .article-info span {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Article Body */
+    .article-body {
+      font-size: 19px;
+      line-height: 1.9;
+    }
+
+    .article-body p {
+      margin-bottom: 1.8em;
+    }
+
+    .article-body h3 {
+      font-family: var(--font-serif);
+      font-size: 28px;
+      font-weight: 600;
+      margin: 2.5em 0 1em;
+    }
+
+    .article-body strong {
+      font-weight: 600;
+    }
+
+    .article-body blockquote {
+      font-size: 24px;
+      font-style: italic;
+      color: var(--gray-700);
+      border-left: 3px solid var(--black);
+      padding-left: 30px;
+      margin: 2.5em 0;
+      line-height: 1.6;
+    }
+
+    .article-body ul {
+      margin: 1.5em 0;
+      padding-left: 0;
+      list-style: none;
+    }
+
+    .article-body ul li {
+      position: relative;
+      padding-left: 25px;
+      margin-bottom: 0.8em;
+    }
+
+    .article-body ul li::before {
+      content: '—';
+      position: absolute;
+      left: 0;
+      color: var(--gray-500);
+    }
+
+    /* Pull Quote */
+    .pull-quote {
+      background: var(--cream);
+      padding: 50px;
+      margin: 3em -50px;
+      position: relative;
+    }
+
+    .pull-quote p {
+      font-size: 26px;
+      font-style: italic;
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    .pull-quote::before {
+      content: '"';
+      font-family: var(--font-serif);
+      font-size: 120px;
+      position: absolute;
+      top: 10px;
+      left: 30px;
+      color: var(--gray-300);
+      line-height: 1;
+    }
+
+    /* Notes Section */
+    .article-notes {
+      margin-top: 60px;
+      padding-top: 40px;
+      border-top: 1px solid var(--gray-100);
+    }
+
+    .article-notes h4 {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 2px;
+      margin-bottom: 20px;
+      color: var(--gray-500);
+    }
+
+    .article-notes ol {
+      padding-left: 20px;
+      font-size: 14px;
+      color: var(--gray-700);
+    }
+
+    .article-notes li {
+      margin-bottom: 10px;
+    }
+
+    /* Recommended Reading */
+    .recommended-reading {
+      margin-top: 40px;
+      padding: 40px;
+      background: var(--off-white);
+    }
+
+    .recommended-reading h4 {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 2px;
+      margin-bottom: 20px;
+      color: var(--gray-500);
+    }
+
+    .recommended-reading ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .recommended-reading li {
+      font-size: 15px;
+      margin-bottom: 12px;
+      padding-left: 0;
+    }
+
+    .recommended-reading li::before {
+      display: none;
+    }
+
+    .recommended-reading em {
+      font-style: italic;
+    }
+
+    /* Share Section */
+    .share-section {
+      margin-top: 60px;
+      padding: 40px 0;
+      border-top: 1px solid var(--gray-100);
+      border-bottom: 1px solid var(--gray-100);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .share-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--gray-500);
+    }
+
+    .like-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border: 1px solid var(--gray-200);
+      background: transparent;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 1px;
+    }
+
+    .like-btn:hover {
+      background: var(--cream);
+      border-color: var(--gray-300);
+    }
+
+    .like-btn.liked {
+      background: var(--black);
+      border-color: var(--black);
+      color: var(--white);
+    }
+
+    .like-btn svg {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.5;
+      transition: all 0.3s;
+    }
+
+    .like-btn.liked svg {
+      fill: var(--white);
+    }
+
+    .like-count {
+      font-weight: 700;
+    }
+
+    .share-buttons {
+      display: flex;
+      gap: 15px;
+    }
+
+    .share-btn {
+      width: 40px;
+      height: 40px;
+      border: 1px solid var(--gray-200);
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .share-btn:hover {
+      background: var(--black);
+      border-color: var(--black);
+    }
+
+    .share-btn:hover svg {
+      stroke: var(--white);
+    }
+
+    .share-btn svg {
+      width: 18px;
+      height: 18px;
+      stroke: var(--gray-700);
+      fill: none;
+      stroke-width: 1.5;
+    }
+
+    /* Join the Confluence */
+    .confluence-section {
+      margin-top: 80px;
+      padding: 60px;
+      background: var(--black);
+      color: var(--white);
+    }
+
+    .confluence-section h3 {
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: 4px;
+      margin-bottom: 15px;
+    }
+
+    .confluence-section p {
+      font-size: 16px;
+      color: var(--gray-300);
+      margin-bottom: 30px;
+      max-width: 500px;
+    }
+
+    .confluence-form {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .confluence-form textarea {
+      flex: 1;
+      min-width: 300px;
+      padding: 15px 20px;
+      background: transparent;
+      border: 1px solid var(--gray-700);
+      color: var(--white);
+      font-family: var(--font-serif);
+      font-size: 16px;
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .confluence-form textarea::placeholder {
+      color: var(--gray-500);
+    }
+
+    .confluence-form textarea:focus {
+      outline: none;
+      border-color: var(--white);
+    }
+
+    .confluence-submit {
+      padding: 15px 30px;
+      background: var(--white);
+      color: var(--black);
+      border: none;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 2px;
+      cursor: pointer;
+      transition: all 0.3s;
+      align-self: flex-end;
+    }
+
+    .confluence-submit:hover {
+      background: var(--gray-300);
+    }
+
+    /* Comments */
+    .comment-item {
+      padding: 20px 0;
+      border-bottom: 1px solid var(--gray-700);
+    }
+
+    .comment-item:last-child {
+      border-bottom: none;
+    }
+
+    .comment-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .comment-name {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 1px;
+      color: var(--white);
+    }
+
+    .comment-date {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--gray-500);
+    }
+
+    .comment-text {
+      font-family: var(--font-serif);
+      font-size: 15px;
+      color: var(--gray-300);
+      line-height: 1.6;
+    }
+
+    .no-comments {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--gray-500);
+      letter-spacing: 1px;
+    }
+
+    /* Newsletter Section */
+    .newsletter-section {
+      padding: 100px 60px;
+      background: var(--cream);
+      text-align: center;
+    }
+
+    .newsletter-content {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .newsletter-icon {
+      width: 60px;
+      height: 60px;
+      margin: 0 auto 30px;
+      border: 1px solid var(--black);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    .newsletter-icon svg {
+      width: 24px;
+      height: 24px;
+      stroke: var(--black);
+      fill: none;
+    }
+
+    .newsletter-title {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 4px;
+      margin-bottom: 15px;
+    }
+
+    .newsletter-text {
+      font-size: 17px;
+      color: var(--gray-700);
+      margin-bottom: 30px;
+    }
+
+    .newsletter-form {
+      display: flex;
+      gap: 0;
+      max-width: 450px;
+      margin: 0 auto;
+    }
+
+    .newsletter-form input {
+      flex: 1;
+      padding: 15px 20px;
+      border: 1px solid var(--black);
+      background: var(--white);
+      font-family: var(--font-mono);
+      font-size: 12px;
+    }
+
+    .newsletter-form input:focus {
+      outline: none;
+    }
+
+    .newsletter-form button {
+      padding: 15px 25px;
+      background: var(--black);
+      color: var(--white);
+      border: 1px solid var(--black);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 2px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .newsletter-form button:hover {
+      background: var(--gray-700);
+    }
+
+    /* Footer */
+    .site-footer {
+      padding: 60px;
+      background: var(--black);
+      color: var(--white);
+    }
+
+    .footer-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-logo {
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 4px;
+    }
+
+    .footer-nav {
+      display: flex;
+      gap: 30px;
+    }
+
+    .footer-nav a {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--gray-500);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .footer-nav a:hover {
+      color: var(--white);
+    }
+
+    /* Animations */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Floating Elements */
+    .floating-line {
+      position: fixed;
+      right: 30px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 1px;
+      height: 100px;
+      background: linear-gradient(to bottom, transparent, var(--gray-300), transparent);
+      z-index: 100;
+      opacity: 0.5;
+    }
+
+    .floating-dot {
+      position: fixed;
+      right: 27px;
+      width: 7px;
+      height: 7px;
+      background: var(--black);
+      border-radius: 50%;
+      z-index: 101;
+      transition: top 0.1s ease;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      html, body {
+        overflow-x: hidden;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .site-header {
+        padding: 0 20px;
+        height: 60px;
+      }
+
+      .header-nav {
+        display: none;
+      }
+
+      .site-logo {
+        font-size: 10px;
+        letter-spacing: 2px;
+      }
+
+      .subscribe-btn {
+        padding: 8px 15px;
+        font-size: 8px;
+      }
+
+      .hero {
+        padding: 100px 20px 40px;
+      }
+
+      .hero-title {
+        font-size: 28px;
+        letter-spacing: 4px;
+      }
+
+      .hero-subtitle {
+        font-size: 16px;
+      }
+
+      .hero-label {
+        font-size: 9px;
+        letter-spacing: 2px;
+      }
+
+      .articles-section {
+        padding: 40px 20px;
+      }
+
+      .section-header {
+        margin-bottom: 30px;
+      }
+
+      .article-card {
+        grid-template-columns: 1fr;
+        gap: 15px;
+        padding: 30px 0;
+      }
+
+      .article-card:hover {
+        margin: 0;
+        padding: 30px 0;
+        background: transparent;
+      }
+
+      .article-content h2 {
+        font-size: 22px;
+      }
+
+      .article-excerpt {
+        font-size: 15px;
+      }
+
+      .article-full {
+        padding: 80px 20px 40px;
+      }
+
+      .article-header h1 {
+        font-size: 26px;
+      }
+
+      .article-header .deck {
+        font-size: 17px;
+      }
+
+      .article-body {
+        font-size: 16px;
+      }
+
+      .article-body h3 {
+        font-size: 22px;
+      }
+
+      .article-body blockquote {
+        font-size: 18px;
+        padding-left: 20px;
+      }
+
+      .pull-quote {
+        margin: 2em -10px;
+        padding: 25px;
+      }
+
+      .pull-quote p {
+        font-size: 18px;
+      }
+
+      .pull-quote::before {
+        font-size: 80px;
+        left: 15px;
+      }
+
+      .share-section {
+        flex-direction: column;
+        gap: 20px;
+        align-items: flex-start;
+      }
+
+      .share-buttons {
+        width: 100%;
+        justify-content: flex-start;
+      }
+
+      .newsletter-section {
+        padding: 50px 20px;
+      }
+
+      .newsletter-title {
+        font-size: 14px;
+      }
+
+      .newsletter-text {
+        font-size: 15px;
+      }
+
+      .newsletter-form {
+        flex-direction: column;
+      }
+
+      .newsletter-form input,
+      .newsletter-form button {
+        width: 100%;
+      }
+
+      .confluence-section {
+        padding: 30px 20px;
+      }
+
+      .confluence-section h3 {
+        font-size: 18px;
+      }
+
+      .confluence-form {
+        flex-direction: column;
+      }
+
+      .confluence-form input,
+      .confluence-form textarea {
+        min-width: 100%;
+        width: 100%;
+      }
+
+      .confluence-submit {
+        width: 100%;
+      }
+
+      .footer-content {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+      }
+
+      .site-footer {
+        padding: 40px 20px;
+      }
+
+      .floating-line,
+      .floating-dot {
+        display: none;
+      }
+
+      .article-image {
+        height: 180px;
+      }
+
+      .recommended-reading {
+        padding: 25px;
+      }
+
+      .article-notes {
+        padding-top: 30px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="scroll-progress" id="scroll-progress"></div>
+
+  <div class="floating-line"></div>
+  <div class="floating-dot" id="floating-dot"></div>
+
+  <!-- Header -->
+  <header class="site-header" id="site-header">
+    <div class="header-left">
+      <a href="index.html" class="site-logo">EMOGHENE</a>
+      <nav class="header-nav">
+        <a href="about.html">DOSSIER</a>
+        <a href="labs-universe.html">LABS</a>
+        <a href="works.html">WORKS</a>
+        <a href="writing.html">WRITING</a>
+        <a href="transmissions.html" style="color: var(--black);">TRANSMISSIONS</a>
+      </nav>
+    </div>
+    <div class="header-right">
+      <a href="#newsletter" class="subscribe-btn">SUBSCRIBE</a>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero" id="hero">
+    <div class="hero-label">TRANSMISSIONS</div>
+    <h1 class="hero-title">TRANSMISSIONS</h1>
+    <p class="hero-subtitle">Essays on dance, technology, embodied knowledge, and the politics of movement.</p>
+    
+    <div class="hero-decoration">
+      <svg viewBox="0 0 200 200">
+        <circle cx="100" cy="100" r="80" stroke="currentColor" fill="none" stroke-width="0.5"/>
+        <circle cx="100" cy="100" r="60" stroke="currentColor" fill="none" stroke-width="0.5"/>
+        <circle cx="100" cy="100" r="40" stroke="currentColor" fill="none" stroke-width="0.5"/>
+        <line x1="100" y1="20" x2="100" y2="180" stroke="currentColor" stroke-width="0.5"/>
+        <line x1="20" y1="100" x2="180" y2="100" stroke="currentColor" stroke-width="0.5"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- Articles List -->
+  <section class="articles-section" id="articles-list">
+    <div class="section-header">
+      <span class="section-title">LATEST TRANSMISSIONS</span>
+    </div>
+
+    <article class="article-card fade-in" onclick="showArticle('confluence-technique')">
+      <div class="article-meta">
+        <span class="article-date">JANUARY 2026</span>
+        <span class="article-category">TECHNIQUE</span>
+        <span class="article-reading-time">12 min read</span>
+      </div>
+      <div class="article-content">
+        <div class="article-image-container">
+          <img src="confluence-technique.jpg" alt="Confluence Dance Technique class" class="article-image">
+        </div>
+        <h2>Confluence Dance Technique: Naming a Living Practice When the Names Are Already Taken</h2>
+        <p class="article-excerpt">A rigorous training practice for dancers living inside shifting vocabularies and shifting definitions of legitimacy. It treats dance as steps and as intelligence, developing multirhythmic skill, repertoire fluency, and cultural responsibility through embodied research.</p>
+        <a class="read-more">
+          READ TRANSMISSION
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+      </div>
+    </article>
+  </section>
+
+  <!-- Full Article View -->
+  <article class="article-full" id="article-confluence-technique">
+    <a href="#" class="article-back" onclick="hideArticle(); return false;">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M19 12H5M12 19l-7-7 7-7"/>
+      </svg>
+      BACK TO TRANSMISSIONS
+    </a>
+
+    <header class="article-header">
+      <span class="article-category">TECHNIQUE</span>
+      <h1>Confluence Dance Technique</h1>
+      <p class="deck">Naming a Living Practice When the Names Are Already Taken — Multirhythm, Repertoire, and Embodied Research in Dance Diffusion</p>
+      <div class="article-info">
+        <span>
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 6v6l4 2"/>
+          </svg>
+          12 min read
+        </span>
+        <span>JANUARY 2026</span>
+        <span>SINCLAIR EMOGHENE</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+      <figure>
+        <img src="confluence-technique.jpg" alt="Dancers in Confluence Dance Technique class" class="article-feature-image">
+        <figcaption class="article-image-caption">CONFLUENCE DANCE TECHNIQUE — UT AUSTIN, 2025</figcaption>
+      </figure>
+
+      <p>Confluence Dance Technique is a rigorous training practice for dancers living inside shifting vocabularies and shifting definitions of legitimacy. It treats dance as steps and as intelligence, developing multirhythmic skill, repertoire fluency, and cultural responsibility through embodied research into how dances travel and transform. A method, not a marketing category.</p>
+
+      <p>I have been struggling with the words modern dance and contemporary dance, not because I do not understand their histories, but because their meanings have become unstable in everyday use. Modern dance often refers to a specific American lineage built by early pioneers and later formalized through techniques, institutions, and aesthetic schools. Contemporary dance, meanwhile, is used in several different ways at once: as a concert dance category, as a commercial studio genre that blends jazz, ballet, and modern influences, and as a global catch-all for dance happening now. That multivalence creates a problem. The term sounds familiar, but it does not reliably tell you what is happening in the room.</p>
+
+      <div class="pull-quote">
+        <p>The label becomes a gate before the class even begins.</p>
+      </div>
+
+      <p>The naming problem becomes even sharper when the label "African dance" enters the space. In many contexts, the word African arrives carrying assumptions that flatten diversity into a single category, even when the speaker intends the opposite. "African dance" can unintentionally produce an exclusive-club effect, drawing some people in while signaling to others that they are outside of the conversation. It can also reduce the work to a narrow identity container, positioning the teacher as a specialist who cannot move across creative boundaries. The label becomes a gate before the class even begins.</p>
+
+      <p>I tried to move sideways into "contemporary Africa," but that phrase has also been reshaped by music and television industries into a commercial fusion aesthetic that does not match what I teach or practice. The result is an exhausting drift between conventions, market meanings, and academic canons. The vocabulary starts to force me to explain what I am not before I can name what I am.</p>
+
+      <p>So I want a different approach to naming. A term that describes a method without staking out genre territory. A practice that can be defined clearly, taught responsibly, and understood by a broad audience without being mistaken for something else.</p>
+
+      <p>What I teach is a technique and research environment built from traditions and movement logics that shaped me, and it extends outward through study into wider questions of how dances travel, transform, and persist across communities. I do not treat political borders as the best container for movement knowledge. My teaching is about diffusion, proximity, encounter, transformation, and survival. It is also about strength, timing, articulation, musical intelligence, and presence. I treat dance as steps, yes, but also as human intelligence.</p>
+
+      <p>The question is not simply, "What is this dance called?" The deeper question is: what does this practice do, and what does it train a dancer to become?</p>
+
+      <h3>What the Practice Is, in Plain Terms</h3>
+
+      <p>My technique class is built as layered training:</p>
+
+      <p><strong>The body as instrument</strong> — dynamic alignment, stamina, coordination, articulation, mobility, and power.</p>
+
+      <p><strong>Rhythm as intelligence</strong> — timing, pulse, phrasing, repetition as deep learning, and the relationship between movement and sound.</p>
+
+      <p><strong>Repertoire as knowledge</strong> — learning dances as embodied archives, with attention to origins, social function, and cultural logics.</p>
+
+      <p><strong>Improvisation as literacy</strong> — learning how movement generates choices, how bodies respond to music and to one another, and how style is carried through principles rather than surface imitation.</p>
+
+      <p><strong>Context as responsibility</strong> — investigating how dances live across human societies, from classical to traditional, from social to contemporary performance, and how power shapes what is seen, valued, and credited.</p>
+
+      <p>The goal is to train dancers who are not only physically capable, but also intellectually awake and ethically attentive. Dancers who can perform with clarity and joy, and who can also ask better questions about what they are doing, where it comes from, and what it means to move across lineages.</p>
+
+      <h3>Why Confluence Fits, and What It Risks</h3>
+
+      <p>A working term I am considering is Confluence Dance Technique.</p>
+
+      <p>Confluence names how dances actually operate in the world. Dances do not stay inside political boundaries. They move with people. They spread through migration, labor, trade, war, education, religion, popular culture, and social celebration. They influence one another through proximity and encounter. They evolve through repetition and remix. Confluence captures diffusion without pretending that a nation-state is the most accurate container for movement knowledge.</p>
+
+      <div class="pull-quote">
+        <p>Movement may be permeable, but power often is not.</p>
+      </div>
+
+      <p>But I also want to name what is potentially naive about confluence as an idea, because dance is rarely a neutral space. Confluence can sound like a welcoming, accept-all-forms philosophy. In perception, that can feel generous and expansive. In practice, dance spaces often reproduce asymmetrical power structures. They can center particular bodies, aesthetics, and lineages while pushing others to the margins. They can reward familiarity with dominant vocabularies and treat other ways of moving as raw material rather than knowledge. This is one of the foundational tensions inside the confluence concept: movement may be permeable, but power often is not.</p>
+
+      <p>For me, that tension is not a reason to abandon confluence. It is precisely why confluence is useful, because it gives us language for acknowledging dance as interpellative and permeable. By interpellative, I mean that dance "calls" bodies into relation and identity. It recruits, marks, persuades, disciplines, and invites. In Louis Althusser's formulation, interpellation describes how ideologies "hail" individuals into subject positions, often making those positions feel natural.¹ Dance does something similar: it hails the dancer into a relationship with a history, a community, an idea of virtuosity, and an idea of belonging. That calling can be liberatory, but it can also be coercive, depending on who controls the space and what is rewarded.</p>
+
+      <p>Naming confluence makes our conversations about dance fluidity more constructive, rather than dissolving into an everything-goes mentality. Confluence is not permission to flatten difference. It is a demand to study how difference travels, how it is absorbed, how it is resisted, and how it is transformed.</p>
+
+      <h3>Why Multirhythm Matters More Than Polyrhythm</h3>
+
+      <p>Rhythm has often been used as a marker that filters bodies into categories of "us" and "them." Who "has rhythm," who does not. Who is a cultural insider, who is not. These judgments can become segregation language. They can reproduce racial essentialism, including the lazy claim that Black people can dance and white people cannot. They can also exclude disabled, neurodivergent, and differently trained bodies by treating variation in timing, coordination, or response as deficiency rather than difference.</p>
+
+      <div class="pull-quote">
+        <p>Multirhythm names rhythmic intelligence as plural and learnable. It frames rhythm as an ecology rather than a test.</p>
+      </div>
+
+      <p>I choose multirhythm deliberately. Multirhythm names rhythmic intelligence as plural and learnable. It frames rhythm as an ecology rather than a test. It acknowledges that bodies arrive with different capacities, histories, sensory relationships, and cultural mappings of time, and that technique can meet dancers where they are while still demanding rigor. Multirhythm does not weaken the work. It clarifies the work. It signals that this practice trains dancers to develop complex timing relationships without turning rhythm into a gatekeeping tool or a myth about who belongs.</p>
+
+      <p>This distinction matters for what Confluence Dance Technique promises. The practice is rigorous. It asks for precision, stamina, and deep listening. But it refuses the old sorting languages that decided in advance which bodies could access that rigor and which could not.</p>
+
+      <h3>Confluence and the Contact Zone Problem</h3>
+
+      <p>I often place confluence adjacent to ideas like contact zones, collision metaphors, and frameworks of cross-cultural encounter that try to describe what happens when cultures meet. Mary Louise Pratt famously defines contact zones as social spaces where cultures meet, clash, and grapple with each other, often in contexts of highly asymmetrical relations of power.² This concept is valuable because it refuses romantic stories of exchange. It keeps conflict, inequality, extraction, and negotiation visible.</p>
+
+      <p>But some models of cultural encounter can also decapitate dance by treating it like an object that transfers cleanly from one bounded culture to another, or by imagining bodies as billiard balls that collide and then bounce away unchanged. Those models can be useful for naming appropriation and constraint. But they can also overemphasize restriction, boundaries, and marked zones, until the body becomes monitored rather than responsive, contained rather than creative.</p>
+
+      <p>Confluence insists on something simpler and more honest: dance has survived precisely because bodies adapt. Dancers absorb, translate, recompose, and produce. They learn through repetition, relation, and need. Confluence is not an escape from critique. It is a way to hold critique together with the reality that movement is relational by nature.</p>
+
+      <p>So when I say Confluence Dance Technique, I am not describing a utopia where all dances mix equally. I am naming a training practice that prepares dancers to recognize both realities at once: the permeability of movement and the politics of the spaces that movement enters.</p>
+
+      <h3>What Confluence Dance Technique Means in the Classroom</h3>
+
+      <p>If Confluence Dance Technique is going to be more than a beautiful phrase, it needs a definition that can be repeated consistently.</p>
+
+      <blockquote>Confluence Dance Technique is a rigorous training method that develops multirhythmic intelligence, grounded articulation, repertoire fluency, and cultural-historical literacy by studying how dance forms travel, transform, and sustain knowledge through bodies in relation.</blockquote>
+
+      <p>That definition makes a promise. The class is distinct from "African dance" as a narrowing label, from commercial "contemporary," and from abstract surveys of everything. It is a technique practice with a research ethic.</p>
+
+      <p><strong>How This Shows Up in Class</strong></p>
+
+      <ul>
+        <li>Conditioning and craft (strength, stamina, alignment, precision)</li>
+        <li>Multirhythm study (pulse, phrasing, layered timing, responsiveness)</li>
+        <li>Repertoire as embodied archive (repetition as deep learning)</li>
+        <li>Improvisation as culturally shaped problem-solving and relational decision-making</li>
+        <li>Context and responsibility (origins, social function, ethical questions of circulation)</li>
+      </ul>
+
+      <p>This is where the term confluence becomes a pedagogical tool. It opens the field into a larger question: what other ways does dance live that we have not yet investigated? Dance on stages, yes, and also dance in rituals, social spaces, nightlife, streets, churches, ceremonies, classrooms, and the everyday. Confluence invites dancers to treat those spaces as sites where technique, knowledge, and innovation are constantly being produced, equal to any concert stage.</p>
+
+      <h3>Toward a Consistent Lexicon</h3>
+
+      <p>Maybe the answer is not one perfect label. Maybe the answer is a label plus a definition that stays consistent every time it is used.</p>
+
+      <p>But the need is real, because names shape expectations. Names shape legitimacy. Names shape whether students enter the room ready to learn, or ready to misinterpret.</p>
+
+      <p>If Confluence Dance Technique is the term, then the task is to hold it to its standard: everything is structured, and structure includes power, history, and responsibility. Multirhythm reinforces that commitment by refusing the old sorting languages while still insisting on technical development.</p>
+
+      <p>And if the term evolves, the mission stays the same: to train dancers who are physically strong, multirhythmically sophisticated, culturally literate, and creatively expansive. Dancers who can move through the twenty-first century not just with skill, but with intelligence.</p>
+
+      <p>If Confluence Dance Technique works as a name, it is because it refuses to solve the naming problem by flattening difference. It keeps the difficulty visible. Dance travels, yes, but it does not travel evenly. Bodies absorb, yes, but institutions sort. This practice trains inside those tensions with clarity and responsibility rather than pretending they disappear.</p>
+
+      <p>I am continuing to refine this lexicon in public because language shapes what becomes possible in the studio. If you are a dancer, teacher, choreographer, or curious witness who has felt the confusion of inherited labels, I hope this offers a usable alternative: a method you can recognize in the body rather than a category to defend. Confluence is the invitation. The work is the training.</p>
+    </div>
+
+    <div class="article-notes">
+      <h4>NOTES</h4>
+      <ol>
+        <li>Louis Althusser, "Ideology and Ideological State Apparatuses (Notes Toward an Investigation)," in <em>Lenin and Philosophy and Other Essays</em>, trans. Ben Brewster (New York: Monthly Review Press, 1971).</li>
+        <li>Mary Louise Pratt, <em>Imperial Eyes: Travel Writing and Transculturation</em> (London: Routledge, 1992).</li>
+      </ol>
+    </div>
+
+    <div class="recommended-reading">
+      <h4>RECOMMENDED READING</h4>
+      <ul>
+        <li>Louis Althusser, "Ideology and Ideological State Apparatuses"</li>
+        <li>Mary Louise Pratt, <em>Imperial Eyes: Travel Writing and Transculturation</em></li>
+        <li>Diana Taylor, <em>The Archive and the Repertoire: Performing Cultural Memory in the Americas</em></li>
+        <li>Brenda Dixon Gottschild, <em>Digging the Africanist Presence in American Performance</em></li>
+        <li>Paul Gilroy, <em>The Black Atlantic: Modernity and Double Consciousness</em></li>
+      </ul>
+    </div>
+
+    <div class="share-section">
+      <div style="display: flex; align-items: center; gap: 20px;">
+        <button class="like-btn" id="like-btn" onclick="toggleLike('confluence-technique')">
+          <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          <span class="like-count" id="like-count">0</span>
+        </button>
+        <span class="share-label">SHARE THIS TRANSMISSION</span>
+      </div>
+      <div class="share-buttons">
+        <button class="share-btn" onclick="shareTwitter()" title="Share on X">
+          <svg viewBox="0 0 24 24"><path d="M4 4l6.5 8L4 20h2l5.5-7 4.5 7h6l-7-9 6-7h-2l-5 6-4-6H4z"/></svg>
+        </button>
+        <button class="share-btn" onclick="shareLinkedIn()" title="Share on LinkedIn">
+          <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6zM2 9h4v12H2zM4 2a2 2 0 110 4 2 2 0 010-4z"/></svg>
+        </button>
+        <button class="share-btn" onclick="shareEmail()" title="Share via Email">
+          <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><path d="M22 6l-10 7L2 6"/></svg>
+        </button>
+        <button class="share-btn" onclick="copyLink()" title="Copy Link">
+          <svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="confluence-section">
+      <h3>JOIN THE CONFLUENCE</h3>
+      <p>Responses, questions, provocations. This is an open conversation about naming, method, and the politics of dance practice.</p>
+      
+      <!-- Comments Display -->
+      <div id="comments-list" style="margin-bottom: 30px;"></div>
+      
+      <div class="confluence-form" id="comment-form">
+        <input type="text" id="comment-name" placeholder="Your name" style="flex: 1; min-width: 150px; padding: 15px 20px; background: transparent; border: 1px solid var(--gray-700); color: var(--white); font-family: var(--font-serif); font-size: 16px;">
+        <textarea id="comment-text" placeholder="Enter the confluence..."></textarea>
+        <button class="confluence-submit" type="button" onclick="submitComment('confluence-technique')">SUBMIT</button>
+      </div>
+    </div>
+  </article>
+
+  <!-- Newsletter Section -->
+  <section class="newsletter-section" id="newsletter">
+    <div class="newsletter-content">
+      <div class="newsletter-icon">
+        <svg viewBox="0 0 24 24" stroke-width="1.5">
+          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+          <path d="M22 6l-10 7L2 6"/>
+        </svg>
+      </div>
+      <h2 class="newsletter-title">RECEIVE TRANSMISSIONS</h2>
+      <p class="newsletter-text">Essays on dance, embodied knowledge, and the circulation of movement. Delivered when there is something worth saying.</p>
+      <form class="newsletter-form" onsubmit="handleSubscribe(event)">
+        <input type="email" placeholder="your@email.com" required>
+        <button type="submit">SUBSCRIBE</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-content">
+      <span class="footer-logo">SINCLAIR EMOGHENE</span>
+      <nav class="footer-nav">
+        <a href="about.html">DOSSIER</a>
+        <a href="labs-universe.html">LABS</a>
+        <a href="works.html">WORKS</a>
+        <a href="contact.html">CONTACT</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll Progress
+    window.addEventListener('scroll', () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = (scrollTop / docHeight) * 100;
+      document.getElementById('scroll-progress').style.width = progress + '%';
+
+      // Floating dot
+      const dot = document.getElementById('floating-dot');
+      if (dot) {
+        const dotPos = 30 + (progress / 100) * (window.innerHeight - 60);
+        dot.style.top = dotPos + 'px';
+      }
+
+      // Header shadow
+      const header = document.getElementById('site-header');
+      if (scrollTop > 50) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    });
+
+    // Fade in on scroll
+    const fadeElements = document.querySelectorAll('.fade-in');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    fadeElements.forEach(el => observer.observe(el));
+
+    // Hide Article
+    function hideArticle() {
+      document.querySelectorAll('.article-full').forEach(el => el.classList.remove('active'));
+      document.getElementById('hero').style.display = 'block';
+      document.getElementById('articles-list').style.display = 'block';
+      window.scrollTo(0, 0);
+    }
+
+    // Share Functions
+    function shareTwitter() {
+      const url = encodeURIComponent(window.location.href);
+      const text = encodeURIComponent('Confluence Dance Technique: Naming a Living Practice When the Names Are Already Taken');
+      window.open(`https://twitter.com/intent/tweet?url=${url}&text=${text}`, '_blank');
+    }
+
+    function shareLinkedIn() {
+      const url = encodeURIComponent(window.location.href);
+      window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}`, '_blank');
+    }
+
+    function shareEmail() {
+      const subject = encodeURIComponent('Confluence Dance Technique — Sinclair Emoghene');
+      const body = encodeURIComponent('Read this essay on dance, naming, and method: ' + window.location.href);
+      window.location.href = `mailto:?subject=${subject}&body=${body}`;
+    }
+
+    function copyLink() {
+      navigator.clipboard.writeText(window.location.href);
+      alert('Link copied to clipboard');
+    }
+
+    // Page Transitions
+    document.querySelectorAll('a').forEach(link => {
+      if (link.hostname === window.location.hostname && !link.getAttribute('onclick')) {
+        link.addEventListener('click', (e) => {
+          const href = link.getAttribute('href');
+          if (href && !href.startsWith('#') && !href.startsWith('mailto')) {
+            e.preventDefault();
+            document.body.style.opacity = '0';
+            document.body.style.transition = 'opacity 0.3s';
+            setTimeout(() => window.location.href = href, 300);
+          }
+        });
+      }
+    });
+
+    // Initial fade in
+    document.body.style.opacity = '0';
+    window.addEventListener('load', () => {
+      document.body.style.transition = 'opacity 0.5s';
+      document.body.style.opacity = '1';
+    });
+
+    // Register Service Worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js')
+        .then(reg => console.log('SW registered'))
+        .catch(err => console.log('SW registration failed:', err));
+    }
+
+    // Supabase Setup
+    const SUPABASE_URL = 'https://sgwmwjhieycbowwiixym.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_fQhNRry2M6SO8UgVt4BwAg_iA9kxouk';
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    // Load likes count
+    async function loadLikes(articleId) {
+      const { count, error } = await supabase
+        .from('article_likes')
+        .select('*', { count: 'exact', head: true })
+        .eq('article_id', articleId);
+      
+      if (!error) {
+        document.getElementById('like-count').textContent = count || 0;
+      }
+      
+      // Check if already liked (stored in localStorage)
+      if (localStorage.getItem(`liked_${articleId}`)) {
+        document.getElementById('like-btn').classList.add('liked');
+      }
+    }
+
+    // Toggle like
+    async function toggleLike(articleId) {
+      const btn = document.getElementById('like-btn');
+      const countEl = document.getElementById('like-count');
+      const isLiked = localStorage.getItem(`liked_${articleId}`);
+      
+      if (isLiked) {
+        // Already liked - can't unlike (keeps it simple)
+        return;
+      }
+      
+      // Add like
+      const { error } = await supabase
+        .from('article_likes')
+        .insert({ article_id: articleId });
+      
+      if (!error) {
+        localStorage.setItem(`liked_${articleId}`, 'true');
+        btn.classList.add('liked');
+        countEl.textContent = parseInt(countEl.textContent) + 1;
+      }
+    }
+
+    // Load comments
+    async function loadComments(articleId) {
+      const { data, error } = await supabase
+        .from('article_comments')
+        .select('*')
+        .eq('article_id', articleId)
+        .order('created_at', { ascending: false });
+      
+      const container = document.getElementById('comments-list');
+      
+      if (error || !data || data.length === 0) {
+        container.innerHTML = '<p class="no-comments">NO TRANSMISSIONS YET. BE THE FIRST TO RESPOND.</p>';
+        return;
+      }
+      
+      container.innerHTML = data.map(comment => `
+        <div class="comment-item">
+          <div class="comment-header">
+            <span class="comment-name">${escapeHtml(comment.name)}</span>
+            <span class="comment-date">${formatDate(comment.created_at)}</span>
+          </div>
+          <p class="comment-text">${escapeHtml(comment.comment)}</p>
+        </div>
+      `).join('');
+    }
+
+    // Submit comment
+    async function submitComment(articleId) {
+      const nameEl = document.getElementById('comment-name');
+      const textEl = document.getElementById('comment-text');
+      const name = nameEl.value.trim();
+      const comment = textEl.value.trim();
+      
+      if (!name || !comment) {
+        alert('Please enter your name and comment.');
+        return;
+      }
+      
+      const { error } = await supabase
+        .from('article_comments')
+        .insert({ article_id: articleId, name, comment });
+      
+      if (error) {
+        alert('Error submitting comment. Please try again.');
+        return;
+      }
+      
+      nameEl.value = '';
+      textEl.value = '';
+      loadComments(articleId);
+    }
+
+    // Subscribe to newsletter
+    async function handleSubscribe(e) {
+      e.preventDefault();
+      const emailEl = e.target.querySelector('input');
+      const email = emailEl.value.trim();
+      
+      if (!email) return;
+      
+      const { error } = await supabase
+        .from('subscribers')
+        .insert({ email });
+      
+      if (error) {
+        if (error.code === '23505') {
+          alert('You are already subscribed!');
+        } else {
+          alert('Error subscribing. Please try again.');
+        }
+        return;
+      }
+      
+      alert('Thank you for subscribing. Transmissions incoming.');
+      emailEl.value = '';
+    }
+
+    // Utility functions
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function formatDate(dateStr) {
+      const date = new Date(dateStr);
+      return date.toLocaleDateString('en-US', { 
+        month: 'short', 
+        day: 'numeric', 
+        year: 'numeric' 
+      }).toUpperCase();
+    }
+
+    // Initialize on article view
+    function showArticle(id) {
+      document.getElementById('hero').style.display = 'none';
+      document.getElementById('articles-list').style.display = 'none';
+      document.getElementById('article-' + id).classList.add('active');
+      window.scrollTo(0, 0);
+      
+      // Load likes and comments
+      loadLikes(id);
+      loadComments(id);
+    }
+  </script>
+
+</body>
+</html>
