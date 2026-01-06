@@ -1,0 +1,2162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Clerk Authentication Protection -->
+  <script async crossorigin="anonymous" data-clerk-publishable-key="pk_test_bmF0aXZlLWFudGVhdGVyLTY3LmNsZXJrLmFjY291bnRzLmRldiQ" src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js" type="text/javascript"></script>
+  <script>
+    window.addEventListener('load', async () => {
+      if (window.Clerk) {
+        try { await window.Clerk.load(); if (!window.Clerk.user) { window.location.href = 'index.html'; } }
+        catch (err) { window.location.href = 'index.html'; }
+      } else { setTimeout(() => { if (!window.Clerk?.user) { window.location.href = 'index.html'; } }, 2000); }
+    });
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TRANSMISSIONS // EMOGHENE</title>
+  
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="EMOGHENE">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <meta name="description" content="Essays on dance, technology, embodied knowledge, and the politics of movement by Sinclair Emoghene.">
+  
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Space+Mono:wght@400;700&family=Orbitron:wght@400;500;700;900&display=swap');
+
+    :root {
+      --white: #ffffff;
+      --off-white: #fafafa;
+      --cream: #f5f5f0;
+      --black: #0a0a0a;
+      --gray-900: #1a1a1a;
+      --gray-700: #404040;
+      --gray-500: #6b6b6b;
+      --gray-300: #b0b0b0;
+      --gray-100: #e5e5e5;
+      --accent: #0a0a0a;
+      --font-serif: 'Cormorant Garamond', Georgia, serif;
+      --font-mono: 'Space Mono', monospace;
+      --font-display: 'Orbitron', sans-serif;
+      /* Military colors */
+      --mil-bg: #0a0a0a;
+      --mil-white: #e0e0e0;
+      --mil-white-dim: rgba(255,255,255,0.5);
+      --mil-white-faint: rgba(255,255,255,0.1);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--white);
+      color: var(--black);
+      font-family: var(--font-serif);
+      line-height: 1.7;
+      cursor: default;
+      overflow-x: hidden;
+    }
+
+    ::selection {
+      background: var(--black);
+      color: var(--white);
+    }
+
+    /* Scroll Progress */
+    .scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 2px;
+      background: var(--black);
+      z-index: 10001;
+      width: 0%;
+      transition: width 0.1s linear;
+      pointer-events: none;
+    }
+
+    /* Header */
+    .site-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 70px;
+      background: var(--white);
+      border-bottom: 1px solid var(--gray-100);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 60px;
+      z-index: 1000;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .site-header.scrolled {
+      box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+    }
+
+    .site-logo {
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 4px;
+      color: var(--black);
+      text-decoration: none;
+    }
+
+    .header-nav {
+      display: flex;
+      gap: 30px;
+    }
+
+    .header-nav a {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--gray-500);
+      text-decoration: none;
+      transition: color 0.3s;
+      text-transform: uppercase;
+    }
+
+    .header-nav a:hover {
+      color: var(--black);
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 25px;
+    }
+
+    .subscribe-btn {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 2px;
+      padding: 10px 20px;
+      background: var(--black);
+      color: var(--white);
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+
+    .subscribe-btn:hover {
+      background: var(--gray-700);
+    }
+
+    /* Hero Section */
+    .hero {
+      padding: 180px 60px 100px;
+      max-width: 1400px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .hero-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 4px;
+      color: var(--gray-500);
+      margin-bottom: 30px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .hero-label::before {
+      content: '';
+      width: 40px;
+      height: 1px;
+      background: var(--gray-300);
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: 64px;
+      font-weight: 900;
+      letter-spacing: 8px;
+      line-height: 1;
+      margin-bottom: 30px;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeUp 0.8s ease forwards 0.2s;
+    }
+
+    .hero-subtitle {
+      font-family: var(--font-serif);
+      font-size: 24px;
+      font-weight: 400;
+      font-style: italic;
+      color: var(--gray-700);
+      max-width: 600px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.8s ease forwards 0.4s;
+    }
+
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Decorative Elements */
+    .hero-decoration {
+      position: absolute;
+      top: 150px;
+      right: 60px;
+      width: 300px;
+      height: 300px;
+      opacity: 0.03;
+      pointer-events: none;
+    }
+
+    .hero-decoration svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Article List */
+    .articles-section {
+      padding: 80px 60px;
+      max-width: 1400px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 20;
+    }
+
+    /* Article Image */
+    .article-image {
+      width: 100%;
+      height: 280px;
+      object-fit: cover;
+      filter: grayscale(1) contrast(1.1);
+      opacity: 0.7;
+      transition: all 0.5s ease;
+    }
+
+    .article-card:hover .article-image {
+      opacity: 0.9;
+      filter: grayscale(0.5) contrast(1.05);
+    }
+
+    .article-image-container {
+      overflow: hidden;
+      margin-bottom: 25px;
+    }
+
+    /* Full Article Image */
+    .article-feature-image {
+      width: 100%;
+      margin: 40px 0;
+      filter: grayscale(0.8) contrast(1.1);
+      opacity: 0.85;
+      transition: all 0.5s ease;
+    }
+
+    .article-feature-image:hover {
+      filter: grayscale(0.3) contrast(1);
+      opacity: 1;
+    }
+
+    .article-image-caption {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--gray-500);
+      margin-top: 10px;
+      letter-spacing: 1px;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 60px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--gray-100);
+    }
+
+    .section-title {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: var(--gray-500);
+    }
+
+    .article-card {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 60px;
+      padding: 60px 0;
+      border-bottom: 1px solid var(--gray-100);
+      cursor: pointer;
+      transition: all 0.4s ease;
+      position: relative;
+      z-index: 50;
+    }
+
+    .article-card * {
+      pointer-events: none;
+    }
+
+    .article-card-btn {
+      display: none;
+    }
+
+    .article-card:hover {
+      background: var(--off-white);
+      margin: 0 -30px;
+      padding: 60px 30px;
+    }
+
+    .article-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .article-date {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: var(--gray-500);
+    }
+
+    .article-category {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 2px;
+      color: var(--black);
+      padding: 6px 12px;
+      border: 1px solid var(--black);
+      display: inline-block;
+      width: fit-content;
+    }
+
+    .article-reading-time {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--gray-500);
+    }
+
+    .article-content h2 {
+      font-family: var(--font-serif);
+      font-size: 32px;
+      font-weight: 600;
+      line-height: 1.3;
+      margin-bottom: 20px;
+      transition: color 0.3s;
+    }
+
+    .article-card:hover .article-content h2 {
+      color: var(--gray-700);
+    }
+
+    .article-excerpt {
+      font-size: 17px;
+      color: var(--gray-700);
+      line-height: 1.8;
+    }
+
+    .read-more {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 25px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--black);
+      text-decoration: none;
+      transition: gap 0.3s;
+    }
+
+    .read-more:hover {
+      gap: 15px;
+    }
+
+    .read-more svg {
+      width: 20px;
+      height: 20px;
+      transition: transform 0.3s;
+    }
+
+    .article-card:hover .read-more svg {
+      transform: translateX(5px);
+    }
+
+    /* Full Article View - Military Aesthetic */
+    .article-full {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: var(--mil-bg);
+      color: var(--mil-white);
+      overflow-y: auto;
+      z-index: 2000;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .article-full.active {
+      display: block;
+    }
+
+    .article-full .scanlines {
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(255, 255, 255, 0.015) 2px,
+        rgba(255, 255, 255, 0.015) 4px
+      );
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    .article-full .grid-overlay {
+      position: fixed;
+      inset: 0;
+      background-image: 
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .article-inner {
+      padding: 120px 60px 150px;
+      max-width: 900px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 10;
+    }
+
+    .article-back {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--mil-white-dim);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 60px;
+      transition: color 0.3s;
+      text-transform: uppercase;
+    }
+
+    .article-back:hover {
+      color: var(--mil-white);
+    }
+
+    .article-back svg {
+      stroke: currentColor;
+    }
+
+    .article-classification {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 4px;
+      color: var(--mil-white-dim);
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--mil-white-faint);
+    }
+
+    .article-header {
+      margin-bottom: 60px;
+      padding-bottom: 40px;
+      border-bottom: 1px solid var(--mil-white-faint);
+    }
+
+    .article-header .article-category {
+      margin-bottom: 30px;
+      background: transparent;
+      border: 1px solid var(--mil-white-faint);
+      color: var(--mil-white-dim);
+    }
+
+    .article-header h1 {
+      font-family: var(--font-display);
+      font-size: 32px;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 25px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--mil-white);
+    }
+
+    .article-header .deck {
+      font-family: var(--font-serif);
+      font-size: 20px;
+      font-style: italic;
+      color: var(--mil-white-dim);
+      line-height: 1.6;
+    }
+
+    .article-info {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+      margin-top: 30px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--mil-white-dim);
+      letter-spacing: 1px;
+    }
+
+    .article-info span {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .article-info svg {
+      stroke: var(--mil-white-dim);
+    }
+
+    /* Article Body - Military Theme */
+    .article-body {
+      font-size: 17px;
+      line-height: 1.9;
+      color: var(--mil-white);
+    }
+
+    .article-body p {
+      margin-bottom: 1.8em;
+      color: rgba(255,255,255,0.85);
+    }
+
+    .article-body h3 {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 700;
+      margin: 2.5em 0 1em;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--mil-white);
+    }
+
+    .article-body strong {
+      font-weight: 600;
+      color: var(--mil-white);
+    }
+
+    .article-body blockquote {
+      font-size: 20px;
+      font-style: italic;
+      color: var(--mil-white-dim);
+      border-left: 2px solid var(--mil-white-faint);
+      padding-left: 30px;
+      margin: 2.5em 0;
+      line-height: 1.6;
+    }
+
+    .article-body ul {
+      margin: 1.5em 0;
+      padding-left: 0;
+      list-style: none;
+    }
+
+    .article-body ul li {
+      position: relative;
+      padding-left: 25px;
+      margin-bottom: 0.8em;
+      color: rgba(255,255,255,0.85);
+    }
+
+    .article-body ul li::before {
+      content: '//';
+      position: absolute;
+      left: 0;
+      color: var(--mil-white-dim);
+      font-family: var(--font-mono);
+      font-size: 12px;
+    }
+
+    /* Pull Quote - Military */
+    .pull-quote {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--mil-white-faint);
+      padding: 50px;
+      margin: 3em 0;
+      position: relative;
+    }
+
+    .pull-quote p {
+      font-size: 22px;
+      font-style: italic;
+      line-height: 1.5;
+      margin: 0;
+      color: var(--mil-white);
+    }
+
+    .pull-quote::before {
+      content: '"';
+      font-family: var(--font-serif);
+      font-size: 100px;
+      position: absolute;
+      top: 10px;
+      left: 30px;
+      color: var(--mil-white-faint);
+      line-height: 1;
+    }
+
+    /* Notes Section - Military */
+    .article-notes {
+      margin-top: 60px;
+      padding-top: 40px;
+      border-top: 1px solid var(--mil-white-faint);
+    }
+
+    .article-notes h4 {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 2px;
+      margin-bottom: 20px;
+      color: var(--mil-white-dim);
+    }
+
+    .article-notes ol {
+      padding-left: 20px;
+      font-size: 14px;
+      color: var(--mil-white-dim);
+    }
+
+    .article-notes li {
+      margin-bottom: 10px;
+    }
+
+    /* Recommended Reading - Military */
+    .recommended-reading {
+      margin-top: 40px;
+      padding: 40px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--mil-white-faint);
+    }
+
+    .recommended-reading h4 {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 2px;
+      margin-bottom: 20px;
+      color: var(--mil-white-dim);
+    }
+
+    .recommended-reading ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .recommended-reading li {
+      font-size: 14px;
+      margin-bottom: 12px;
+      padding-left: 0;
+      color: rgba(255,255,255,0.7);
+    }
+
+    .recommended-reading li::before {
+      display: none;
+    }
+
+    .recommended-reading em {
+      font-style: italic;
+      color: var(--mil-white);
+    }
+
+    /* Share Section - Military */
+    .share-section {
+      margin-top: 60px;
+      padding: 40px 0;
+      border-top: 1px solid var(--mil-white-faint);
+      border-bottom: 1px solid var(--mil-white-faint);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .share-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--mil-white-dim);
+    }
+
+    .like-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border: 1px solid var(--mil-white-faint);
+      background: transparent;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 1px;
+      color: var(--mil-white-dim);
+    }
+
+    .like-btn:hover {
+      background: rgba(255,255,255,0.1);
+      border-color: var(--mil-white-dim);
+    }
+
+    .like-btn.liked {
+      background: var(--mil-white);
+      border-color: var(--mil-white);
+      color: var(--mil-bg);
+    }
+
+    .like-btn svg {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.5;
+      transition: all 0.3s;
+    }
+
+    .like-btn.liked svg {
+      fill: var(--mil-bg);
+    }
+
+    .like-count {
+      font-weight: 700;
+    }
+
+    .share-buttons {
+      display: flex;
+      gap: 15px;
+    }
+
+    .share-btn {
+      width: 40px;
+      height: 40px;
+      border: 1px solid var(--mil-white-faint);
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .share-btn:hover {
+      background: var(--mil-white);
+      border-color: var(--mil-white);
+    }
+
+    .share-btn:hover svg {
+      stroke: var(--mil-bg);
+    }
+
+    .share-btn svg {
+      width: 18px;
+      height: 18px;
+      stroke: var(--mil-white-dim);
+      fill: none;
+      stroke-width: 1.5;
+    }
+
+    /* Join the Confluence - Military */
+    .confluence-section {
+      margin-top: 80px;
+      padding: 60px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--mil-white-faint);
+      color: var(--mil-white);
+    }
+
+    .confluence-section h3 {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 4px;
+      margin-bottom: 15px;
+      color: var(--mil-white);
+    }
+
+    .confluence-section p {
+      font-size: 15px;
+      color: var(--mil-white-dim);
+      margin-bottom: 30px;
+      max-width: 500px;
+    }
+
+    .confluence-form {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .confluence-form textarea {
+      flex: 1;
+      min-width: 300px;
+      padding: 15px 20px;
+      background: transparent;
+      border: 1px solid var(--gray-700);
+      color: var(--mil-white);
+      font-family: var(--font-serif);
+      font-size: 15px;
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .confluence-form textarea::placeholder {
+      color: var(--mil-white-dim);
+    }
+
+    .confluence-form textarea:focus {
+      outline: none;
+      border-color: var(--mil-white);
+    }
+
+    .confluence-submit {
+      padding: 15px 30px;
+      background: var(--mil-white);
+      color: var(--mil-bg);
+      border: none;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 2px;
+      cursor: pointer;
+      transition: all 0.3s;
+      align-self: flex-end;
+    }
+
+    .confluence-submit:hover {
+      background: rgba(255,255,255,0.8);
+    }
+
+    /* Comments - Military */
+    .comment-item {
+      padding: 20px 0;
+      border-bottom: 1px solid var(--mil-white-faint);
+    }
+
+    .comment-item:last-child {
+      border-bottom: none;
+    }
+
+    .comment-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .comment-name {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 1px;
+      color: var(--mil-white);
+    }
+
+    .comment-date {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--mil-white-dim);
+    }
+
+    .comment-text {
+      font-family: var(--font-serif);
+      font-size: 14px;
+      color: var(--gray-300);
+      line-height: 1.6;
+    }
+
+    .no-comments {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--mil-white-dim);
+      letter-spacing: 1px;
+    }
+
+    /* Article Bottom Nav - Military */
+    .article-nav-pills {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      gap: 5px;
+      padding: 15px;
+      background: rgba(10,10,10,0.95);
+      border-top: 1px solid var(--mil-white-faint);
+      z-index: 10000;
+      backdrop-filter: blur(10px);
+    }
+
+    .article-nav-pills a {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 2px;
+      color: var(--mil-white-dim);
+      text-decoration: none;
+      padding: 8px 12px;
+      border: 1px solid transparent;
+      transition: all 0.3s;
+    }
+
+    .article-nav-pills a:hover {
+      color: var(--mil-white);
+      border-color: var(--mil-white-faint);
+    }
+
+    .article-nav-pills a.active {
+      color: var(--mil-white);
+      border-color: var(--mil-white);
+    }
+
+    /* Article Feature Image - Military */
+    .article-feature-image {
+      width: 100%;
+      margin: 40px 0;
+      filter: grayscale(1) contrast(1.2);
+      opacity: 0.7;
+      transition: all 0.5s ease;
+    }
+
+    .article-feature-image:hover {
+      filter: grayscale(0.5) contrast(1.1);
+      opacity: 0.85;
+    }
+
+    .article-image-caption {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--mil-white-dim);
+      margin-top: 10px;
+      letter-spacing: 1px;
+    }
+
+    /* Callout Box - Military */
+    .callout-box {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--mil-white-faint);
+      padding: 30px;
+      margin: 2em 0;
+    }
+
+    .callout-box h4 {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--mil-white);
+      margin-bottom: 15px;
+    }
+
+    .callout-box ul li {
+      font-size: 14px;
+    }
+
+    /* Newsletter Section */
+    .newsletter-section {
+      padding: 100px 60px;
+      background: var(--cream);
+      text-align: center;
+    }
+
+    .newsletter-content {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .newsletter-icon {
+      width: 60px;
+      height: 60px;
+      margin: 0 auto 30px;
+      border: 1px solid var(--black);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    .newsletter-icon svg {
+      width: 24px;
+      height: 24px;
+      stroke: var(--black);
+      fill: none;
+    }
+
+    .newsletter-title {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 4px;
+      margin-bottom: 15px;
+    }
+
+    .newsletter-text {
+      font-size: 17px;
+      color: var(--gray-700);
+      margin-bottom: 30px;
+    }
+
+    .newsletter-form {
+      display: flex;
+      gap: 0;
+      max-width: 450px;
+      margin: 0 auto;
+    }
+
+    .newsletter-form input {
+      flex: 1;
+      padding: 15px 20px;
+      border: 1px solid var(--black);
+      background: var(--white);
+      font-family: var(--font-mono);
+      font-size: 12px;
+    }
+
+    .newsletter-form input:focus {
+      outline: none;
+    }
+
+    .newsletter-form button {
+      padding: 15px 25px;
+      background: var(--black);
+      color: var(--white);
+      border: 1px solid var(--black);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 2px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .newsletter-form button:hover {
+      background: var(--gray-700);
+    }
+
+    /* Footer */
+    .site-footer {
+      padding: 60px;
+      background: var(--black);
+      color: var(--white);
+    }
+
+    .footer-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-logo {
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 4px;
+    }
+
+    .footer-nav {
+      display: flex;
+      gap: 30px;
+    }
+
+    .footer-nav a {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--gray-500);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .footer-nav a:hover {
+      color: var(--white);
+    }
+
+    /* Animations */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Floating Elements */
+    .floating-line {
+      position: fixed;
+      right: 30px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 1px;
+      height: 100px;
+      background: linear-gradient(to bottom, transparent, var(--gray-300), transparent);
+      z-index: 100;
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    .floating-dot {
+      position: fixed;
+      right: 27px;
+      width: 7px;
+      height: 7px;
+      background: var(--black);
+      border-radius: 50%;
+      z-index: 101;
+      transition: top 0.1s ease;
+      pointer-events: none;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      html, body {
+        overflow-x: hidden;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .site-header {
+        padding: 0 20px;
+        height: 60px;
+      }
+
+      .header-nav {
+        display: none;
+      }
+
+      .site-logo {
+        font-size: 10px;
+        letter-spacing: 2px;
+      }
+
+      .subscribe-btn {
+        padding: 8px 15px;
+        font-size: 8px;
+      }
+
+      .hero {
+        padding: 100px 20px 40px;
+      }
+
+      .hero-title {
+        font-size: 28px;
+        letter-spacing: 4px;
+      }
+
+      .hero-subtitle {
+        font-size: 16px;
+      }
+
+      .hero-label {
+        font-size: 9px;
+        letter-spacing: 2px;
+      }
+
+      .articles-section {
+        padding: 40px 20px;
+      }
+
+      .section-header {
+        margin-bottom: 30px;
+      }
+
+      .article-card {
+        grid-template-columns: 1fr;
+        gap: 15px;
+        padding: 30px 0;
+      }
+
+      .article-card:hover {
+        margin: 0;
+        padding: 30px 0;
+        background: transparent;
+      }
+
+      .article-content h2 {
+        font-size: 22px;
+      }
+
+      .article-excerpt {
+        font-size: 15px;
+      }
+
+      .article-full {
+        padding: 0;
+      }
+
+      .article-inner {
+        padding: 80px 20px 120px;
+      }
+
+      .article-classification {
+        font-size: 8px;
+        letter-spacing: 2px;
+      }
+
+      .article-header h1 {
+        font-size: 22px;
+        letter-spacing: 1px;
+      }
+
+      .article-header .deck {
+        font-size: 16px;
+      }
+
+      .article-body {
+        font-size: 15px;
+      }
+
+      .article-body h3 {
+        font-size: 14px;
+      }
+
+      .article-body blockquote {
+        font-size: 16px;
+        padding-left: 20px;
+      }
+
+      .pull-quote {
+        margin: 2em 0;
+        padding: 25px;
+      }
+
+      .pull-quote p {
+        font-size: 17px;
+      }
+
+      .pull-quote::before {
+        font-size: 60px;
+        left: 15px;
+      }
+
+      .article-nav-pills {
+        gap: 2px;
+        padding: 10px 5px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .article-nav-pills a {
+        font-size: 7px;
+        letter-spacing: 1px;
+        padding: 6px 8px;
+      }
+
+      .share-section {
+        flex-direction: column;
+        gap: 20px;
+        align-items: flex-start;
+      }
+
+      .share-buttons {
+        width: 100%;
+        justify-content: flex-start;
+      }
+
+      .newsletter-section {
+        padding: 50px 20px;
+      }
+
+      .newsletter-title {
+        font-size: 14px;
+      }
+
+      .newsletter-text {
+        font-size: 15px;
+      }
+
+      .newsletter-form {
+        flex-direction: column;
+      }
+
+      .newsletter-form input,
+      .newsletter-form button {
+        width: 100%;
+      }
+
+      .confluence-section {
+        padding: 30px 20px;
+      }
+
+      .confluence-section h3 {
+        font-size: 18px;
+      }
+
+      .confluence-form {
+        flex-direction: column;
+      }
+
+      .confluence-form input,
+      .confluence-form textarea {
+        min-width: 100%;
+        width: 100%;
+      }
+
+      .confluence-submit {
+        width: 100%;
+      }
+
+      .footer-content {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+      }
+
+      .site-footer {
+        padding: 40px 20px;
+      }
+
+      .floating-line,
+      .floating-dot {
+        display: none;
+      }
+
+      .article-image {
+        height: 180px;
+      }
+
+      .recommended-reading {
+        padding: 25px;
+      }
+
+      .article-notes {
+        padding-top: 30px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="scroll-progress" id="scroll-progress"></div>
+
+  <div class="floating-line"></div>
+  <div class="floating-dot" id="floating-dot"></div>
+
+  <!-- Header -->
+  <header class="site-header" id="site-header">
+    <div class="header-left">
+      <a href="index.html" class="site-logo">EMOGHENE</a>
+      <nav class="header-nav">
+        <a href="about.html">DOSSIER</a>
+        <a href="cv.html">CV</a>
+        <a href="labs-universe.html">LABS</a>
+        <a href="works.html">WORKS</a>
+        <a href="writing.html">WRITING</a>
+        <a href="transmissions.html" style="color: var(--black);">TRANSMISSIONS</a>
+      </nav>
+    </div>
+    <div class="header-right">
+      <a href="#newsletter" class="subscribe-btn">SUBSCRIBE</a>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero" id="hero">
+    <div class="hero-label">TRANSMISSIONS</div>
+    <h1 class="hero-title">TRANSMISSIONS</h1>
+    <p class="hero-subtitle">Essays on dance, technology, embodied knowledge, and the politics of movement.</p>
+    
+    <div class="hero-decoration">
+      <svg viewBox="0 0 200 200">
+        <circle cx="100" cy="100" r="80" stroke="currentColor" fill="none" stroke-width="0.5"/>
+        <circle cx="100" cy="100" r="60" stroke="currentColor" fill="none" stroke-width="0.5"/>
+        <circle cx="100" cy="100" r="40" stroke="currentColor" fill="none" stroke-width="0.5"/>
+        <line x1="100" y1="20" x2="100" y2="180" stroke="currentColor" stroke-width="0.5"/>
+        <line x1="20" y1="100" x2="180" y2="100" stroke="currentColor" stroke-width="0.5"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- Articles List -->
+  <section class="articles-section" id="articles-list">
+    <div class="section-header">
+      <span class="section-title">LATEST TRANSMISSIONS</span>
+    </div>
+
+    <!-- New Article: Refusal as Research -->
+    <div class="article-card fade-in visible" style="cursor:pointer;" onclick="document.getElementById('hero').style.display='none'; document.getElementById('articles-list').style.display='none'; document.getElementById('article-refusal-research').classList.add('active'); window.scrollTo(0,0);">
+      <div class="article-meta">
+        <span class="article-date">JANUARY 2026</span>
+        <span class="article-category">FILM / RESEARCH</span>
+        <span class="article-reading-time">18 min read</span>
+      </div>
+      <div class="article-content">
+        <div class="article-image-container">
+          <img src="refusal-laurel.png" alt="Canada Shorts Film Festival Winner 2025" class="article-image" style="object-fit: contain; background: #fff;">
+        </div>
+        <h2>Refusal as Research: Notes from Asylum Time, and How The Ten Poem Project Became an Award-Winning Film</h2>
+        <p class="article-excerpt">This autoethnographic article introduces refusal as a research method developed through twelve years of asylum-pending life in the United States. Drawing on Audra Simpson, Édouard Glissant, Tina Campt, and Saidiya Hartman, I articulate how refusal became a methodology that protects the inner record from extraction while generating creative work.</p>
+        <span class="read-more">
+          READ TRANSMISSION
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </span>
+      </div>
+    </div>
+
+    <div class="article-card fade-in visible" style="cursor:pointer;" onclick="document.getElementById('hero').style.display='none'; document.getElementById('articles-list').style.display='none'; document.getElementById('article-confluence-technique').classList.add('active'); window.scrollTo(0,0);">
+      <div class="article-meta">
+        <span class="article-date">JANUARY 2026</span>
+        <span class="article-category">TECHNIQUE</span>
+        <span class="article-reading-time">12 min read</span>
+      </div>
+      <div class="article-content">
+        <div class="article-image-container">
+          <img src="confluence-technique.jpg" alt="Confluence Dance Technique class" class="article-image">
+        </div>
+        <h2>Confluence Dance Technique: Naming a Living Practice When the Names Are Already Taken</h2>
+        <p class="article-excerpt">A rigorous training practice for dancers living inside shifting vocabularies and shifting definitions of legitimacy. It treats dance as steps and as intelligence, developing multirhythmic skill, repertoire fluency, and cultural responsibility through embodied research.</p>
+        <span class="read-more">
+          READ TRANSMISSION
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Full Article View -->
+  <article class="article-full" id="article-confluence-technique">
+    <div class="scanlines"></div>
+    <div class="grid-overlay"></div>
+    
+    <div class="article-inner">
+      <div class="article-classification">TRANSMISSION // CLASSIFIED DOCUMENT // CLEARANCE OMEGA</div>
+      
+      <a href="#" class="article-back" onclick="hideArticle(); return false;">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        BACK TO TRANSMISSIONS
+      </a>
+
+      <header class="article-header">
+        <span class="article-category">TECHNIQUE</span>
+        <h1>Confluence Dance Technique</h1>
+        <p class="deck">Naming a Living Practice When the Names Are Already Taken — Multirhythm, Repertoire, and Embodied Research in Dance Diffusion</p>
+        <div class="article-info">
+          <span>
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M12 6v6l4 2"/>
+            </svg>
+            12 min read
+          </span>
+          <span>JANUARY 2026</span>
+          <span>SINCLAIR EMOGHENE</span>
+        </div>
+      </header>
+
+      <div class="article-body">
+        <figure>
+          <img src="confluence-technique.jpg" alt="Dancers in Confluence Dance Technique class" class="article-feature-image">
+          <figcaption class="article-image-caption">CONFLUENCE DANCE TECHNIQUE — UT AUSTIN, 2025</figcaption>
+        </figure>
+
+        <p>Confluence Dance Technique is a rigorous training practice for dancers living inside shifting vocabularies and shifting definitions of legitimacy. It treats dance as steps and as intelligence, developing multirhythmic skill, repertoire fluency, and cultural responsibility through embodied research into how dances travel and transform. A method, not a marketing category.</p>
+
+        <p>I have been struggling with the words modern dance and contemporary dance, not because I do not understand their histories, but because their meanings have become unstable in everyday use. Modern dance often refers to a specific American lineage built by early pioneers and later formalized through techniques, institutions, and aesthetic schools. Contemporary dance, meanwhile, is used in several different ways at once: as a concert dance category, as a commercial studio genre that blends jazz, ballet, and modern influences, and as a global catch-all for dance happening now. That multivalence creates a problem. The term sounds familiar, but it does not reliably tell you what is happening in the room.</p>
+
+        <div class="pull-quote">
+          <p>The label becomes a gate before the class even begins.</p>
+        </div>
+
+        <p>The naming problem becomes even sharper when the label "African dance" enters the space. In many contexts, the word African arrives carrying assumptions that flatten diversity into a single category, even when the speaker intends the opposite. "African dance" can unintentionally produce an exclusive-club effect, drawing some people in while signaling to others that they are outside of the conversation. It can also reduce the work to a narrow identity container, positioning the teacher as a specialist who cannot move across creative boundaries. The label becomes a gate before the class even begins.</p>
+
+        <p>I tried to move sideways into "contemporary Africa," but that phrase has also been reshaped by music and television industries into a commercial fusion aesthetic that does not match what I teach or practice. The result is an exhausting drift between conventions, market meanings, and academic canons. The vocabulary starts to force me to explain what I am not before I can name what I am.</p>
+
+      <p>So I want a different approach to naming. A term that describes a method without staking out genre territory. A practice that can be defined clearly, taught responsibly, and understood by a broad audience without being mistaken for something else.</p>
+
+      <p>What I teach is a technique and research environment built from traditions and movement logics that shaped me, and it extends outward through study into wider questions of how dances travel, transform, and persist across communities. I do not treat political borders as the best container for movement knowledge. My teaching is about diffusion, proximity, encounter, transformation, and survival. It is also about strength, timing, articulation, musical intelligence, and presence. I treat dance as steps, yes, but also as human intelligence.</p>
+
+      <p>The question is not simply, "What is this dance called?" The deeper question is: what does this practice do, and what does it train a dancer to become?</p>
+
+      <h3>What the Practice Is, in Plain Terms</h3>
+
+      <p>My technique class is built as layered training:</p>
+
+      <p><strong>The body as instrument</strong> — dynamic alignment, stamina, coordination, articulation, mobility, and power.</p>
+
+      <p><strong>Rhythm as intelligence</strong> — timing, pulse, phrasing, repetition as deep learning, and the relationship between movement and sound.</p>
+
+      <p><strong>Repertoire as knowledge</strong> — learning dances as embodied archives, with attention to origins, social function, and cultural logics.</p>
+
+      <p><strong>Improvisation as literacy</strong> — learning how movement generates choices, how bodies respond to music and to one another, and how style is carried through principles rather than surface imitation.</p>
+
+      <p><strong>Context as responsibility</strong> — investigating how dances live across human societies, from classical to traditional, from social to contemporary performance, and how power shapes what is seen, valued, and credited.</p>
+
+      <p>The goal is to train dancers who are not only physically capable, but also intellectually awake and ethically attentive. Dancers who can perform with clarity and joy, and who can also ask better questions about what they are doing, where it comes from, and what it means to move across lineages.</p>
+
+      <h3>Why Confluence Fits, and What It Risks</h3>
+
+      <p>A working term I am considering is Confluence Dance Technique.</p>
+
+      <p>Confluence names how dances actually operate in the world. Dances do not stay inside political boundaries. They move with people. They spread through migration, labor, trade, war, education, religion, popular culture, and social celebration. They influence one another through proximity and encounter. They evolve through repetition and remix. Confluence captures diffusion without pretending that a nation-state is the most accurate container for movement knowledge.</p>
+
+      <div class="pull-quote">
+        <p>Movement may be permeable, but power often is not.</p>
+      </div>
+
+      <p>But I also want to name what is potentially naive about confluence as an idea, because dance is rarely a neutral space. Confluence can sound like a welcoming, accept-all-forms philosophy. In perception, that can feel generous and expansive. In practice, dance spaces often reproduce asymmetrical power structures. They can center particular bodies, aesthetics, and lineages while pushing others to the margins. They can reward familiarity with dominant vocabularies and treat other ways of moving as raw material rather than knowledge. This is one of the foundational tensions inside the confluence concept: movement may be permeable, but power often is not.</p>
+
+      <p>For me, that tension is not a reason to abandon confluence. It is precisely why confluence is useful, because it gives us language for acknowledging dance as interpellative and permeable. By interpellative, I mean that dance "calls" bodies into relation and identity. It recruits, marks, persuades, disciplines, and invites. In Louis Althusser's formulation, interpellation describes how ideologies "hail" individuals into subject positions, often making those positions feel natural.¹ Dance does something similar: it hails the dancer into a relationship with a history, a community, an idea of virtuosity, and an idea of belonging. That calling can be liberatory, but it can also be coercive, depending on who controls the space and what is rewarded.</p>
+
+      <p>Naming confluence makes our conversations about dance fluidity more constructive, rather than dissolving into an everything-goes mentality. Confluence is not permission to flatten difference. It is a demand to study how difference travels, how it is absorbed, how it is resisted, and how it is transformed.</p>
+
+      <h3>Why Multirhythm Matters More Than Polyrhythm</h3>
+
+      <p>Rhythm has often been used as a marker that filters bodies into categories of "us" and "them." Who "has rhythm," who does not. Who is a cultural insider, who is not. These judgments can become segregation language. They can reproduce racial essentialism, including the lazy claim that Black people can dance and white people cannot. They can also exclude disabled, neurodivergent, and differently trained bodies by treating variation in timing, coordination, or response as deficiency rather than difference.</p>
+
+      <div class="pull-quote">
+        <p>Multirhythm names rhythmic intelligence as plural and learnable. It frames rhythm as an ecology rather than a test.</p>
+      </div>
+
+      <p>I choose multirhythm deliberately. Multirhythm names rhythmic intelligence as plural and learnable. It frames rhythm as an ecology rather than a test. It acknowledges that bodies arrive with different capacities, histories, sensory relationships, and cultural mappings of time, and that technique can meet dancers where they are while still demanding rigor. Multirhythm does not weaken the work. It clarifies the work. It signals that this practice trains dancers to develop complex timing relationships without turning rhythm into a gatekeeping tool or a myth about who belongs.</p>
+
+      <p>This distinction matters for what Confluence Dance Technique promises. The practice is rigorous. It asks for precision, stamina, and deep listening. But it refuses the old sorting languages that decided in advance which bodies could access that rigor and which could not.</p>
+
+      <h3>Confluence and the Contact Zone Problem</h3>
+
+      <p>I often place confluence adjacent to ideas like contact zones, collision metaphors, and frameworks of cross-cultural encounter that try to describe what happens when cultures meet. Mary Louise Pratt famously defines contact zones as social spaces where cultures meet, clash, and grapple with each other, often in contexts of highly asymmetrical relations of power.² This concept is valuable because it refuses romantic stories of exchange. It keeps conflict, inequality, extraction, and negotiation visible.</p>
+
+      <p>But some models of cultural encounter can also decapitate dance by treating it like an object that transfers cleanly from one bounded culture to another, or by imagining bodies as billiard balls that collide and then bounce away unchanged. Those models can be useful for naming appropriation and constraint. But they can also overemphasize restriction, boundaries, and marked zones, until the body becomes monitored rather than responsive, contained rather than creative.</p>
+
+      <p>Confluence insists on something simpler and more honest: dance has survived precisely because bodies adapt. Dancers absorb, translate, recompose, and produce. They learn through repetition, relation, and need. Confluence is not an escape from critique. It is a way to hold critique together with the reality that movement is relational by nature.</p>
+
+      <p>So when I say Confluence Dance Technique, I am not describing a utopia where all dances mix equally. I am naming a training practice that prepares dancers to recognize both realities at once: the permeability of movement and the politics of the spaces that movement enters.</p>
+
+      <h3>What Confluence Dance Technique Means in the Classroom</h3>
+
+      <p>If Confluence Dance Technique is going to be more than a beautiful phrase, it needs a definition that can be repeated consistently.</p>
+
+      <blockquote>Confluence Dance Technique is a rigorous training method that develops multirhythmic intelligence, grounded articulation, repertoire fluency, and cultural-historical literacy by studying how dance forms travel, transform, and sustain knowledge through bodies in relation.</blockquote>
+
+      <p>That definition makes a promise. The class is distinct from "African dance" as a narrowing label, from commercial "contemporary," and from abstract surveys of everything. It is a technique practice with a research ethic.</p>
+
+      <p><strong>How This Shows Up in Class</strong></p>
+
+      <ul>
+        <li>Conditioning and craft (strength, stamina, alignment, precision)</li>
+        <li>Multirhythm study (pulse, phrasing, layered timing, responsiveness)</li>
+        <li>Repertoire as embodied archive (repetition as deep learning)</li>
+        <li>Improvisation as culturally shaped problem-solving and relational decision-making</li>
+        <li>Context and responsibility (origins, social function, ethical questions of circulation)</li>
+      </ul>
+
+      <p>This is where the term confluence becomes a pedagogical tool. It opens the field into a larger question: what other ways does dance live that we have not yet investigated? Dance on stages, yes, and also dance in rituals, social spaces, nightlife, streets, churches, ceremonies, classrooms, and the everyday. Confluence invites dancers to treat those spaces as sites where technique, knowledge, and innovation are constantly being produced, equal to any concert stage.</p>
+
+      <h3>Toward a Consistent Lexicon</h3>
+
+      <p>Maybe the answer is not one perfect label. Maybe the answer is a label plus a definition that stays consistent every time it is used.</p>
+
+      <p>But the need is real, because names shape expectations. Names shape legitimacy. Names shape whether students enter the room ready to learn, or ready to misinterpret.</p>
+
+      <p>If Confluence Dance Technique is the term, then the task is to hold it to its standard: everything is structured, and structure includes power, history, and responsibility. Multirhythm reinforces that commitment by refusing the old sorting languages while still insisting on technical development.</p>
+
+      <p>And if the term evolves, the mission stays the same: to train dancers who are physically strong, multirhythmically sophisticated, culturally literate, and creatively expansive. Dancers who can move through the twenty-first century not just with skill, but with intelligence.</p>
+
+      <p>If Confluence Dance Technique works as a name, it is because it refuses to solve the naming problem by flattening difference. It keeps the difficulty visible. Dance travels, yes, but it does not travel evenly. Bodies absorb, yes, but institutions sort. This practice trains inside those tensions with clarity and responsibility rather than pretending they disappear.</p>
+
+      <p>I am continuing to refine this lexicon in public because language shapes what becomes possible in the studio. If you are a dancer, teacher, choreographer, or curious witness who has felt the confusion of inherited labels, I hope this offers a usable alternative: a method you can recognize in the body rather than a category to defend. Confluence is the invitation. The work is the training.</p>
+    </div>
+
+    <div class="article-notes">
+      <h4>NOTES</h4>
+      <ol>
+        <li>Louis Althusser, "Ideology and Ideological State Apparatuses (Notes Toward an Investigation)," in <em>Lenin and Philosophy and Other Essays</em>, trans. Ben Brewster (New York: Monthly Review Press, 1971).</li>
+        <li>Mary Louise Pratt, <em>Imperial Eyes: Travel Writing and Transculturation</em> (London: Routledge, 1992).</li>
+      </ol>
+    </div>
+
+    <div class="recommended-reading">
+      <h4>RECOMMENDED READING</h4>
+      <ul>
+        <li>Louis Althusser, "Ideology and Ideological State Apparatuses"</li>
+        <li>Mary Louise Pratt, <em>Imperial Eyes: Travel Writing and Transculturation</em></li>
+        <li>Diana Taylor, <em>The Archive and the Repertoire: Performing Cultural Memory in the Americas</em></li>
+        <li>Brenda Dixon Gottschild, <em>Digging the Africanist Presence in American Performance</em></li>
+        <li>Paul Gilroy, <em>The Black Atlantic: Modernity and Double Consciousness</em></li>
+      </ul>
+    </div>
+
+    <div class="share-section">
+      <div style="display: flex; align-items: center; gap: 20px;">
+        <button class="like-btn" id="like-btn" onclick="toggleLike('confluence-technique')">
+          <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          <span class="like-count" id="like-count">0</span>
+        </button>
+        <span class="share-label">SHARE THIS TRANSMISSION</span>
+      </div>
+      <div class="share-buttons">
+        <button class="share-btn" onclick="shareTwitter()" title="Share on X">
+          <svg viewBox="0 0 24 24"><path d="M4 4l6.5 8L4 20h2l5.5-7 4.5 7h6l-7-9 6-7h-2l-5 6-4-6H4z"/></svg>
+        </button>
+        <button class="share-btn" onclick="shareLinkedIn()" title="Share on LinkedIn">
+          <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6zM2 9h4v12H2zM4 2a2 2 0 110 4 2 2 0 010-4z"/></svg>
+        </button>
+        <button class="share-btn" onclick="shareEmail()" title="Share via Email">
+          <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><path d="M22 6l-10 7L2 6"/></svg>
+        </button>
+        <button class="share-btn" onclick="copyLink()" title="Copy Link">
+          <svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="confluence-section">
+      <h3>JOIN THE CONFLUENCE</h3>
+      <p>Responses, questions, provocations. This is an open conversation about naming, method, and the politics of dance practice.</p>
+      
+      <!-- Comments Display -->
+      <div id="comments-list" style="margin-bottom: 30px;"></div>
+      
+      <div class="confluence-form" id="comment-form">
+        <input type="text" id="comment-name" placeholder="Your name" style="flex: 1; min-width: 150px; padding: 15px 20px; background: transparent; border: 1px solid var(--mil-white-faint); color: var(--mil-white); font-family: var(--font-serif); font-size: 15px;">
+        <textarea id="comment-text" placeholder="Enter the confluence..."></textarea>
+        <button class="confluence-submit" type="button" onclick="submitComment('confluence-technique')">SUBMIT</button>
+      </div>
+    </div>
+    </div>
+
+    <!-- Bottom Nav -->
+    <nav class="article-nav-pills">
+      <a href="index.html">HOME</a>
+      <a href="about.html">DOSSIER</a>
+      <a href="cv.html">CV</a>
+      <a href="labs-universe.html">LABS</a>
+      <a href="works.html">WORKS</a>
+      <a href="writing.html">WRITING</a>
+      <a href="transmissions.html" class="active">TRANSMISSIONS</a>
+      <a href="confluence.html">CONFLUENCE</a>
+      <a href="contact.html">CONTACT</a>
+    </nav>
+  </article>
+
+  <!-- Full Article: Refusal as Research -->
+  <article class="article-full" id="article-refusal-research">
+    <div class="scanlines"></div>
+    <div class="grid-overlay"></div>
+    
+    <div class="article-inner">
+      <div class="article-classification">TRANSMISSION // CLASSIFIED DOCUMENT // CLEARANCE OMEGA</div>
+      
+      <a href="#" class="article-back" onclick="hideArticle(); return false;">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        BACK TO TRANSMISSIONS
+      </a>
+
+      <header class="article-header">
+        <span class="article-category">FILM / RESEARCH</span>
+        <h1>Refusal as Research</h1>
+        <p class="deck">Notes from Asylum Time, and How The Ten Poem Project Became a Book and an Award-Winning Short Film</p>
+        <div class="article-info">
+          <span>
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M12 6v6l4 2"/>
+            </svg>
+            18 min read
+          </span>
+          <span>JANUARY 2026</span>
+          <span>SINCLAIR EMOGHENE</span>
+        </div>
+      </header>
+
+      <div class="article-body">
+        <figure>
+          <img src="refusal-laurel.png" alt="Canada Shorts Film Festival Winner 2025" class="article-feature-image" style="filter: none; background: #fff; padding: 20px;">
+          <figcaption class="article-image-caption">ROOTED IN MOTION — CANADA SHORTS FILM FESTIVAL GRAND PRIZE 2025</figcaption>
+        </figure>
+
+        <h3>Abstract</h3>
+        <p>This autoethnographic article introduces refusal as a research method developed through twelve years of asylum-pending life in the United States. Drawing on Audra Simpson's theorization of refusal as an alternative to recognition, Édouard Glissant's right to opacity, Tina Campt's attention to quotidian practices of refusal, and Saidiya Hartman's ethics of narrative restraint, I articulate how refusal became a methodology that protects the inner record from extraction while generating creative work. The article documents the development of The Ten Poem Project, an autoethnographic dance film and forthcoming book that emerged from the conditions of migration, queer survival, and prolonged legal uncertainty.</p>
+
+        <p>This article is about refusal as a research method.</p>
+
+        <p>I have been doing house cleaning lately, and when I clean I think a lot about my past, my life in Nigeria, and the conditions that pushed me into migration. Today, my life is great. It has turned out better than I expected. I came to the U.S. to study, and during that time I found out that I could not return home. The Nigerian government passed laws to criminalize people of the LGBTQIA+ community. I was terrified. I applied for asylum to remain in the U.S. This decision came out of the necessity to survive. It was not easy to cope, but I made it through. The assimilation process has been difficult. I have been through a lot. I have been abused. I have been relegated to the margins. And with that has come a rebirth of myself. A new person.</p>
+
+        <p>In this article, I resist the urge to tell another immigrant story of look where I came from and look where I am now. That is not how I am feeling. I am still feeling the bitterness and hurt from a lifetime of abuse, physical and mental manipulations that have caused a lot of violence in my life. These pains have been the only way that I know myself and who I have become. Leaving any of that behind and pretending to be a new man sounds like hypocrisy to me. I do not feel like a new man, and I do not forget what was done to me. This is why I have adopted the notion of refusal as a research method. I am grateful for all that I have and have become. Yes. But I am refusing to tell my story for extraction, to entertain people and make others feel good about themselves, or to convince them that the conditions made me better. I am here today in spite of all that has happened to me. What follows is the account of why refusal became necessary, what it produced, and what it is still producing.</p>
+
+        <h3>Theoretical Framework</h3>
+        <p>The concept of refusal I employ here is indebted to several scholars who have theorized alternative relationships to visibility, legibility, and recognition. Audra Simpson's <em>Mohawk Interruptus: Political Life Across the Borders of Settler States</em> (2014) articulates refusal as a political stance that rejects the terms of recognition offered by dominant structures. Simpson's "ethnographic refusal" acknowledges "the asymmetrical power relations that inform the research and writing about... lives and politics" and refuses to write in ways that compromise sovereignty or safety.</p>
+
+        <p>Édouard Glissant's demand for the "right to opacity" in <em>Poetics of Relation</em> (1990) provides another foundation for this work. Glissant argues that opacity "is not enclosure within an impenetrable autarchy but subsistence within an irreducible singularity." This right to remain partially unknowable, to refuse full transparency, is central to my methodology.</p>
+
+        <p>Tina Campt's <em>Listening to Images</em> (2017) offers a method for attending to "quotidian practices of refusal" in photographs of Black diasporic subjects. Campt hears in these images "a quiet intensity" and "the low hum of resistance and subversion." Her attention to what she calls "the grammar of Black feminist futurity" informs my understanding of how the body can hold and transmit knowledge that resists extraction.</p>
+
+        <p>Saidiya Hartman's "Venus in Two Acts" (2008) articulates the ethical stakes of narrative when writing about lives marked by violence. Hartman grapples with how to "tell a story... without committing further violence in my own act of narration." Her concept of "narrative restraint" as "the refusal to fill in the gaps and provide closure" speaks directly to my practice.</p>
+
+        <h3>Asylum Time</h3>
+        <p>I wrote an early version of this manuscript on October 29, 2024, one week before the U.S. general election. Some people treat an election like an argument. Something you debate, something you win or lose, then you move on. For me, an election can feel like weather. It does not have to touch you directly to change how you sleep. You start checking the windows. You start planning for the kind of day you might wake up into.</p>
+
+        <p>In 2016, when Donald Trump took office, I had applied for asylum about five months earlier. I still had the hope that many people have when they first enter a system. You think an application is a beginning. You think a beginning leads to a middle, then an end. You think time moves forward like that. A friend messaged me on Facebook asking if Trump's new law affected me. I contacted my lawyers in Washington, D.C. They told me I might not be directly impacted, but delays were likely. That one word, <em>likely</em>, became a structure. A roof. A room. Something you live under.</p>
+
+        <div class="pull-quote">
+          <p>Waiting is not neutral. Waiting changes a person.</p>
+        </div>
+
+        <p>For years, I renewed my employment authorization carefully. I was terrified of making a mistake that could cost me everything. I paid taxes. I worked. I taught. I built a career. I made art. I did all the things that look like life from the outside. Inside, I lived in a kind of confinement that is hard to explain without people trying to clean it up. You cannot vote, and you learn to keep your opinions quiet. You do not want attention. You do not want the wrong kind of visibility. You do not want to be misunderstood by a system that already treats you like a file number. You learn to be careful in a way that enters your body.</p>
+
+        <p>What matters here is not the events. It is what the events did to my nervous system. My body accumulated trauma. I fell in and out of depressions. I became lonely in a way that was not just social. It was institutional. I began to feel that nobody was coming. I began to fear that I would die in darkness. Prolonged uncertainty can make the future feel like a disappearing concept. Calls from home became complicated. Sometimes I could not access joy even when I wanted it. I felt suspicious, and I hated that I felt suspicious. I started noticing how easily an immigrant is expected to perform gratitude as payment for protection.</p>
+
+        <h3>Where Refusal Begins</h3>
+        <p>That is where refusal begins for me. Refusal begins as a boundary you build when you realize that your life keeps getting converted into something else for other people. I refuse to turn my life into public comfort. I refuse to flatten my story into a clean arc that makes the reader feel safe. I refuse to write my pain as entertainment. I refuse to write my survival as an inspirational package. I refuse to become evidence on demand. I refuse to perform gratitude as if gratitude is the price of being allowed to live.</p>
+
+        <p>Refusal does not mean I am silent or ungrateful. It means I choose the terms of the record. Refusal is how I stay human inside a system that can reduce you to paperwork. Refusal is also how the art becomes research.</p>
+
+        <p>The moment you are an immigrant, people feel entitled to your explanation. They want to know where you are from, what happened to you, how bad it was, how you escaped, how you healed. They want the before and after. They want the transformation. They want closure. Asylum time is not shaped like closure. It is shaped like repetition, delay, relapse, panic, calm, then panic again. Some days you feel safe and grateful. Some days you feel like a ghost. Some days you feel like a tree that has survived too many seasons and is not sure it has more seasons left. This refusal is the only way I know to record this without being taken from myself.</p>
+
+        <p>I have told my story many times to whoever was interested in listening. Every time I tell my stories, I feel emptier than before. Within my struggle in assimilating into the society, feeling deeply depressed, angry and lost, telling my story meant I would deal with anxiety for the rest of the month, even years. Asking myself, "did they like what I was saying? Did I suck all the air out of the room by taking up time to talk non-stop?" For months I would continue to beat myself up. Then I stumbled on the word "extraction." Something I never thought was a thing. But here I was, living a life that simply entertained people, angered people, or gave them perceptions of me that really was more of a mirage than anything else.</p>
+
+        <div class="pull-quote">
+          <p>Extraction is what happens when people take your lived experience and do not take responsibility for the cost of it.</p>
+        </div>
+
+        <p>I define this "extraction" as a process where you give, and get nothing in return. Extraction is what happens when people take your lived experience and do not take responsibility for the cost of it. Your pain becomes useful to someone else. You do not become safer. A story is demanded from you, then consumed, then left behind. The immigrant is asked to be legible, clean, and teachable. It is a strange thing to live through trauma and then be asked to summarize it neatly. A clean summary can become a lie. The events may be true, but the shape is false. I use my method of refusal to interrupt that transaction.</p>
+
+        <h3>Why This Refusal Was Necessary for Me</h3>
+        <p>I decided to remain in the U.S. on asylum because of my sexuality. I did not come thinking I would stay permanently. I came for education. Then the Nigerian government criminalized gay people, and my life pivoted abruptly. I had to decide what it meant to survive. I used to believe my sexuality was minimal, like it was something I could keep quiet and therefore be safe. However, legality does not care how quietly you live. Once criminalization becomes law, the world reorganizes itself around danger. Your body begins to behave like danger is everywhere, and rightfully so, given the Nigerian environment I had grown up in.</p>
+
+        <p>That shift did not remain in paperwork. It entered my mind, my mood, my relationships. I became mentally depressed. Angry at small irritations. I lashed out at people who cared about me. I lost friendships in the early years because I did not know how to carry what I was carrying. Over time, I struggled to keep relationships, to make lasting connections, to access help in the ways people talk about as if help is always accessible. I began to believe there was no one coming. That belief is its own kind of injury. Life as an immigrant is tough. Life as a lonely immigrant is on another level.</p>
+
+        <p>So I became an artist in the way some people become religious. It was the only place I could still be whole. Art is where I make sense of the world around me. Art is how I survive this world. My art is not a trophy. It is not phenomenal for people's gaze. It is not for approval. It is like a tree in a forest. It goes through seasons. It survives winter. It survives fire. One day it will fall. All I ask is that my roots run deep enough to hold me until due course, until something new can grow. This is the emotional ground of The Ten Poem Project.</p>
+
+        <h3>The Ten Poems: A Record, Not a Timeline</h3>
+        <p>This short film and what I plan to become a book in the future, contains poems from my migrational journey. I use the word journey to mean the ways I have migrated across space and time. Journey here does not mean to literally travel even when that happens within this context of migrating to a new world. Here, it means internal migration. How the self moves across fear, suspicion, gratitude, rage, tenderness, numbness, and the rare moments when the body briefly believes it might be safe.</p>
+
+        <p>To regain a sense of "place" and to retain my sense of "self," I defaulted to an old practice of writing poetry, which I adopted early on. Finding myself locked in this immigration cul-de-sac, I began to write poems. In the book, I include these poems. The poems are not written in a tidy sequence because my life was not experienced in a tidy sequence. Some days felt like progress. Some days felt like regression. Some days felt like returning to the same room with different lighting. That is why the structure is unstable. That instability is not a failure of craft. It is accuracy. Refusal is the reason the poems do not behave like chapters in a conventional memoir. If I forced them into linearity, the work would become easier to consume. It would also become easier to misunderstand. Refusal makes the poems stay close to the truth of asylum time.</p>
+
+        <p>As I developed my academic career, I developed research that looked into documenting dance as a living archive. When I say living archive, I mean something simple. A record of conditions, not just events. A record of what prolonged waiting does to the body. A record of how memory reorganizes itself under stress. A record of how fear returns. A record of how hope flickers. A record of how a person becomes suspicious of joy. A record of how love becomes complicated. The poems hold this kind of record. They do not only tell what happened. They hold what it felt like to live through it. That is why I call this work research. I built a method for recording reality without betraying the person inside it.</p>
+
+        <p>As poetry took a hold of me and helped me to create a safe space, I began to develop my writing into abstraction. It was a way for me to get away from the murky and stuffy room that I have been confined in for so long in my asylum waiting years. If I abstract my experiences, I thought, I would better understand them as something distant and far from me. But little did I know that abstraction is not me trying to be mysterious. Abstraction is protection and precision at the same time. Sometimes direct explanation is unsafe. Sometimes it is extractable. Sometimes it forces you to perform your pain clearly so that another person can feel moved by it. Abstraction lets me speak without being taken. It lets the work hold the truth without turning me into a public exhibit. It is also how dance enters the project as a real language.</p>
+
+        <h3>The Film as a Parallel Universe</h3>
+        <p>The Ten Poem Project is accompanied by a short dance film: <em>Rooted in Motion</em>. The work took shape over a decade of living in the United States with an asylum case pending. During those years, I wrote poems, recorded audio notes, and kept private observations as I moved through migration, queer survival, displacement, and the long work of learning how to live inside a new society. The film is not based on the poems in a simple way. It runs alongside them. It is another way of recording.</p>
+
+        <p>My dance training ranges from Nigerian traditional dance to ballroom and Latin social dance to contemporary African dance. The movement in the film is culled from these lineages. The point is not to display culture. The point is to show what it looks like when a body is carrying too much, and still moving.</p>
+
+        <div class="callout-box">
+          <h4>FESTIVAL RECOGNITION</h4>
+          <ul>
+            <li>Canada Shorts Film Festival Grand Prize 2025</li>
+            <li>Best Documentary</li>
+            <li>Best International Short</li>
+            <li>Best Experimental Film</li>
+            <li>Best Director</li>
+            <li>Best Cinematography</li>
+            <li>Best Score</li>
+            <li>LGBTQ+ Toronto & Los Angeles Film Festival (Official Selection)</li>
+            <li>SHORT to the Point - Dance Film Category</li>
+            <li>Versatility Dance Festival</li>
+            <li>ATX Short Film Showcase (Honorable Mention)</li>
+          </ul>
+        </div>
+
+        <p>My migration is not only legal. It is also artistic. Before the U.S., dance was already survival for me. I trained myself while training others. I taught children during the day, rehearsed at night, and lived inside exhaustion. I tried to build a company with limited resources. I learned what it means to dream while broke. I learned what it means to be seen as a failure while you are doing everything you can to live.</p>
+
+        <p>I helped choreograph a major Nigerian dance film. That success brought pressure, and pressure brought collapse. Collapse brought the question that returns again and again in the immigrant body: what do I do now, and where do I go now. I pursued an MFA in the U.S. after being told I was not brilliant enough to be admitted anywhere abroad. I was admitted, with support, and that moment did not solve my life, but it opened a door.</p>
+
+        <p>In the U.S., I created works that were not just performances. They were records: <em>Gray</em> (2013), <em>Nyam Chiem (NightMare)</em> (2015), <em>ROAMS</em> (2016), <em>Kaleidoscope of Tuts</em> (2020, Kennedy Center). These are not random titles in a CV. They are milestones in how my body learned to speak under pressure. The Ten Poem Project emerges from this longer reality. It is dance, language, memory, and survival braided together.</p>
+
+        <p>The significance of the film is that it turns a life condition into an authored method. A decade of asylum-pending life is usually treated as background, or reduced to trauma material. Here, it becomes structured practice: poems, audio logs, movement scores, screenplay drafts, and a film language that can hold time, uncertainty, waiting, and adaptation without flattening any of it. The film shows how writing becomes movement, and how movement becomes evidence. The edit is treated like choreography, and the camera is treated like a collaborator. It is a record of queer migrant survival that refuses simplification. The project holds complexity: joy and fear, belonging and estrangement, intimacy and public risk. It does not ask for pity. It makes form, and that is power.</p>
+
+        <h3>What This Article is Doing</h3>
+        <p>This article is not meant to summarize my life. It is meant to name the method that has been holding the work together. Refusal is that method. Refusal is how I keep the record without being extracted. Refusal is how I protect the inner life of the immigrant, the artist, the gay body, the asylum body, from being converted into something easy. Refusal is also what finally gives me a structure for the book.</p>
+
+        <p>If refusal is the spine, then each part of the book can be designed as a boundary. A human boundary. The book will move through asylum time as a condition. It will hold the ten poems alongside short narratives about when each was written, what triggered it, what time of day it arrived, what it felt like in the body. It will document how <em>Rooted in Motion</em> holds what language cannot hold. It will trace the earlier works, the Nigerian company years, the U.S. training, the performances, the teaching, and the moments where dance kept me alive. And it will turn toward the research horizon: why dance matters beyond performance, why movement deserves serious preservation, and why I believe a world that takes dance seriously can rethink politics, culture, religion, science and technology.</p>
+
+        <p>That last part is not a sudden pivot. It is the continuation of the same refusal. The absence of African dance in global archives is also an extraction problem. The repeated demand for legible immigrant narratives is also an archive problem. The body is not just a body. It is a knowing system. I am writing this book to keep that knowledge intact. To keep it intact.</p>
+
+        <div class="article-notes">
+          <h4>REFERENCES</h4>
+          <ol>
+            <li>Campt, Tina M. <em>Listening to Images</em>. Durham: Duke University Press, 2017.</li>
+            <li>Glissant, Édouard. <em>Poetics of Relation</em>. Translated by Betsy Wing. Ann Arbor: University of Michigan Press, 1997.</li>
+            <li>Hartman, Saidiya. "Venus in Two Acts." <em>Small Axe</em> 12, no. 2 (2008): 1-14.</li>
+            <li>Simpson, Audra. <em>Mohawk Interruptus: Political Life Across the Borders of Settler States</em>. Durham: Duke University Press, 2014.</li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- Share Section -->
+      <div class="share-section">
+        <div style="display: flex; align-items: center; gap: 20px;">
+          <span class="share-label">SHARE THIS TRANSMISSION</span>
+          <button class="like-btn" id="like-btn-refusal" onclick="toggleLike('refusal-research')">
+            <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            <span class="like-count" id="like-count-refusal">0</span>
+          </button>
+        </div>
+        <div class="share-buttons">
+          <button class="share-btn" onclick="shareTwitter()" title="Share on X">
+            <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </button>
+          <button class="share-btn" onclick="shareLinkedIn()" title="Share on LinkedIn">
+            <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+          </button>
+          <button class="share-btn" onclick="shareEmail()" title="Share via Email">
+            <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><path d="M22 6l-10 7L2 6"/></svg>
+          </button>
+          <button class="share-btn" onclick="copyLink()" title="Copy Link">
+            <svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="confluence-section">
+        <h3>JOIN THE CONFLUENCE</h3>
+        <p>Responses, questions, provocations. This is an open conversation about refusal, method, and the politics of narrative.</p>
+        
+        <div id="comments-list-refusal" style="margin-bottom: 30px;"></div>
+        
+        <div class="confluence-form">
+          <input type="text" id="comment-name-refusal" placeholder="Your name" style="flex: 1; min-width: 150px; padding: 15px 20px; background: transparent; border: 1px solid var(--mil-white-faint); color: var(--mil-white); font-family: var(--font-serif); font-size: 15px;">
+          <textarea id="comment-text-refusal" placeholder="Enter the confluence..."></textarea>
+          <button class="confluence-submit" type="button" onclick="submitComment('refusal-research')">SUBMIT</button>
+        </div>
+      </div>
+    </div>
+
+    <nav class="article-nav-pills">
+      <a href="index.html">HOME</a>
+      <a href="about.html">DOSSIER</a>
+      <a href="cv.html">CV</a>
+      <a href="labs-universe.html">LABS</a>
+      <a href="works.html">WORKS</a>
+      <a href="writing.html">WRITING</a>
+      <a href="transmissions.html" class="active">TRANSMISSIONS</a>
+      <a href="confluence.html">CONFLUENCE</a>
+      <a href="contact.html">CONTACT</a>
+    </nav>
+  </article>
+
+  <!-- Newsletter Section -->
+  <section class="newsletter-section" id="newsletter">
+    <div class="newsletter-content">
+      <div class="newsletter-icon">
+        <svg viewBox="0 0 24 24" stroke-width="1.5">
+          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+          <path d="M22 6l-10 7L2 6"/>
+        </svg>
+      </div>
+      <h2 class="newsletter-title">RECEIVE TRANSMISSIONS</h2>
+      <p class="newsletter-text">Essays on dance, embodied knowledge, and the circulation of movement. Delivered when there is something worth saying.</p>
+      <form class="newsletter-form" onsubmit="handleSubscribe(event)">
+        <input type="email" placeholder="your@email.com" required>
+        <button type="submit">SUBSCRIBE</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-content">
+      <span class="footer-logo">SINCLAIR EMOGHENE</span>
+      <nav class="footer-nav">
+        <a href="about.html">DOSSIER</a>
+        <a href="cv.html">CV</a>
+        <a href="labs-universe.html">LABS</a>
+        <a href="works.html">WORKS</a>
+        <a href="contact.html">CONTACT</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll Progress
+    window.addEventListener('scroll', () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = (scrollTop / docHeight) * 100;
+      document.getElementById('scroll-progress').style.width = progress + '%';
+
+      // Floating dot
+      const dot = document.getElementById('floating-dot');
+      if (dot) {
+        const dotPos = 30 + (progress / 100) * (window.innerHeight - 60);
+        dot.style.top = dotPos + 'px';
+      }
+
+      // Header shadow
+      const header = document.getElementById('site-header');
+      if (scrollTop > 50) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    });
+
+    // Fade in on scroll
+    const fadeElements = document.querySelectorAll('.fade-in');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    fadeElements.forEach(el => observer.observe(el));
+
+    // Trigger fade-in for elements already in view on page load
+    setTimeout(() => {
+      fadeElements.forEach(el => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight) {
+          el.classList.add('visible');
+        }
+      });
+    }, 100);
+
+    // Hide Article
+    function hideArticle() {
+      document.querySelectorAll('.article-full').forEach(el => el.classList.remove('active'));
+      document.getElementById('hero').style.display = 'block';
+      document.getElementById('articles-list').style.display = 'block';
+      window.scrollTo(0, 0);
+    }
+
+    // Show Article
+    function showArticle(id) {
+      document.getElementById('hero').style.display = 'none';
+      document.getElementById('articles-list').style.display = 'none';
+      document.getElementById('article-' + id).classList.add('active');
+      window.scrollTo(0, 0);
+      
+      // Load likes and comments if Supabase is ready
+      if (typeof loadLikes === 'function') loadLikes(id);
+      if (typeof loadComments === 'function') loadComments(id);
+    }
+
+    // Share Functions
+    function shareTwitter() {
+      const url = encodeURIComponent(window.location.href);
+      const text = encodeURIComponent('Confluence Dance Technique: Naming a Living Practice When the Names Are Already Taken');
+      window.open(`https://twitter.com/intent/tweet?url=${url}&text=${text}`, '_blank');
+    }
+
+    function shareLinkedIn() {
+      const url = encodeURIComponent(window.location.href);
+      window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}`, '_blank');
+    }
+
+    function shareEmail() {
+      const subject = encodeURIComponent('Confluence Dance Technique — Sinclair Emoghene');
+      const body = encodeURIComponent('Read this essay on dance, naming, and method: ' + window.location.href);
+      window.location.href = `mailto:?subject=${subject}&body=${body}`;
+    }
+
+    function copyLink() {
+      navigator.clipboard.writeText(window.location.href);
+      alert('Link copied to clipboard');
+    }
+
+    // Page Transitions
+    document.querySelectorAll('a').forEach(link => {
+      if (link.hostname === window.location.hostname && !link.getAttribute('onclick')) {
+        link.addEventListener('click', (e) => {
+          const href = link.getAttribute('href');
+          if (href && !href.startsWith('#') && !href.startsWith('mailto')) {
+            e.preventDefault();
+            document.body.style.opacity = '0';
+            document.body.style.transition = 'opacity 0.3s';
+            setTimeout(() => window.location.href = href, 300);
+          }
+        });
+      }
+    });
+
+    // Initial fade in
+    document.body.style.opacity = '0';
+    window.addEventListener('load', () => {
+      document.body.style.transition = 'opacity 0.5s';
+      document.body.style.opacity = '1';
+    });
+
+    // Register Service Worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js')
+        .then(reg => console.log('SW registered'))
+        .catch(err => console.log('SW registration failed:', err));
+    }
+
+    // Supabase Setup
+    const SUPABASE_URL = 'https://sgwmwjhieycbowwiixym.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_fQhNRry2M6SO8UgVt4BwAg_iA9kxouk';
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    // Load likes count
+    async function loadLikes(articleId) {
+      const { count, error } = await supabase
+        .from('article_likes')
+        .select('*', { count: 'exact', head: true })
+        .eq('article_id', articleId);
+      
+      // Try article-specific IDs first, then fallback to generic
+      const countEl = document.getElementById('like-count-' + articleId.replace('confluence-technique', '').replace('refusal-research', 'refusal')) || document.getElementById('like-count');
+      const btnEl = document.getElementById('like-btn-' + articleId.replace('confluence-technique', '').replace('refusal-research', 'refusal')) || document.getElementById('like-btn');
+      
+      if (!error && countEl) {
+        countEl.textContent = count || 0;
+      }
+      
+      // Check if already liked (stored in localStorage)
+      if (localStorage.getItem(`liked_${articleId}`) && btnEl) {
+        btnEl.classList.add('liked');
+      }
+    }
+
+    // Toggle like
+    async function toggleLike(articleId) {
+      const btnSuffix = articleId === 'refusal-research' ? '-refusal' : '';
+      const btn = document.getElementById('like-btn' + btnSuffix);
+      const countEl = document.getElementById('like-count' + btnSuffix);
+      const isLiked = localStorage.getItem(`liked_${articleId}`);
+      
+      if (isLiked) {
+        // Already liked - can't unlike (keeps it simple)
+        return;
+      }
+      
+      // Add like
+      const { error } = await supabase
+        .from('article_likes')
+        .insert({ article_id: articleId });
+      
+      if (!error) {
+        localStorage.setItem(`liked_${articleId}`, 'true');
+        if (btn) btn.classList.add('liked');
+        if (countEl) countEl.textContent = parseInt(countEl.textContent) + 1;
+      }
+    }
+
+    // Load comments
+    async function loadComments(articleId) {
+      const { data, error } = await supabase
+        .from('article_comments')
+        .select('*')
+        .eq('article_id', articleId)
+        .order('created_at', { ascending: false });
+      
+      const containerSuffix = articleId === 'refusal-research' ? '-refusal' : '';
+      const container = document.getElementById('comments-list' + containerSuffix);
+      
+      if (error || !data || data.length === 0) {
+        container.innerHTML = '<p class="no-comments">NO TRANSMISSIONS YET. BE THE FIRST TO RESPOND.</p>';
+        return;
+      }
+      
+      container.innerHTML = data.map(comment => `
+        <div class="comment-item">
+          <div class="comment-header">
+            <span class="comment-name">${escapeHtml(comment.name)}</span>
+            <span class="comment-date">${formatDate(comment.created_at)}</span>
+          </div>
+          <p class="comment-text">${escapeHtml(comment.comment)}</p>
+        </div>
+      `).join('');
+    }
+
+    // Submit comment
+    async function submitComment(articleId) {
+      const suffix = articleId === 'refusal-research' ? '-refusal' : '';
+      const nameEl = document.getElementById('comment-name' + suffix);
+      const textEl = document.getElementById('comment-text' + suffix);
+      const name = nameEl.value.trim();
+      const comment = textEl.value.trim();
+      
+      if (!name || !comment) {
+        alert('Please enter your name and comment.');
+        return;
+      }
+      
+      const { error } = await supabase
+        .from('article_comments')
+        .insert({ article_id: articleId, name, comment });
+      
+      if (error) {
+        alert('Error submitting comment. Please try again.');
+        return;
+      }
+      
+      nameEl.value = '';
+      textEl.value = '';
+      loadComments(articleId);
+    }
+
+    // Subscribe to newsletter
+    async function handleSubscribe(e) {
+      e.preventDefault();
+      const emailEl = e.target.querySelector('input');
+      const email = emailEl.value.trim();
+      
+      if (!email) return;
+      
+      const { error } = await supabase
+        .from('subscribers')
+        .insert({ email });
+      
+      if (error) {
+        if (error.code === '23505') {
+          alert('You are already subscribed!');
+        } else {
+          alert('Error subscribing. Please try again.');
+        }
+        return;
+      }
+      
+      alert('Thank you for subscribing. Transmissions incoming.');
+      emailEl.value = '';
+    }
+
+    // Utility functions
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function formatDate(dateStr) {
+      const date = new Date(dateStr);
+      return date.toLocaleDateString('en-US', { 
+        month: 'short', 
+        day: 'numeric', 
+        year: 'numeric' 
+      }).toUpperCase();
+    }
+  </script>
+
+</body>
+</html>
