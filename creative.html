@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Clerk Authentication Protection -->
+  <script async crossorigin="anonymous" data-clerk-publishable-key="pk_test_bmF0aXZlLWFudGVhdGVyLTY3LmNsZXJrLmFjY291bnRzLmRldiQ" src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js" type="text/javascript"></script>
+  <script>window.addEventListener("load", async () => { if (window.Clerk) { try { await window.Clerk.load(); if (!window.Clerk.user) { window.location.href = "index.html"; } } catch (err) { window.location.href = "index.html"; } } else { setTimeout(() => { if (!window.Clerk?.user) { window.location.href = "index.html"; } }, 2000); } });</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creative Practice | Sinclair Emoghene</title>
+<!-- PWA -->
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#00ff41">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="SINCLAIR">
+<link rel="apple-touch-icon" href="/icons/icon-192x192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --black: #0a0a0a;
+      --white: #e8e8e8;
+      --white-dim: rgba(232, 232, 232, 0.6);
+      --white-faint: rgba(232, 232, 232, 0.15);
+      --accent: #b87a6b;
+      --accent-dim: rgba(184, 122, 107, 0.3);
+      --font-mono: 'Share Tech Mono', monospace;
+      --font-display: 'Orbitron', sans-serif;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    /* Loading Screen */
+    .loading-screen { position: fixed; inset: 0; background: var(--black); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10000; transition: opacity 0.8s ease, visibility 0.8s ease; }
+    .loading-screen.hidden { opacity: 0; visibility: hidden; }
+    .loading-title { font-family: var(--font-display); font-size: 18px; font-weight: 700; letter-spacing: 6px; margin-bottom: 40px; color: var(--white); }
+    .loading-bar-container { width: 280px; height: 1px; background: var(--white-faint); overflow: hidden; }
+    .loading-bar { height: 100%; background: var(--white); width: 0%; transition: width 0.2s ease; }
+    .loading-text { margin-top: 20px; font-size: 9px; letter-spacing: 3px; color: var(--white-dim); }
+    .loading-dots { display: flex; gap: 6px; margin-top: 30px; }
+    .loading-dot { width: 6px; height: 6px; background: var(--white); border-radius: 50%; animation: dotPulse 1.4s ease-in-out infinite; }
+    .loading-dot:nth-child(2) { animation-delay: 0.2s; }
+    .loading-dot:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes dotPulse { 0%, 100% { transform: scale(1); opacity: 0.3; } 50% { transform: scale(1.4); opacity: 1; } }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      line-height: 1.8;
+      letter-spacing: 0.5px;
+      min-height: 100vh;
+    }
+
+    /* === ANIMATION SYSTEM === */
+    .scroll-progress { position: fixed; top: 0; left: 0; height: 2px; background: var(--white); z-index: 10001; width: 0%; }
+    .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease, transform 0.8s ease; }
+    .reveal.revealed { opacity: 1; transform: translateY(0); }
+    .card-hover { transition: transform 0.4s ease, box-shadow 0.4s ease; }
+    .card-hover:hover { transform: translateY(-10px) scale(1.02); box-shadow: 0 30px 60px rgba(255,255,255,0.1); }
+    #particle-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; opacity: 0.5; }
+    .grid-overlay { position: fixed; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px); background-size: 60px 60px; pointer-events: none; z-index: 2; animation: gridPulse 5s ease-in-out infinite; }
+    @keyframes gridPulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.7; } }
+    .radar-sweep { position: fixed; bottom: 30px; right: 30px; width: 100px; height: 100px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.15); pointer-events: none; z-index: 50; overflow: hidden; }
+    .radar-sweep::before { content: ''; position: absolute; top: 50%; left: 50%; width: 50%; height: 2px; background: linear-gradient(90deg, rgba(255,255,255,0.8), transparent); transform-origin: left center; animation: radarSweep 3s linear infinite; }
+    @keyframes radarSweep { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    .radar-ring { position: absolute; top: 50%; left: 50%; border: 1px solid rgba(255,255,255,0.08); border-radius: 50%; transform: translate(-50%, -50%); }
+    .radar-ring:nth-child(1) { width: 33%; height: 33%; } .radar-ring:nth-child(2) { width: 66%; height: 66%; } .radar-ring:nth-child(3) { width: 100%; height: 100%; }
+    @media (max-width: 768px) { .radar-sweep { width: 60px; height: 60px; } }
+
+    /* Scanlines */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        rgba(0,0,0,0.1) 0px,
+        rgba(0,0,0,0.1) 1px,
+        transparent 1px,
+        transparent 2px
+      );
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* Header */
+    .header {
+      padding: 30px 40px;
+      border-bottom: 1px solid var(--white-faint);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header-back {
+      font-size: 10px;
+      color: var(--white-dim);
+      text-decoration: none;
+      letter-spacing: 2px;
+      transition: color 0.3s;
+    }
+
+    .header-back:hover { color: var(--white); }
+
+    .header-tag {
+      font-size: 9px;
+      letter-spacing: 3px;
+      color: var(--accent);
+    }
+
+    /* Hero */
+    .hero {
+      padding: 60px 40px;
+      border-bottom: 1px solid var(--white-faint);
+    }
+
+    .hero-label {
+      font-size: 9px;
+      letter-spacing: 3px;
+      color: var(--white-dim);
+      margin-bottom: 15px;
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: 36px;
+      letter-spacing: 4px;
+      margin-bottom: 15px;
+    }
+
+    .hero-subtitle {
+      font-size: 11px;
+      color: var(--white-dim);
+      letter-spacing: 2px;
+      max-width: 700px;
+    }
+
+    /* Content */
+    main {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 60px 40px;
+    }
+
+    .section { position: relative; z-index: 10;
+      margin-bottom: 60px;
+      padding-bottom: 60px;
+      border-bottom: 1px solid var(--white-faint);
+    }
+
+    .section:last-child {
+      border-bottom: none;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+    }
+
+    .section-tag {
+      font-size: 9px;
+      letter-spacing: 3px;
+      color: var(--accent);
+    }
+
+    .section-status {
+      font-size: 9px;
+      letter-spacing: 2px;
+      color: var(--white-dim);
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: 16px;
+      letter-spacing: 3px;
+      margin-bottom: 20px;
+    }
+
+    .section-text {
+      font-size: 11px;
+      color: var(--white-dim);
+      line-height: 2;
+    }
+
+    .section-text p {
+      margin-bottom: 20px;
+    }
+
+    .section-text strong {
+      color: var(--white);
+    }
+
+    .section-text em {
+      color: var(--accent);
+      font-style: normal;
+    }
+
+    /* Works Grid */
+    .works-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 25px;
+      margin-top: 30px;
+    }
+
+    .work-card {
+      border: 1px solid var(--white-faint);
+      overflow: hidden;
+      transition: border-color 0.3s;
+    }
+
+    .work-card:hover {
+      border-color: var(--accent-dim);
+    }
+
+    .work-video {
+      aspect-ratio: 16/9;
+      background: #111;
+    }
+
+    .work-video iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .work-content {
+      padding: 20px;
+    }
+
+    .work-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .work-category {
+      font-size: 8px;
+      letter-spacing: 2px;
+      color: var(--accent);
+    }
+
+    .work-year {
+      font-size: 9px;
+      color: var(--white-dim);
+    }
+
+    .work-title {
+      font-family: var(--font-display);
+      font-size: 13px;
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+    }
+
+    .work-desc {
+      font-size: 10px;
+      color: var(--white-dim);
+      line-height: 1.8;
+      margin-bottom: 15px;
+    }
+
+    .work-link {
+      font-size: 9px;
+      letter-spacing: 2px;
+      color: var(--white);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .work-link:hover {
+      color: var(--accent);
+    }
+
+    /* Opening Statement */
+    .opening {
+      padding: 40px;
+      border: 1px solid var(--accent-dim);
+      background: rgba(184, 122, 107, 0.03);
+      margin-bottom: 40px;
+    }
+
+    .opening-text {
+      font-size: 12px;
+      color: var(--white-dim);
+      line-height: 2.2;
+    }
+
+    .opening-text em {
+      color: var(--accent);
+      font-style: normal;
+    }
+
+    /* Categories */
+    .category-header {
+      font-family: var(--font-display);
+      font-size: 12px;
+      letter-spacing: 3px;
+      color: var(--accent);
+      margin: 40px 0 20px 0;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--white-faint);
+    }
+
+    /* Connection Box */
+    .connection-box {
+      border: 1px solid var(--white-faint);
+      padding: 30px;
+      margin-top: 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 30px;
+    }
+
+    .connection-text {
+      font-size: 11px;
+      color: var(--white-dim);
+      line-height: 1.9;
+      flex: 1;
+    }
+
+    .connection-link {
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--white);
+      text-decoration: none;
+      padding: 12px 20px;
+      border: 1px solid var(--white-faint);
+      transition: all 0.3s;
+      white-space: nowrap;
+    }
+
+    .connection-link:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* Nav Pills */
+
+    .nav-pill {
+      font-size: 9px;
+      letter-spacing: 2px;
+      color: var(--white-dim);
+      text-decoration: none;
+      padding: 10px 15px;
+      transition: all 0.3s;
+    }
+
+    .nav-pill:hover, .nav-pill.active {
+      color: var(--white);
+      background: var(--white-faint);
+    }
+
+    @media (max-width: 768px) {
+      .header { padding: 20px; }
+      .hero { padding: 40px 20px; }
+      .hero-title { font-size: 24px; }
+      main { padding: 40px 20px; }
+      .works-grid { grid-template-columns: 1fr; }
+      .connection-box { flex-direction: column; text-align: center; }
+    }
+  
+    
+
+  
+    /* Minimal Hamburger Menu */
+    .menu-btn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 30px;
+      height: 20px;
+      cursor: pointer;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: none;
+      border: none;
+      padding: 0;
+    }
+    .menu-btn span {
+      display: block;
+      width: 100%;
+      height: 2px;
+      background: rgba(255,255,255,0.6);
+      transition: all 0.3s ease;
+    }
+    .menu-btn:hover span { background: #fff; }
+    .menu-btn.open span:nth-child(1) { transform: rotate(45deg) translate(6px, 6px); }
+    .menu-btn.open span:nth-child(2) { opacity: 0; }
+    .menu-btn.open span:nth-child(3) { transform: rotate(-45deg) translate(6px, -6px); }
+
+    .nav-menu {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.95);
+      z-index: 9998;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+    .nav-menu.open { opacity: 1; visibility: visible; }
+    .nav-menu a {
+      display: block;
+      font-family: var(--font-display), 'Orbitron', sans-serif;
+      font-size: 18px;
+      font-weight: 500;
+      letter-spacing: 3px;
+      color: rgba(255,255,255,0.5);
+      text-decoration: none;
+      padding: 10px 20px;
+      text-align: center;
+      transition: color 0.2s;
+    }
+    .nav-menu a:hover, .nav-menu a.active { color: #fff; }
+    .nav-menu-inner { text-align: center; }
+    .nav-menu-label {
+      font-family: var(--font-mono), monospace;
+      font-size: 9px;
+      letter-spacing: 2px;
+      color: rgba(255,255,255,0.3);
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .menu-btn { bottom: 20px; right: 20px; }
+      .nav-menu a { font-size: 15px; padding: 8px 15px; }
+    }
+
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <button class="menu-btn" id="menuBtn" onclick="document.getElementById('menuBtn').classList.toggle('open');document.getElementById('navMenu').classList.toggle('open');document.body.style.overflow=document.getElementById('navMenu').classList.contains('open')?'hidden':'';">
+    <span></span><span></span><span></span>
+  </button>
+  <nav class="nav-menu" id="navMenu">
+    <div class="nav-menu-inner">
+      <div class="nav-menu-label">NAVIGATION</div>
+        <a href="index.html">HOME</a>
+        <a href="about.html">DOSSIER</a>
+        <a href="cv.html">CV</a>
+        <a href="labs-universe.html" class="active">LABS</a>
+        <a href="works.html">WORKS</a>
+        <a href="writing.html">WRITING</a>
+        <a href="transmissions.html">TRANSMISSIONS</a>
+        <a href="confluence.html">CONFLUENCE</a>
+        <a href="contact.html">CONTACT</a>
+    </div>
+  </nav>
+
+
+  <!-- Loading Screen -->
+  <div class="loading-screen" id="loading-screen">
+    <div class="loading-title">CREATIVE PRACTICE</div>
+    <div class="loading-bar-container"><div class="loading-bar" id="loading-bar"></div></div>
+    <div class="loading-text" id="loading-text">ENTERING STUDIO</div>
+    <div class="loading-dots"><div class="loading-dot"></div><div class="loading-dot"></div><div class="loading-dot"></div></div>
+  </div>
+
+  <header class="header">
+    <a href="labs-universe.html" class="header-back">← BACK TO LABS</a>
+    <span class="header-tag">LAB_04 // CREATIVE PRACTICE</span>
+  </header>
+
+  <section class="hero">
+    <p class="hero-label">THE STUDIO ECOLOGY</p>
+    <h1 class="hero-title">CREATIVE PRACTICE</h1>
+    <p class="hero-subtitle">
+      Where ideas become works through rehearsal, writing, iteration, failure, and return.
+    </p>
+  </section>
+
+  <main>
+    <section class="section">
+      <div class="section-header">
+        <span class="section-tag">WELCOME</span>
+        <span class="section-status">● ONGOING</span>
+      </div>
+      <h2 class="section-title">WELCOME TO MY LAB</h2>
+      
+      <div class="opening">
+        <p class="opening-text">
+          This is where I explore the past — not for nostalgia, but for <em>understanding</em>. For <em>growth</em>. 
+          As you walk through these works with me, you'll notice they don't arrive from triumph. They arrive from 
+          <em>pain</em>, from mistakes, from the kind of hurt that stays lodged in the heart and refuses to leave quietly.
+          <br><br>
+          I won't pretend those mistakes made me a better artist. That would be a lie. But I have learned to reach 
+          into that pain and pull something from it — moments of clarity, fragments of healing, and occasionally, art.
+        </p>
+      </div>
+
+      <div class="connection-box">
+        <p class="connection-text">
+          My creative practice is deeply intertwined with the <strong>Global Movement Research</strong> archive — 
+          a living system that preserves and honors the movement traditions that inform my work. 
+          Where creative practice explores, GMR remembers.
+        </p>
+        <a href="gmr.html" class="connection-link">EXPLORE GMR →</a>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <span class="section-tag">PERFORMANCES</span>
+        <span class="section-status">● STAGE WORKS</span>
+      </div>
+      <h2 class="section-title">LIVE PERFORMANCE</h2>
+
+      <div class="works-grid">
+        <article class="work-card">
+          <div class="work-video">
+            <iframe src="https://www.youtube.com/embed/6JwMrhSwcDU" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          </div>
+          <div class="work-content">
+            <div class="work-meta">
+              <span class="work-category">PERFORMANCE</span>
+              <span class="work-year">2025</span>
+            </div>
+            <h3 class="work-title">MÉ DUNIYA</h3>
+            <p class="work-desc">
+              An interdisciplinary dance and technology collaboration exploring Nigerian dance forms through 
+              tactile sensing and projection mapping. Part of The Sensorium Project.
+            </p>
+            <a href="sensorium.html" class="work-link">VIEW SENSORIUM LAB →</a>
+          </div>
+        </article>
+
+        <article class="work-card">
+          <div class="work-video">
+            <iframe src="https://www.youtube.com/embed/SjTSZCzqwN8" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          </div>
+          <div class="work-content">
+            <div class="work-meta">
+              <span class="work-category">PERFORMANCE</span>
+              <span class="work-year">2024</span>
+            </div>
+            <h3 class="work-title">I'LL MARRY WHEN I WANT</h3>
+            <p class="work-desc">
+              Contemporary dance inspired by the East African play exploring class, gender, culture, and the 
+              tension between modernity and tradition.
+            </p>
+            <a href="works.html" class="work-link">VIEW IN WORKS →</a>
+          </div>
+        </article>
+
+        <article class="work-card">
+          <div class="work-video">
+            <iframe src="https://www.youtube.com/embed/09wklOEhEnc" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          </div>
+          <div class="work-content">
+            <div class="work-meta">
+              <span class="work-category">PERFORMANCE</span>
+              <span class="work-year">2021</span>
+            </div>
+            <h3 class="work-title">AINIHI E ALTERIDADE</h3>
+            <p class="work-desc">
+              Fusion of Nigerian and Brazilian dance traditions exploring identity and otherness. 
+              With Pablo Regis de Oliveira and Dr. Kathleen Spanos.
+            </p>
+            <a href="works.html" class="work-link">VIEW IN WORKS →</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <span class="section-tag">FILMS</span>
+        <span class="section-status">● SCREEN WORKS</span>
+      </div>
+      <h2 class="section-title">DANCE FILM</h2>
+
+      <div class="works-grid">
+        <article class="work-card">
+          <div class="work-video">
+            <iframe src="https://player.vimeo.com/video/1146485835" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+          </div>
+          <div class="work-content">
+            <div class="work-meta">
+              <span class="work-category">FILM</span>
+              <span class="work-year">2025</span>
+            </div>
+            <h3 class="work-title">TEN POEM PROJECT: AUNTIE</h3>
+            <p class="work-desc">
+              Award-winning autoethnographic dance film exploring migration, queerness, aging, trauma, 
+              and resilience through a decade of asylum-pending life.
+            </p>
+            <a href="ten-poem.html" class="work-link">VIEW TEN POEM LAB →</a>
+          </div>
+        </article>
+
+        <article class="work-card">
+          <div class="work-video">
+            <iframe src="https://www.youtube.com/embed/XFoPyze8xk0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          </div>
+          <div class="work-content">
+            <div class="work-meta">
+              <span class="work-category">FILM</span>
+              <span class="work-year">2021</span>
+            </div>
+            <h3 class="work-title">THERAPY</h3>
+            <p class="work-desc">
+              A film about deep isolation and depression faced living in a foreign land. 
+              After this film came out, I finally reached for help.
+            </p>
+            <a href="works.html" class="work-link">VIEW IN WORKS →</a>
+          </div>
+        </article>
+
+        <article class="work-card">
+          <div class="work-video">
+            <iframe src="https://www.youtube.com/embed/cKPG_frb_RI" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          </div>
+          <div class="work-content">
+            <div class="work-meta">
+              <span class="work-category">FILM</span>
+              <span class="work-year">2015</span>
+            </div>
+            <h3 class="work-title">NYAM CHIEM</h3>
+            <p class="work-desc">
+              Dance film exploring trauma and memory through West African movement vocabularies. 
+              An early work that established thematic threads carried forward.
+            </p>
+            <a href="works.html" class="work-link">VIEW IN WORKS →</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <span class="section-tag">INSTALLATIONS</span>
+        <span class="section-status">● SITE-SPECIFIC</span>
+      </div>
+      <h2 class="section-title">INSTALLATION WORK</h2>
+
+      <div class="works-grid">
+        <article class="work-card">
+          <div class="work-video">
+            <iframe src="https://www.youtube.com/embed/0AYMNYYHEmc" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          </div>
+          <div class="work-content">
+            <div class="work-meta">
+              <span class="work-category">INSTALLATION</span>
+              <span class="work-year">2016</span>
+            </div>
+            <h3 class="work-title">ROAMS</h3>
+            <p class="work-desc">
+              Site-specific installation at UMD Metal Shop exploring privilege and marginalization 
+              through spatial intervention and embodied presence.
+            </p>
+            <a href="works.html" class="work-link">VIEW IN WORKS →</a>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+  <script>
+    const loadingMessages = ['ENTERING STUDIO', 'LOADING WORKS', 'CURATING ARCHIVE', 'READY'];
+    let loadProgress = 0;
+    (function simulateLoading() {
+      const bar = document.getElementById('loading-bar'), text = document.getElementById('loading-text');
+      const interval = setInterval(() => {
+        loadProgress += Math.random() * 20 + 10;
+        if (loadProgress > 100) loadProgress = 100;
+        bar.style.width = loadProgress + '%';
+        text.textContent = loadingMessages[Math.min(Math.floor(loadProgress / 28), loadingMessages.length - 1)];
+        if (loadProgress >= 100) { clearInterval(interval); setTimeout(() => { document.getElementById('loading-screen').classList.add('hidden'); initAnimations(); }, 400); }
+      }, 150);
+    })();
+
+    // === ANIMATION SYSTEM ===
+    function initAnimations() { initParticles(); initScrollReveal(); initScrollProgress(); initPageTransitions(); }
+    function initParticles() {
+      const canvas = document.getElementById('particle-canvas'); if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+      resize(); window.addEventListener('resize', resize);
+      const particles = [];
+      for (let i = 0; i < 50; i++) particles.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, vx: (Math.random() - 0.5) * 0.3, vy: (Math.random() - 0.5) * 0.3, size: Math.random() * 2 + 0.5, opacity: Math.random() * 0.5 + 0.2 });
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => { p.x += p.vx; p.y += p.vy; if (p.x < 0) p.x = canvas.width; if (p.x > canvas.width) p.x = 0; if (p.y < 0) p.y = canvas.height; if (p.y > canvas.height) p.y = 0; ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fillStyle = 'rgba(255,255,255,' + p.opacity + ')'; ctx.fill(); });
+        requestAnimationFrame(animate);
+      }
+      animate();
+    }
+    function initScrollReveal() { const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('revealed'); }); }, { threshold: 0.1 }); document.querySelectorAll('.reveal').forEach(el => observer.observe(el)); }
+    function initScrollProgress() { const bar = document.getElementById('scroll-progress'); if (!bar) return; window.addEventListener('scroll', () => { bar.style.width = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100 + '%'; }); }
+    function initPageTransitions() { document.querySelectorAll('a').forEach(link => { if (link.hostname === window.location.hostname && !link.hasAttribute('target')) { link.addEventListener('click', (e) => { const href = link.getAttribute('href'); if (href && !href.startsWith('#')) { e.preventDefault(); document.body.style.opacity = '0'; document.body.style.transition = 'opacity 0.3s'; setTimeout(() => window.location.href = href, 300); } }); } }); }
+  </script>
+
+<!-- Service Worker -->
+<script>
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/service-worker.js')
+        .then(reg => console.log('[PWA] Registered'))
+        .catch(err => console.error('[PWA] Failed:', err));
+}
+</script>
+<script>
+
+  </script>
+</body>
+</html>

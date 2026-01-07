@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Clerk Authentication Protection -->
+  <script async crossorigin="anonymous" data-clerk-publishable-key="pk_test_bmF0aXZlLWFudGVhdGVyLTY3LmNsZXJrLmFjY291bnRzLmRldiQ" src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js" type="text/javascript"></script>
+  <script>window.addEventListener("load", async () => { if (window.Clerk) { try { await window.Clerk.load(); if (!window.Clerk.user) { window.location.href = "index.html"; } } catch (err) { window.location.href = "index.html"; } } else { setTimeout(() => { if (!window.Clerk?.user) { window.location.href = "index.html"; } }, 2000); } });</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PERSONNEL DOSSIER // EMOGHENE, SINCLAIR // CV</title>
+<!-- PWA -->
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#00ff41">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="SINCLAIR">
+<link rel="apple-touch-icon" href="/icons/icon-192x192.png">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;500;700;900&display=swap');
+
+    :root {
+      --black: #000000;
+      --white: #ffffff;
+      --white-dim: rgba(255, 255, 255, 0.5);
+      --white-faint: rgba(255, 255, 255, 0.15);
+      --font-mono: 'Share Tech Mono', monospace;
+      --font-display: 'Orbitron', sans-serif;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body {
+      min-height: 100vh;
+      background: var(--black);
+      color: var(--white);
+      font-family: var(--font-mono);
+      cursor: crosshair;
+    }
+
+    .scanlines {
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(255, 255, 255, 0.02) 2px,
+        rgba(255, 255, 255, 0.02) 4px
+      );
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* Header */
+    .command-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: var(--black);
+      display: flex;
+      align-items: center;
+      padding: 0 30px;
+      z-index: 100;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+    }
+
+    .back-btn {
+      color: var(--white-dim);
+      text-decoration: none;
+      font-size: 11px;
+      letter-spacing: 2px;
+      transition: color 0.3s;
+    }
+
+    .back-btn:hover {
+      color: var(--white);
+    }
+
+    .header-title {
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 4px;
+    }
+
+    /* Main */
+    .main-content { position: relative; z-index: 10;
+      padding: 120px 40px 120px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    /* Dossier Header */
+    .dossier-header {
+      margin-bottom: 60px;
+    }
+
+    .dossier-label {
+      font-size: 10px;
+      color: var(--white-dim);
+      letter-spacing: 4px;
+      margin-bottom: 15px;
+    }
+
+    .dossier-name {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing: 6px;
+      margin-bottom: 10px;
+    }
+
+    .dossier-title {
+      font-size: 12px;
+      color: var(--white-dim);
+      letter-spacing: 2px;
+      margin-bottom: 20px;
+    }
+
+    .dossier-links {
+      display: flex;
+      gap: 30px;
+      flex-wrap: wrap;
+      font-size: 11px;
+    }
+
+    .dossier-links a {
+      color: var(--white);
+      text-decoration: none;
+      transition: opacity 0.3s;
+    }
+
+    .dossier-links a:hover {
+      opacity: 0.6;
+    }
+
+    /* Research Statement */
+    .research-statement {
+      margin-bottom: 60px;
+      padding: 25px 0;
+      border-top: 1px solid var(--white-faint);
+      border-bottom: 1px solid var(--white-faint);
+    }
+
+    .research-statement p {
+      font-size: 13px;
+      line-height: 1.9;
+      color: var(--white-dim);
+    }
+
+    /* Sections */
+    .cv-section {
+      margin-bottom: 50px;
+    }
+
+    .section-header {
+      margin-bottom: 25px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 4px;
+    }
+
+    .typing-dots {
+      display: inline-block;
+      width: 20px;
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 2px;
+    }
+
+    .typing-dots::after {
+      content: '';
+      animation: dotCycle 2s infinite;
+    }
+
+    @keyframes dotCycle {
+      0%, 100% { content: ''; }
+      25% { content: '.'; }
+      50% { content: '..'; }
+      75% { content: '...'; }
+    }
+
+    /* Entry */
+    .cv-entry {
+      padding: 12px 0;
+    }
+
+    .entry-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 6px;
+      gap: 20px;
+    }
+
+    .entry-title {
+      font-size: 13px;
+      color: var(--white);
+    }
+
+    .entry-date {
+      font-size: 10px;
+      color: var(--white-dim);
+      letter-spacing: 1px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .entry-subtitle {
+      font-size: 11px;
+      color: var(--white-dim);
+      margin-bottom: 4px;
+    }
+
+    .entry-desc {
+      font-size: 11px;
+      color: var(--white-dim);
+      line-height: 1.7;
+    }
+
+    .entry-amount {
+      font-family: var(--font-display);
+      font-size: 11px;
+      color: var(--white);
+      margin-top: 4px;
+    }
+
+    /* Navigation */
+
+    .nav-pill {
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--white-dim);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .nav-pill:hover,
+    .nav-pill.active {
+      color: var(--white);
+    }
+
+    @media (max-width: 768px) {
+      .main-content { position: relative; z-index: 10; padding: 100px 20px 120px; }
+      .entry-header { flex-direction: column; gap: 4px; }
+      .dossier-name { font-size: 22px; letter-spacing: 4px; }
+    }
+  
+    
+
+  
+    /* Minimal Hamburger Menu */
+    .menu-btn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 30px;
+      height: 20px;
+      cursor: pointer;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: none;
+      border: none;
+      padding: 0;
+    }
+    .menu-btn span {
+      display: block;
+      width: 100%;
+      height: 2px;
+      background: rgba(255,255,255,0.6);
+      transition: all 0.3s ease;
+    }
+    .menu-btn:hover span { background: #fff; }
+    .menu-btn.open span:nth-child(1) { transform: rotate(45deg) translate(6px, 6px); }
+    .menu-btn.open span:nth-child(2) { opacity: 0; }
+    .menu-btn.open span:nth-child(3) { transform: rotate(-45deg) translate(6px, -6px); }
+
+    .nav-menu {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.95);
+      z-index: 9998;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+    .nav-menu.open { opacity: 1; visibility: visible; }
+    .nav-menu a {
+      display: block;
+      font-family: var(--font-display), 'Orbitron', sans-serif;
+      font-size: 18px;
+      font-weight: 500;
+      letter-spacing: 3px;
+      color: rgba(255,255,255,0.5);
+      text-decoration: none;
+      padding: 10px 20px;
+      text-align: center;
+      transition: color 0.2s;
+    }
+    .nav-menu a:hover, .nav-menu a.active { color: #fff; }
+    .nav-menu-inner { text-align: center; }
+    .nav-menu-label {
+      font-family: var(--font-mono), monospace;
+      font-size: 9px;
+      letter-spacing: 2px;
+      color: rgba(255,255,255,0.3);
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .menu-btn { bottom: 20px; right: 20px; }
+      .nav-menu a { font-size: 15px; padding: 8px 15px; }
+    }
+
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <button class="menu-btn" id="menuBtn" onclick="document.getElementById('menuBtn').classList.toggle('open');document.getElementById('navMenu').classList.toggle('open');document.body.style.overflow=document.getElementById('navMenu').classList.contains('open')?'hidden':'';">
+    <span></span><span></span><span></span>
+  </button>
+  <nav class="nav-menu" id="navMenu">
+    <div class="nav-menu-inner">
+      <div class="nav-menu-label">NAVIGATION</div>
+        <a href="index.html">HOME</a>
+        <a href="about.html">DOSSIER</a>
+        <a href="cv.html" class="active">CV</a>
+        <a href="labs-universe.html">LABS</a>
+        <a href="works.html">WORKS</a>
+        <a href="writing.html">WRITING</a>
+        <a href="transmissions.html">TRANSMISSIONS</a>
+        <a href="confluence.html">CONFLUENCE</a>
+        <a href="contact.html">CONTACT</a>
+    </div>
+  </nav>
+
+
+
+  <div class="scanlines"></div>
+  <div class="scroll-progress" id="scroll-progress"></div>
+  <canvas id="particle-canvas"></canvas>
+  <div class="grid-overlay"></div>
+  <div class="radar-sweep"><div class="radar-ring"></div><div class="radar-ring"></div><div class="radar-ring"></div></div>
+
+  <header class="command-header">
+    <div class="header-left">
+      <a href="index.html" class="back-btn">← HOME</a>
+      <span class="header-title">PERSONNEL DOSSIER</span>
+    </div>
+  </header>
+
+  <main class="main-content">
+
+    <div class="dossier-header">
+      <div class="dossier-label">PERSONNEL FILE // CLEARANCE LEVEL OMEGA</div>
+      <h1 class="dossier-name">SINCLAIR OGAGA EMOGHENE</h1>
+      <p class="dossier-title">ASSISTANT PROFESSOR · CHOREOGRAPHER · RESEARCHER</p>
+      <div class="dossier-links">
+        <span>University of Texas at Austin</span>
+        <a href="https://sinclair.dance" target="_blank">sinclair.dance</a>
+        <a href="/cdn-cgi/l/email-protection#6a19030409060b0318440f07050d020f040f2a0b1f191e0304441f1e0f120b19440f0e1f"><span class="__cf_email__" data-cfemail="02716b6c616e636b702c676f6d656a676c6742637771766b6c2c7776677a63712c676677">[email&#160;protected]</span></a>
+      </div>
+    </div>
+
+    <div class="research-statement">
+      <p>My research investigates the intersections of dance, technology, and cultural memory, focusing on how embodied knowledge is archived, transmitted, and reactivated through digital, material, and affective systems. Central to my work are projects such as Global Movement Research (GMR) and The Thinking Archive, which examine the transformation of archival practice through artificial embodied intelligence (AEI), motion capture, and ethical design.</p>
+    </div>
+
+    <!-- EDUCATION -->
+    <section class="cv-section">
+      <div class="section-header">
+        <span class="section-title">EDUCATION</span>
+        <span class="typing-dots"></span>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">Master of Fine Arts (MFA) in Dance, Choreography and Performance</span>
+          <span class="entry-date">2016</span>
+        </div>
+        <p class="entry-subtitle">University of Maryland, College Park, MD</p>
+        <p class="entry-desc">Thesis: Nyam Chiem – Reconstructing and Performing Nightmare: A Dance Research in Performance of Sleep Paralysis</p>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">Bachelor of Arts (B.A.) with Honors in Theatre Arts</span>
+          <span class="entry-date">2007</span>
+        </div>
+        <p class="entry-subtitle">Federal University of Benin, Benin City, Edo State, Nigeria</p>
+        <p class="entry-desc">Major – Dance, Theatre, Acting, Costume and Directing</p>
+      </div>
+    </section>
+
+    <!-- ACADEMIC POSITIONS -->
+    <section class="cv-section">
+      <div class="section-header">
+        <span class="section-title">ACADEMIC POSITIONS</span>
+        <span class="typing-dots"></span>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">Assistant Professor of Theatre and Dance (Tenure-Track)</span>
+          <span class="entry-date">2024–PRESENT</span>
+        </div>
+        <p class="entry-subtitle">The University of Texas at Austin, Austin, TX</p>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">Assistant Professor of Dance and Choreography (Tenure-Track)</span>
+          <span class="entry-date">2019–2024</span>
+        </div>
+        <p class="entry-subtitle">Virginia Commonwealth University, Richmond, VA</p>
+      </div>
+    </section>
+
+    <!-- CREATIVE LABS -->
+    <section class="cv-section">
+      <div class="section-header">
+        <span class="section-title">CREATIVE LABS</span>
+        <span class="typing-dots"></span>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">The Sensorium Project - Integrated Lab</span>
+          <span class="entry-date">2025–PRESENT</span>
+        </div>
+        <p class="entry-subtitle">Creator, Lead Researcher & Choreographer</p>
+        <p class="entry-desc">First full-scale performance experiment integrating soft-robotic fluidic sensors with live choreography. Cross-disciplinary collaboration with engineering and media design teams.</p>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">Global Movement Research (GMR) Laboratory – Phase II</span>
+          <span class="entry-date">2024–PRESENT</span>
+        </div>
+        <p class="entry-subtitle">Principal Investigator – Lab Director</p>
+        <p class="entry-desc">Advanced research on Artificial Embodied Intelligence (AEI) and multimodal data fusion through motion capture and haptic visualization. Institutional Affiliation: The University of Texas at Austin.</p>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">Global Movement Research (GMR) Lab – Phase I</span>
+          <span class="entry-date">2023–2024</span>
+        </div>
+        <p class="entry-subtitle">Principal Investigator – Lab Director</p>
+        <p class="entry-desc">Data Capture, Annotation, and Experimental documentation of African and diasporic dance forms. Motion Capture Trials and Early Prototypes for the Thinking Archive (A.I. model).</p>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">The Dance Confluence (MVP in production)</span>
+          <span class="entry-date">2025–PRESENT</span>
+        </div>
+        <p class="entry-subtitle">The University of Texas at Austin – Lead Mobile Application Designer</p>
+        <p class="entry-desc">First-of-its-kind mobile app containing motion-capture data from GMR, geo-spatial detailing and remote sensing information.</p>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">Global Movement Research (GMR): Creating an AEI</span>
+          <span class="entry-date">2024–PRESENT</span>
+        </div>
+        <p class="entry-subtitle">The University of Texas at Austin – Lead Researcher and Project Lead</p>
+        <p class="entry-desc">Assembled over 59 dances and thousands of metadata body-point materials. Metadata used for AI training within the GMR Dance Confluence app.</p>
+      </div>
+    </section>
+
+    <!-- PUBLICATIONS -->
+    <section class="cv-section">
+      <div class="section-header">
+        <span class="section-title">PUBLICATIONS</span>
+        <span class="typing-dots"></span>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">Global Movement Research (GMR): Dance Technology and Process Documentation</span>
+          <span class="entry-date">2025</span>
+        </div>
+        <p class="entry-subtitle">Book Proposal under review – Routledge Taylor & Francis (~70,000 words)</p>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">Dancing in the World: Revealing Cultural Confluences</span>
+          <span class="entry-date">2023</span>
+        </div>
+        <p class="entry-subtitle">Routledge, London, UK (viii-139 pages)</p>
+        <p class="entry-desc">Co-authored with Kathleen Spanos, Ph.D.</p>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">The Sensorium Project: Affective Computation and Embodied Feedback in Performance</span>
+          <span class="entry-date">2026</span>
+        </div>
+        <p class="entry-subtitle">Article in preparation (1-37 pages)</p>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">Shaping Southern Shifts: Provocations in/through Laban Bartenieff Movement Studies</span>
+          <span class="entry-date">2024–PRESENT</span>
+        </div>
+        <p class="entry-subtitle">ESI Publications, South Africa – Book Editor (one of 4)</p>
+      </div>
+    </section>
+
+    <!-- CHOREOGRAPHY (FILM) -->
+    <section class="cv-section">
+      <div class="section-header">
+        <span class="section-title">CHOREOGRAPHY // FILM</span>
+        <span class="typing-dots"></span>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">Ten Poem Project (Award-Winning Short Film)</span>
+          <span class="entry-date">2026</span>
+        </div>
+        <p class="entry-subtitle">The University of Texas at Austin</p>
+        <p class="entry-desc">Choreographer, Director and Writer. Canada Short Film Festival (Grand Prize Winner), LGBTQ+ Toronto & Los Angeles Film Festival, Versatility Dance Festival, Austin Dance Festival Dance on Film, ATX Film Festival (Honorable Mention), Short to the Point Film Festival, DanceFilmmaking.com.</p>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">Therapy</span>
+          <span class="entry-date">2021</span>
+        </div>
+        <p class="entry-subtitle">Virginia Commonwealth University</p>
+        <p class="entry-desc">Choreographer. Screened at VCU Dance Now (Spring 2021).</p>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">Seeking Asylum</span>
+          <span class="entry-date">2018</span>
+        </div>
+        <p class="entry-subtitle">Make A Scene Media</p>
+        <p class="entry-desc">Performer, Actor, and Dancer. Screened at major short film festivals internationally and nationally.</p>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">I'll Take My Chances (First feature-length dance film in Nollywood)</span>
+          <span class="entry-date">2011</span>
+        </div>
+        <p class="entry-subtitle">The Royal Art Academy, Lagos, Nigeria</p>
+        <p class="entry-desc">Lead Choreographer. Viral Nigerian movie, box office critically acclaimed choreography.</p>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">International Dance Music Video – Tony Harmony</span>
+          <span class="entry-date">2008</span>
+        </div>
+        <p class="entry-subtitle">Nigeria</p>
+        <p class="entry-desc">Lead Choreographer. One of the most popular Nigerian music videos of the 2010s.</p>
+      </div>
+    </section>
+
+    <!-- CHOREOGRAPHY (STAGE) -->
+    <section class="cv-section">
+      <div class="section-header">
+        <span class="section-title">CHOREOGRAPHY // STAGE</span>
+        <span class="typing-dots"></span>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">Me Duniya Part I</span>
+          <span class="entry-date">2025</span>
+        </div>
+        <p class="entry-subtitle">Oscar G. Brockett Theatre, The University of Texas at Austin</p>
+        <p class="entry-desc">Performance and Engineering Collaboration with Dr. Lillian Chin, Cockrell School of Engineering.</p>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">Kaleidoscope of Tuts (Part II)</span>
+          <span class="entry-date">2020</span>
+        </div>
+        <p class="entry-subtitle">Grace Street Theater, Virginia Commonwealth University</p>
+        <p class="entry-desc">Faculty Dance Concert (VCU Dance Now).</p>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">Kaleidoscope of Tuts (Part I)</span>
+          <span class="entry-date">2020</span>
+        </div>
+        <p class="entry-subtitle">The John F. Kennedy Center for the Performing Arts, Washington D.C.</p>
+        <p class="entry-desc">Black History Month - Millennium Stage.</p>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">Peace Ball</span>
+          <span class="entry-date">2017</span>
+        </div>
+        <p class="entry-subtitle">National Museum of African American History and Culture, Washington D.C.</p>
+        <p class="entry-desc">Dancer and Choreographer. Director: Karen Kohn Bradley.</p>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">Nyam Chiem (Thesis Performance)</span>
+          <span class="entry-date">2016</span>
+        </div>
+        <p class="entry-subtitle">Dance Theater, The Clarice – University of Maryland</p>
+        <p class="entry-desc">Reconstructing and Performing Nightmare: A Dance Research in Performance of Sleep Paralysis.</p>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">Love + Peace = Bad Names</span>
+          <span class="entry-date">2016</span>
+        </div>
+        <p class="entry-subtitle">Dance Theater, The Clarice – University of Maryland</p>
+        <p class="entry-desc">NextDANCE Alumni Commission, NextNOW Festival ($2,500 commission).</p>
+      </div>
+    </section>
+
+    <!-- SITE-SPECIFIC & INSTALLATIONS -->
+    <section class="cv-section">
+      <div class="section-header">
+        <span class="section-title">SITE-SPECIFIC & INSTALLATIONS</span>
+        <span class="typing-dots"></span>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">The Sensorium Project (Me Duniya Part II)</span>
+          <span class="entry-date">2026</span>
+        </div>
+        <p class="entry-subtitle">The University of Texas at Austin</p>
+        <p class="entry-desc">Performance installation and engineering collaboration investigating haptic sensors. In progress.</p>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">Experimental Dance, Film, and Sound Design Collaboration</span>
+          <span class="entry-date">2024</span>
+        </div>
+        <p class="entry-subtitle">Institute for Contemporary Arts (ICA), Richmond, Virginia</p>
+        <p class="entry-desc">Director and Choreographer. Collaboration with Professor Stephen Vitiello.</p>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">Ainihi E Alteridade</span>
+          <span class="entry-date">2021</span>
+        </div>
+        <p class="entry-subtitle">Joe's Movement Emporium, The Clarice, and EduCarte (Washington D.C.)</p>
+        <p class="entry-desc">Community Engagement Commission. Collaboration with EduCarte.</p>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">Facets of Esoterics Part II</span>
+          <span class="entry-date">2020</span>
+        </div>
+        <p class="entry-subtitle">The Anderson, VCUArts, Richmond, Virginia</p>
+        <p class="entry-desc">Week-long Installation & Exhibition.</p>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">Facets of Esoterics Part I</span>
+          <span class="entry-date">2019</span>
+        </div>
+        <p class="entry-subtitle">The REACH, The John F. Kennedy Center, Washington D.C.</p>
+        <p class="entry-desc">First dance artist to receive the Office Hours Award ($10,000). Week-long Artist Residency.</p>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">Rooted on a Moving Spot (ROAMS)</span>
+          <span class="entry-date">2016</span>
+        </div>
+        <p class="entry-subtitle">Arts and Sociology Building – University of Maryland</p>
+        <p class="entry-desc">Self-produced dance and live-art collaboration with Pablo Salazar and Beki Bausch.</p>
+      </div>
+    </section>
+
+    <!-- EXTERNAL GRANTS & AWARDS -->
+    <section class="cv-section">
+      <div class="section-header">
+        <span class="section-title">EXTERNAL GRANTS & AWARDS</span>
+        <span class="typing-dots"></span>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">Dancing in the World: Revealing Cultural Confluences (Podcast)</span>
+          <span class="entry-date">2022</span>
+        </div>
+        <p class="entry-subtitle">Maryland State Arts Council – Creativity Grant</p>
+        <p class="entry-amount">$4,000</p>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">Ainihi E Alteridade</span>
+          <span class="entry-date">2021</span>
+        </div>
+        <p class="entry-subtitle">Joe's Movement Emporium & The Clarice Smith Performing Arts Center</p>
+        <p class="entry-amount">$5,000</p>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">Kaleidoscope of Tuts</span>
+          <span class="entry-date">2020</span>
+        </div>
+        <p class="entry-subtitle">The John F. Kennedy Center for the Performing Arts</p>
+        <p class="entry-amount">$5,500</p>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">Facets of Esoterics – Office Hours Award</span>
+          <span class="entry-date">2019</span>
+        </div>
+        <p class="entry-subtitle">The REACH at The John F. Kennedy Center – First dance artist selected</p>
+        <p class="entry-amount">$10,000</p>
+      </div>
+    </section>
+
+    <!-- INTERNAL RESEARCH FUNDING -->
+    <section class="cv-section">
+      <div class="section-header">
+        <span class="section-title">INTERNAL RESEARCH FUNDING</span>
+        <span class="typing-dots"></span>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">The Ten Poem Project</span>
+          <span class="entry-date">2025</span>
+        </div>
+        <p class="entry-subtitle">University of Texas at Austin – College of Fine Arts Creative Research Grant</p>
+        <p class="entry-amount">$9,845</p>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">Global Movement Research (GMR)</span>
+          <span class="entry-date">2024–PRESENT</span>
+        </div>
+        <p class="entry-subtitle">University of Texas at Austin – Faculty Start-Up Fund</p>
+        <p class="entry-amount">$3,000</p>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">Theatre and Dance Chair Fellowship</span>
+          <span class="entry-date">2024–PRESENT</span>
+        </div>
+        <p class="entry-subtitle">University of Texas at Austin – Faculty Research Fund</p>
+        <p class="entry-amount">$3,000</p>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">Living Archive / Global Movement Research</span>
+          <span class="entry-date">2022–2023</span>
+        </div>
+        <p class="entry-subtitle">Virginia Commonwealth University – Arts, Humanities, and Social Sciences Fund</p>
+        <p class="entry-amount">$9,883</p>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">Dancing in the World (Book Writing Grant)</span>
+          <span class="entry-date">2022</span>
+        </div>
+        <p class="entry-subtitle">Virginia Commonwealth University – Dean's Research Grant</p>
+        <p class="entry-amount">$5,000</p>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">Living Archives Research</span>
+          <span class="entry-date">2021</span>
+        </div>
+        <p class="entry-subtitle">Virginia Commonwealth University – Dean's Research Grant</p>
+        <p class="entry-amount">$4,500</p>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">Kaleidoscope of Tuts</span>
+          <span class="entry-date">2020</span>
+        </div>
+        <p class="entry-subtitle">Virginia Commonwealth University – Dean's Research Grant</p>
+        <p class="entry-amount">$5,000</p>
+      </div>
+    </section>
+
+    <!-- AWARDS & HONORS -->
+    <section class="cv-section">
+      <div class="section-header">
+        <span class="section-title">AWARDS & HONORS</span>
+        <span class="typing-dots"></span>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">NextLOOK Alumni Award – Distinguished Award for Alumni of the Year</span>
+          <span class="entry-date">2016</span>
+        </div>
+        <p class="entry-subtitle">University of Maryland</p>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">International Teaching Fellowship Program</span>
+          <span class="entry-date">2015</span>
+        </div>
+        <p class="entry-subtitle">University of Maryland – Teaching & Learning Transformation Center</p>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">Dean Fellowship</span>
+          <span class="entry-date">2013</span>
+        </div>
+        <p class="entry-subtitle">University of Maryland, College Park – Department of Theater, Dance and Performance Studies</p>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">Service Excellence Award</span>
+          <span class="entry-date">2008</span>
+        </div>
+        <p class="entry-subtitle">National Youth Service Corp, Enugu State, Nigeria</p>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">Best Dancer Award</span>
+          <span class="entry-date">2005–2006</span>
+        </div>
+        <p class="entry-subtitle">University of Benin, Department of Theatre Arts</p>
+      </div>
+    </section>
+
+    <!-- TEACHING -->
+    <section class="cv-section">
+      <div class="section-header">
+        <span class="section-title">TEACHING</span>
+        <span class="typing-dots"></span>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">University of Texas at Austin</span>
+          <span class="entry-date">2024–PRESENT</span>
+        </div>
+        <p class="entry-desc">Dance History I (TD 317M), Choreography II (TD 332N), Advanced Contemporary Dance (TD 322E), Intermediate Contemporary Dance (TD 322D), Projects in Dance Performance and Repertory (TD 232P/332P)</p>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">Virginia Commonwealth University</span>
+          <span class="entry-date">2019–2024</span>
+        </div>
+        <p class="entry-desc">Dance in World Cultures (DANC 313), West African Dance (DANC 191), Modern Dance II-IV (DANC 202-401), Dance History (DANC 104), Composition (DANC 206)</p>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">University of Maryland, College Park</span>
+          <span class="entry-date">2016</span>
+        </div>
+        <p class="entry-desc">West African Dance (DANC 138W / DANC 338)</p>
+      </div>
+    </section>
+
+    <!-- GUEST LECTURES -->
+    <section class="cv-section">
+      <div class="section-header">
+        <span class="section-title">GUEST LECTURES & PRESENTATIONS</span>
+        <span class="typing-dots"></span>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">West African Dance Masterclass</span>
+          <span class="entry-date">2025</span>
+        </div>
+        <p class="entry-subtitle">American College Dance Association (ACDA) – Texas State University, San Marcos, TX</p>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">Contemporary West African Dance Masterclass</span>
+          <span class="entry-date">2024</span>
+        </div>
+        <p class="entry-subtitle">American College Dance Association (ACDA) – Meredith College, Raleigh, NC</p>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">Book Talk: Dancing in the World: Revealing Cultural Confluences</span>
+          <span class="entry-date">2023</span>
+        </div>
+        <p class="entry-subtitle">Honors College, University of Maryland, College Park, MD</p>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">Conversations in the Atlantic Theory: Dancing in the World</span>
+          <span class="entry-date">2023</span>
+        </div>
+        <p class="entry-subtitle">Journal of French and Francophone Philosophy – Online Interview</p>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">Dance Composition and Site-Specific Choreographic Modalities</span>
+          <span class="entry-date">2020</span>
+        </div>
+        <p class="entry-subtitle">University of North Carolina, Asheville, NC</p>
+      </div>
+    </section>
+
+    <!-- PRESS & MEDIA -->
+    <section class="cv-section">
+      <div class="section-header">
+        <span class="section-title">PRESS & MEDIA</span>
+        <span class="typing-dots"></span>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">Wired for Rhythm</span>
+          <span class="entry-date">2025</span>
+        </div>
+        <p class="entry-subtitle">Cockrell School of Engineering, The University of Texas at Austin</p>
+        <p class="entry-desc">By Nat Levy | Nov 19, 2025</p>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">Dance Filmmaking Prepares to Crown the Inaugural Dance Film of the Year with the Help of LA Dancers</span>
+          <span class="entry-date">2024</span>
+        </div>
+        <p class="entry-subtitle">LA Dance Chronicles</p>
+        <p class="entry-desc">By Steven Vargas | Apr 5, 2024</p>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">Dancing Without Borders</span>
+          <span class="entry-date">2024</span>
+        </div>
+        <p class="entry-subtitle">Fulbright Chronicles, Volume 3, Number 2</p>
+        <p class="entry-desc">Author: Mary Anna Ball</p>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">Dance Confluences Website Launched</span>
+          <span class="entry-date">2023</span>
+        </div>
+        <p class="entry-desc">Platform created to reach global audiences and position work in global conversation. Serves as a place for future work from the book.</p>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">The Kennedy Center Announces Millennium Stage Schedule for February 2020</span>
+          <span class="entry-date">2020</span>
+        </div>
+        <p class="entry-subtitle">The John F. Kennedy Center for the Performing Arts</p>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">Dance is My Life</span>
+          <span class="entry-date">2011</span>
+        </div>
+        <p class="entry-subtitle">The Nation Newspaper</p>
+        <p class="entry-desc">Jan 18, 2012</p>
+      </div>
+    </section>
+
+    <!-- SERVICE TO THE FIELD -->
+    <section class="cv-section">
+      <div class="section-header">
+        <span class="section-title">SERVICE TO THE FIELD</span>
+        <span class="typing-dots"></span>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">Curator – <a href="https://dancefilmmaking.com" target="_blank" style="color: var(--white);">DanceFilmmaking.com</a></span>
+          <span class="entry-date">2023–PRESENT</span>
+        </div>
+        <p class="entry-subtitle">International Dance Film Platform</p>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">Faculty Representative – ACDA</span>
+          <span class="entry-date">2024–2025</span>
+        </div>
+        <p class="entry-subtitle">American College Dance Association – Texas State & Meredith College</p>
+      </div>
+    </section>
+
+    <!-- PROFESSIONAL AFFILIATIONS -->
+    <section class="cv-section">
+      <div class="section-header">
+        <span class="section-title">PROFESSIONAL AFFILIATIONS</span>
+        <span class="typing-dots"></span>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">StepMate Dance Outfit</span>
+          <span class="entry-date">2025–PRESENT</span>
+        </div>
+        <p class="entry-subtitle">Director, Lead Instructor, Choreographer, Artistic Director & Founder – Austin, TX</p>
+      </div>
+      <div class="cv-entry">
+        <div class="entry-header">
+          <span class="entry-title">Sinclair Dance / WXYZ Art Factory</span>
+          <span class="entry-date">2010–2024</span>
+        </div>
+        <p class="entry-subtitle">Director – Benin City, Nigeria & Richmond, Virginia</p>
+      </div>
+    </section>
+
+    <!-- MEMBERSHIPS -->
+    <section class="cv-section">
+      <div class="section-header">
+        <span class="section-title">MEMBERSHIPS</span>
+        <span class="typing-dots"></span>
+      </div>
+      <div class="cv-entry">
+        <p class="entry-desc">Dance Studies Association (DSA) · 2019–Present<br>
+        National Dance Education Organization (NDEO) · 2014–Present<br>
+        National Association for Nigerian Theatre Arts Practitioners (NANTAP) · 2010–2011<br>
+        Dance Guild of Nigeria / International Dance Council (CID), UNESCO · 2010–2011</p>
+      </div>
+    </section>
+
+    <!-- INSTITUTIONAL COLLABORATIONS -->
+    <section class="cv-section">
+      <div class="section-header">
+        <span class="section-title">INSTITUTIONAL COLLABORATIONS</span>
+        <span class="typing-dots"></span>
+      </div>
+      <div class="cv-entry">
+        <p class="entry-desc">U.S. Library of Congress – Washington D.C. – GMR Research Support<br>
+        Association for Cultural Equity – New York, New York – Alan Lomax Archive<br>
+        Mount Holyoke College – South Hadley, Massachusetts<br>
+        University of Maryland, College Park – Institutional Partnership</p>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+
+
+    // Loading animation - auto-init after brief delay
+    setTimeout(() => { initAnimations(); }, 500);
+
+    // === ANIMATION SYSTEM ===
+    function initAnimations() { initParticles(); initScrollReveal(); initScrollProgress(); initPageTransitions(); }
+    function initParticles() {
+      const canvas = document.getElementById('particle-canvas'); if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+      resize(); window.addEventListener('resize', resize);
+      const particles = [];
+      for (let i = 0; i < 50; i++) particles.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, vx: (Math.random() - 0.5) * 0.3, vy: (Math.random() - 0.5) * 0.3, size: Math.random() * 2 + 0.5, opacity: Math.random() * 0.5 + 0.2 });
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => { p.x += p.vx; p.y += p.vy; if (p.x < 0) p.x = canvas.width; if (p.x > canvas.width) p.x = 0; if (p.y < 0) p.y = canvas.height; if (p.y > canvas.height) p.y = 0; ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fillStyle = 'rgba(255,255,255,' + p.opacity + ')'; ctx.fill(); });
+        requestAnimationFrame(animate);
+      }
+      animate();
+    }
+    function initScrollReveal() { const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('revealed'); }); }, { threshold: 0.1 }); document.querySelectorAll('.reveal').forEach(el => observer.observe(el)); }
+    function initScrollProgress() { const bar = document.getElementById('scroll-progress'); if (!bar) return; window.addEventListener('scroll', () => { bar.style.width = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100 + '%'; }); }
+    function initPageTransitions() { document.querySelectorAll('a').forEach(link => { if (link.hostname === window.location.hostname && !link.hasAttribute('target')) { link.addEventListener('click', (e) => { const href = link.getAttribute('href'); if (href && !href.startsWith('#')) { e.preventDefault(); document.body.style.opacity = '0'; document.body.style.transition = 'opacity 0.3s'; setTimeout(() => window.location.href = href, 300); } }); } }); }
+  </script>
+
+<!-- Service Worker -->
+<script>
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/service-worker.js')
+        .then(reg => console.log('[PWA] Registered'))
+        .catch(err => console.error('[PWA] Failed:', err));
+}
+</script>
+</body>
+</html>
