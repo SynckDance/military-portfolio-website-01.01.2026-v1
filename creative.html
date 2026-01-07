@@ -6,15 +6,14 @@
   <script>window.addEventListener("load", async () => { if (window.Clerk) { try { await window.Clerk.load(); if (!window.Clerk.user) { window.location.href = "index.html"; } } catch (err) { window.location.href = "index.html"; } } else { setTimeout(() => { if (!window.Clerk?.user) { window.location.href = "index.html"; } }, 2000); } });</script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- PWA -->
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#000000">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="EMOGHENE">
-  <link rel="icon" type="image/png" href="favicon.png">
-  <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <title>Creative Practice | Sinclair Emoghene</title>
+<!-- PWA -->
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#00ff41">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="SINCLAIR">
+<link rel="apple-touch-icon" href="/icons/icon-192x192.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet">
@@ -70,7 +69,6 @@
     .radar-ring { position: absolute; top: 50%; left: 50%; border: 1px solid rgba(255,255,255,0.08); border-radius: 50%; transform: translate(-50%, -50%); }
     .radar-ring:nth-child(1) { width: 33%; height: 33%; } .radar-ring:nth-child(2) { width: 66%; height: 66%; } .radar-ring:nth-child(3) { width: 100%; height: 100%; }
     @media (max-width: 768px) { .radar-sweep { width: 60px; height: 60px; } }
-      html, body { overflow-x: hidden; overflow-y: auto; -webkit-overflow-scrolling: touch; }
 
     /* Scanlines */
     body::before {
@@ -344,7 +342,7 @@
     }
 
     /* Nav Pills */
-    .nav-pills {
+    .nav-pills { display: none;
       position: fixed;
       bottom: 30px;
       left: 50%;
@@ -372,7 +370,6 @@
     }
 
     @media (max-width: 768px) {
-      html, body { overflow-x: hidden; overflow-y: auto; -webkit-overflow-scrolling: touch; }
       .header { padding: 20px; }
       .hero { padding: 40px 20px; }
       .hero-title { font-size: 24px; }
@@ -381,9 +378,154 @@
       .connection-box { flex-direction: column; text-align: center; }
       .nav-pills { display: none; }
     }
+  
+    /* Hamburger Menu Button - Bottom Right */
+    .menu-toggle {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 56px;
+      height: 56px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 10001;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .menu-toggle:hover {
+      background: rgba(255,255,255,0.2);
+      border-color: rgba(255,255,255,0.5);
+      transform: scale(1.05);
+    }
+
+    .menu-toggle span {
+      display: block;
+      width: 20px;
+      height: 2px;
+      background: var(--white);
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .menu-toggle span::before,
+    .menu-toggle span::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 2px;
+      background: var(--white);
+      transition: all 0.3s ease;
+    }
+
+    .menu-toggle span::before { top: -6px; }
+    .menu-toggle span::after { top: 6px; }
+
+    .menu-toggle.active span { background: transparent; }
+    .menu-toggle.active span::before { top: 0; transform: rotate(45deg); }
+    .menu-toggle.active span::after { top: 0; transform: rotate(-45deg); }
+
+    /* Full Screen Nav Overlay */
+    .nav-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.98);
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.4s ease;
+    }
+
+    .nav-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .nav-overlay-content {
+      text-align: center;
+      position: relative;
+      z-index: 10;
+    }
+
+    .nav-overlay-links {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .nav-overlay-links a {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 4px;
+      color: rgba(255,255,255,0.4);
+      text-decoration: none;
+      padding: 12px 30px;
+      transition: all 0.3s ease;
+    }
+
+    .nav-overlay-links a:hover,
+    .nav-overlay-links a.active {
+      color: #fff;
+    }
+
+    .nav-overlay-label {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 3px;
+      color: rgba(255,255,255,0.3);
+      margin-bottom: 30px;
+    }
+
+    @media (max-width: 768px) {
+      .menu-toggle {
+        bottom: 20px;
+        right: 20px;
+        width: 50px;
+        height: 50px;
+      }
+      .nav-overlay-links a {
+        font-size: 16px;
+        letter-spacing: 3px;
+        padding: 10px 20px;
+      }
+    }
+
   </style>
 </head>
 <body>
+
+  <!-- Hamburger Menu Button -->
+  <button class="menu-toggle" id="menu-toggle" onclick="toggleNav()">
+    <span></span>
+  </button>
+
+  <!-- Full Screen Nav Overlay -->
+  <nav class="nav-overlay" id="nav-overlay">
+    <div class="nav-overlay-content">
+      <div class="nav-overlay-label">NAVIGATION</div>
+      <div class="nav-overlay-links">
+        <a href="index.html">HOME</a>
+        <a href="about.html">DOSSIER</a>
+        <a href="cv.html">CV</a>
+        <a href="labs-universe.html" class="active">LABS</a>
+        <a href="works.html">WORKS</a>
+        <a href="writing.html">WRITING</a>
+        <a href="transmissions.html">TRANSMISSIONS</a>
+        <a href="confluence.html">CONFLUENCE</a>
+        <a href="contact.html">CONTACT</a>
+      </div>
+    </div>
+  </nav>
+
   <!-- Loading Screen -->
   <div class="loading-screen" id="loading-screen">
     <div class="loading-title">CREATIVE PRACTICE</div>
@@ -597,7 +739,6 @@
     <a href="labs-universe.html" class="nav-pill">LABS</a>
     <a href="works.html" class="nav-pill">WORKS</a>
     <a href="writing.html" class="nav-pill">WRITING</a>
-    <a href="transmissions.html" class="nav-pill">TRANSMISSIONS</a>
     <a href="confluence.html" class="nav-pill">CONFLUENCE</a>
     <a href="contact.html" class="nav-pill">CONTACT</a>
   </nav>
@@ -634,6 +775,26 @@
     function initScrollReveal() { const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('revealed'); }); }, { threshold: 0.1 }); document.querySelectorAll('.reveal').forEach(el => observer.observe(el)); }
     function initScrollProgress() { const bar = document.getElementById('scroll-progress'); if (!bar) return; window.addEventListener('scroll', () => { bar.style.width = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100 + '%'; }); }
     function initPageTransitions() { document.querySelectorAll('a').forEach(link => { if (link.hostname === window.location.hostname && !link.hasAttribute('target')) { link.addEventListener('click', (e) => { const href = link.getAttribute('href'); if (href && !href.startsWith('#')) { e.preventDefault(); document.body.style.opacity = '0'; document.body.style.transition = 'opacity 0.3s'; setTimeout(() => window.location.href = href, 300); } }); } }); }
+  </script>
+
+<!-- Service Worker -->
+<script>
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/service-worker.js')
+        .then(reg => console.log('[PWA] Registered'))
+        .catch(err => console.error('[PWA] Failed:', err));
+}
+</script>
+<script>
+    // Nav Toggle
+    function toggleNav() {
+      const toggle = document.getElementById('menu-toggle');
+      const overlay = document.getElementById('nav-overlay');
+      toggle.classList.toggle('active');
+      overlay.classList.toggle('active');
+      document.body.style.overflow = overlay.classList.contains('active') ? 'hidden' : '';
+    }
+
   </script>
 </body>
 </html>
