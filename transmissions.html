@@ -465,6 +465,9 @@
       position: relative;
       z-index: 100;
       cursor: pointer;
+      background: none;
+      border: none;
+      padding: 10px 0;
     }
 
     .article-back:hover {
@@ -1437,6 +1440,25 @@
       <span class="section-title">LATEST TRANSMISSIONS</span>
     </div>
 
+    <!-- New Article: Auntie -->
+    <div class="article-card fade-in visible" style="cursor:pointer;" onclick="document.getElementById('hero').style.display='none'; document.getElementById('articles-list').style.display='none'; document.getElementById('article-auntie').classList.add('active'); window.scrollTo(0,0);">
+      <div class="article-meta">
+        <span class="article-date">JANUARY 2026</span>
+        <span class="article-category">MEMOIR</span>
+        <span class="article-reading-time">6 min read</span>
+      </div>
+      <div class="article-content">
+        <h2>Auntie</h2>
+        <p class="article-excerpt">When I was seven, there was a day after dinner when the world felt like it belonged to children and small animals. That evening I was still outside, playing at the playground, listening the way you listen when you are young and everything is new.</p>
+        <span class="read-more">
+          READ TRANSMISSION
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </span>
+      </div>
+    </div>
+
     <!-- New Article: Refusal as Research -->
     <div class="article-card fade-in visible" style="cursor:pointer;" onclick="document.getElementById('hero').style.display='none'; document.getElementById('articles-list').style.display='none'; document.getElementById('article-refusal-research').classList.add('active'); window.scrollTo(0,0);">
       <div class="article-meta">
@@ -1489,7 +1511,7 @@
     <div class="article-inner">
       <div class="article-classification">TRANSMISSION // CLASSIFIED DOCUMENT // CLEARANCE OMEGA</div>
       
-      <a href="#" class="article-back" onclick="event.preventDefault(); hideArticle();">
+      <a href="#" class="article-back" onclick="document.querySelectorAll('.article-full').forEach(function(el){el.classList.remove('active')});document.getElementById('hero').style.display='block';document.getElementById('articles-list').style.display='block';var n=document.getElementById('newsletter');if(n)n.style.display='block';window.scrollTo(0,0);">
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5">
           <path d="M19 12H5M12 19l-7-7 7-7"/>
         </svg>
@@ -1695,12 +1717,12 @@
     <div class="article-inner">
       <div class="article-classification">TRANSMISSION // CLASSIFIED DOCUMENT // CLEARANCE OMEGA</div>
       
-      <a href="#" class="article-back" onclick="event.preventDefault(); hideArticle();">
+      <a href="#" class="article-back" onclick="document.querySelectorAll('.article-full').forEach(function(el){el.classList.remove('active')});document.getElementById('hero').style.display='block';document.getElementById('articles-list').style.display='block';var n=document.getElementById('newsletter');if(n)n.style.display='block';window.scrollTo(0,0);">
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5">
           <path d="M19 12H5M12 19l-7-7 7-7"/>
         </svg>
         BACK TO TRANSMISSIONS
-      </a>
+      </button>
 
       <header class="article-header">
         <span class="article-category">FILM / RESEARCH</span>
@@ -1875,6 +1897,113 @@
     </div>
   </article>
 
+  <!-- Full Article: Auntie -->
+  <article class="article-full" id="article-auntie">
+    <div class="scanlines"></div>
+    <div class="grid-overlay"></div>
+    
+    <div class="article-inner">
+      <div class="article-classification">TRANSMISSION // CLASSIFIED DOCUMENT // CLEARANCE OMEGA</div>
+      
+      <a href="#" class="article-back" onclick="document.querySelectorAll('.article-full').forEach(function(el){el.classList.remove('active')});document.getElementById('hero').style.display='block';document.getElementById('articles-list').style.display='block';var n=document.getElementById('newsletter');if(n)n.style.display='block';window.scrollTo(0,0);">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        BACK TO TRANSMISSIONS
+      </button>
+
+      <header class="article-header">
+        <span class="article-category">MEMOIR</span>
+        <h1>Auntie</h1>
+        <div class="article-info">
+          <span>
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M12 6v6l4 2"/>
+            </svg>
+            6 min read
+          </span>
+          <span>JANUARY 2026</span>
+          <span>SINCLAIR EMOGHENE</span>
+        </div>
+      </header>
+
+      <div class="article-body">
+        <p>When I was seven, there was a day after dinner when the world felt like it belonged to children and small animals. That evening I was still outside, playing at the playground, listening the way you listen when you are young and everything is new. Frogs had started their mating rituals, their calls rising and falling like a conversation you do not need to understand to feel. Crickets chirped in the distance. Nearby, other children played and sang moonlight songs, their voices drifting through the air as if the night itself was singing back.</p>
+
+        <p>Then my auntie called my name.</p>
+
+        <p>I found her in the kitchen, putting dishes away. She had the kind of tired focus adults get when they are finishing the last task of the day. But when she turned to me, her face changed. She looked frightened, the way someone looks when they suddenly remember something they cannot undo.</p>
+
+        <p>She told me, endearingly, she had forgotten the church visitors' meal.</p>
+
+        <p>My auntie said it was late. She said no one else would go, because the path to the church was dark. It was a twenty-minute walk, and the road meandered through places where you could meet snakes, wild cats, bush dogs. The night was when they came out to play. It simply made the night come alive and more real.</p>
+
+        <p>There was another reason, too. Her foot was injured. She could not make a long trip. She looked at me like she was asking for something big without wanting to say the word big. She pleaded with me to take the meal. I remember the strange clarity of that moment. I understood what she needed. I understood why she was asking me. And I said yes with joy.</p>
+
+        <p>I took the meal in my hand and stepped out into the night. The moonlight was bright enough to draw clean edges around trees and roofs and the curves of the road. When you are seven, darkness sometimes is a kind of privacy and a kind of freedom I cannot now put to words as I think of this wholesome night. The night felt quiet in a way that made every sound clearer than ever: the frogs, the insects, the soft movement of leaves. It was as if I had stepped into nature's own abode. As if nature was awake and watching, and I was walking through its most vulnerable place.</p>
+
+        <p>I have always been drawn to animals, and I felt they were drawn to me. Even then I had the feeling that most of them knew me by name. I could not explain it, only felt it. The night felt populated, alive with hidden eyes and listening bodies. I liked that. I liked being in the world like that, not loud, but deeply present as if I am one with nature.</p>
+
+        <div class="pull-quote">
+          <p>Maybe my voice was my lantern. Maybe the sound was my way of telling the night: I am here, I am not hiding, I am moving through.</p>
+        </div>
+
+        <p>So I walked with the meal in one hand and made myself a small parade. I sang. I danced. I pranced down the road the way only a child can, as if movement itself could hold courage. In truth, I was a little scared, but not of the animals. The animals made sense to me. What frightened me was the possibility of people, seeable or unseen, human beings who could be lurking in the dark with intentions you could not read.</p>
+
+        <p>Maybe that is why I sang so loudly. Maybe my voice was my lantern. Maybe the sound was my way of telling the night: I am here, I am not hiding, I am moving through. As my mind's voice shivers with fear. I kept walking until the church came into view. The visitors were there, and when they saw me, their faces opened like doors. They were excited to see a child arriving alone at night, and even more excited when they realized I had brought the meals. I remember their genuine gratitude. The kind that makes you feel useful in the world. The kind that makes you feel trusted.</p>
+
+        <p>I stayed only long enough to deliver what I carried. And then I turned back.</p>
+
+        <p>On the way there I had walked. On the way back I ran. I ran because I was suddenly aware again of the darkness, of the distance, of the possibility of other humans out there. I ran as if the night could change its mind. I ran as if my feet could erase the space between danger and home. I ran until I felt the familiar air of my neighborhood again, until the shapes around me were not strangers.</p>
+
+        <p>Years have passed, but that walk has stayed. The experience of it remained with me. I can still smell the bushes, hear the quiet night and my little feet running through the shrubs. The feeling of it has stayed: being small and alone and carrying something that mattered, moving through darkness that was both peaceful and risky, hearing the world breathe around me, finding freedom inside fear.</p>
+
+        <p>I think about that night now, living far away from where I began. There are days when my life feels like that road: dark, quiet, meandering. Living alone in the US makes me feel this way. A little scared of the dark, taking brisk walks, being scared of human beings, and running home. I have always thought about this as a metaphor, but no, a foreign land can feel like a long walk you did not fully choose, a place where you must keep moving even when no one else is willing to go with you. There is solitude in it. There is also beauty. There is a strange kind of peace that comes from learning how to walk through the dark without begging it to become daylight.</p>
+
+        <p>Sometimes I feel alone. Sometimes I feel afraid. But I also feel a freedom that I recognize. The night, the moonlight, the song I used to keep myself brave, the sense of animals listening, the careful joy of being trusted with something important, and making it there anyway, all of that lives in me. That one walk in the dark, with a meal in my hand and my voice in the air, is a sweet memory and it is a map with which I trace the fading memories my body holds.</p>
+      </div>
+
+      <!-- Share Section -->
+      <div class="share-section">
+        <div style="display: flex; align-items: center; gap: 20px;">
+          <span class="share-label">SHARE THIS TRANSMISSION</span>
+          <button class="like-btn" id="like-btn-auntie" onclick="toggleLike('auntie')">
+            <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            <span class="like-count" id="like-count-auntie">0</span>
+          </button>
+        </div>
+        <div class="share-buttons">
+          <button class="share-btn" onclick="shareTwitter()" title="Share on X">
+            <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </button>
+          <button class="share-btn" onclick="shareLinkedIn()" title="Share on LinkedIn">
+            <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+          </button>
+          <button class="share-btn" onclick="shareEmail()" title="Share via Email">
+            <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><path d="M22 6l-10 7L2 6"/></svg>
+          </button>
+          <button class="share-btn" onclick="copyLink()" title="Copy Link">
+            <svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="confluence-section">
+        <h3>JOIN THE CONFLUENCE</h3>
+        <p>Responses, questions, reflections. This is an open conversation.</p>
+        
+        <div id="comments-list-auntie" style="margin-bottom: 30px;"></div>
+        
+        <div class="confluence-form">
+          <input type="text" id="comment-name-auntie" placeholder="Your name" style="flex: 1; min-width: 150px; padding: 15px 20px; background: transparent; border: 1px solid var(--mil-white-faint); color: var(--mil-white); font-family: var(--font-serif); font-size: 15px;">
+          <textarea id="comment-text-auntie" placeholder="Enter the confluence..."></textarea>
+          <button class="confluence-submit" type="button" onclick="submitComment('auntie')">SUBMIT</button>
+        </div>
+      </div>
+    </div>
+  </article>
+
   <!-- Newsletter Section -->
   <section class="newsletter-section" id="newsletter">
     <div class="newsletter-content">
@@ -2042,9 +2171,13 @@
         .select('*', { count: 'exact', head: true })
         .eq('article_id', articleId);
       
-      // Try article-specific IDs first, then fallback to generic
-      const countEl = document.getElementById('like-count-' + articleId.replace('confluence-technique', '').replace('refusal-research', 'refusal')) || document.getElementById('like-count');
-      const btnEl = document.getElementById('like-btn-' + articleId.replace('confluence-technique', '').replace('refusal-research', 'refusal')) || document.getElementById('like-btn');
+      // Get suffix based on articleId
+      let suffix = '';
+      if (articleId === 'refusal-research') suffix = '-refusal';
+      else if (articleId === 'auntie') suffix = '-auntie';
+      
+      const countEl = document.getElementById('like-count' + suffix);
+      const btnEl = document.getElementById('like-btn' + suffix);
       
       if (!error && countEl) {
         countEl.textContent = count || 0;
@@ -2058,9 +2191,12 @@
 
     // Toggle like
     async function toggleLike(articleId) {
-      const btnSuffix = articleId === 'refusal-research' ? '-refusal' : '';
-      const btn = document.getElementById('like-btn' + btnSuffix);
-      const countEl = document.getElementById('like-count' + btnSuffix);
+      let suffix = '';
+      if (articleId === 'refusal-research') suffix = '-refusal';
+      else if (articleId === 'auntie') suffix = '-auntie';
+      
+      const btn = document.getElementById('like-btn' + suffix);
+      const countEl = document.getElementById('like-count' + suffix);
       const isLiked = localStorage.getItem(`liked_${articleId}`);
       
       if (isLiked) {
@@ -2088,8 +2224,11 @@
         .eq('article_id', articleId)
         .order('created_at', { ascending: false });
       
-      const containerSuffix = articleId === 'refusal-research' ? '-refusal' : '';
-      const container = document.getElementById('comments-list' + containerSuffix);
+      let suffix = '';
+      if (articleId === 'refusal-research') suffix = '-refusal';
+      else if (articleId === 'auntie') suffix = '-auntie';
+      
+      const container = document.getElementById('comments-list' + suffix);
       
       if (error || !data || data.length === 0) {
         container.innerHTML = '<p class="no-comments">NO TRANSMISSIONS YET. BE THE FIRST TO RESPOND.</p>';
@@ -2109,7 +2248,10 @@
 
     // Submit comment
     async function submitComment(articleId) {
-      const suffix = articleId === 'refusal-research' ? '-refusal' : '';
+      let suffix = '';
+      if (articleId === 'refusal-research') suffix = '-refusal';
+      else if (articleId === 'auntie') suffix = '-auntie';
+      
       const nameEl = document.getElementById('comment-name' + suffix);
       const textEl = document.getElementById('comment-text' + suffix);
       const name = nameEl.value.trim();
