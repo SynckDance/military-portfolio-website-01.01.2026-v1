@@ -462,6 +462,9 @@
       margin-bottom: 60px;
       transition: color 0.3s;
       text-transform: uppercase;
+      position: relative;
+      z-index: 100;
+      cursor: pointer;
     }
 
     .article-back:hover {
@@ -1325,10 +1328,10 @@
       display: block;
       width: 100%;
       height: 2px;
-      background: rgba(255,255,255,0.6);
+      background: rgba(0,0,0,0.5);
       transition: all 0.3s ease;
     }
-    .menu-btn:hover span { background: #fff; }
+    .menu-btn:hover span { background: #000; }
     .menu-btn.open span:nth-child(1) { transform: rotate(45deg) translate(6px, 6px); }
     .menu-btn.open span:nth-child(2) { opacity: 0; }
     .menu-btn.open span:nth-child(3) { transform: rotate(-45deg) translate(6px, -6px); }
@@ -1486,7 +1489,7 @@
     <div class="article-inner">
       <div class="article-classification">TRANSMISSION // CLASSIFIED DOCUMENT // CLEARANCE OMEGA</div>
       
-      <a href="#" class="article-back" onclick="hideArticle(); return false;">
+      <a href="#" class="article-back" onclick="event.preventDefault(); hideArticle();">
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5">
           <path d="M19 12H5M12 19l-7-7 7-7"/>
         </svg>
@@ -1692,7 +1695,7 @@
     <div class="article-inner">
       <div class="article-classification">TRANSMISSION // CLASSIFIED DOCUMENT // CLEARANCE OMEGA</div>
       
-      <a href="#" class="article-back" onclick="hideArticle(); return false;">
+      <a href="#" class="article-back" onclick="event.preventDefault(); hideArticle();">
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5">
           <path d="M19 12H5M12 19l-7-7 7-7"/>
         </svg>
@@ -1905,9 +1908,6 @@
   </footer>
 
   <script>
-
-    // Close nav when clicking a link
-    });
 
     // Scroll Progress
     window.addEventListener('scroll', () => {
