@@ -410,6 +410,18 @@
     }
 
     /* Nav Pills */
+    .nav-pills { display: none;
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 5px;
+      background: rgba(10, 10, 10, 0.95);
+      padding: 8px;
+      border: 1px solid var(--white-faint);
+      z-index: 1000;
+    }
 
     .nav-pill {
       font-size: 9px;
@@ -431,89 +443,143 @@
       .hero-title { font-size: 24px; }
       main { padding: 40px 20px; }
       .outputs-grid { grid-template-columns: 1fr 1fr; }
+      .nav-pills { display: none; }
     }
   
-    
-
-  
-    /* Minimal Hamburger Menu */
-    .menu-btn {
+    /* Hamburger Menu Button - Bottom Right */
+    .menu-toggle {
       position: fixed;
       bottom: 30px;
       right: 30px;
-      width: 30px;
-      height: 20px;
+      width: 56px;
+      height: 56px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
       cursor: pointer;
-      z-index: 9999;
+      z-index: 10001;
       display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      background: none;
-      border: none;
-      padding: 0;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
     }
-    .menu-btn span {
+
+    .menu-toggle:hover {
+      background: rgba(255,255,255,0.2);
+      border-color: rgba(255,255,255,0.5);
+      transform: scale(1.05);
+    }
+
+    .menu-toggle span {
       display: block;
-      width: 100%;
+      width: 20px;
       height: 2px;
-      background: rgba(255,255,255,0.6);
+      background: var(--white);
+      position: relative;
       transition: all 0.3s ease;
     }
-    .menu-btn:hover span { background: #fff; }
-    .menu-btn.open span:nth-child(1) { transform: rotate(45deg) translate(6px, 6px); }
-    .menu-btn.open span:nth-child(2) { opacity: 0; }
-    .menu-btn.open span:nth-child(3) { transform: rotate(-45deg) translate(6px, -6px); }
 
-    .nav-menu {
+    .menu-toggle span::before,
+    .menu-toggle span::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 2px;
+      background: var(--white);
+      transition: all 0.3s ease;
+    }
+
+    .menu-toggle span::before { top: -6px; }
+    .menu-toggle span::after { top: 6px; }
+
+    .menu-toggle.active span { background: transparent; }
+    .menu-toggle.active span::before { top: 0; transform: rotate(45deg); }
+    .menu-toggle.active span::after { top: 0; transform: rotate(-45deg); }
+
+    /* Full Screen Nav Overlay */
+    .nav-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.95);
-      z-index: 9998;
+      background: rgba(0,0,0,0.98);
+      z-index: 10000;
       display: flex;
       align-items: center;
       justify-content: center;
       opacity: 0;
       visibility: hidden;
+      transition: all 0.4s ease;
+    }
+
+    .nav-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .nav-overlay-content {
+      text-align: center;
+      position: relative;
+      z-index: 10;
+    }
+
+    .nav-overlay-links {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .nav-overlay-links a {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 4px;
+      color: rgba(255,255,255,0.4);
+      text-decoration: none;
+      padding: 12px 30px;
       transition: all 0.3s ease;
     }
-    .nav-menu.open { opacity: 1; visibility: visible; }
-    .nav-menu a {
-      display: block;
-      font-family: var(--font-display), 'Orbitron', sans-serif;
-      font-size: 18px;
-      font-weight: 500;
-      letter-spacing: 3px;
-      color: rgba(255,255,255,0.5);
-      text-decoration: none;
-      padding: 10px 20px;
-      text-align: center;
-      transition: color 0.2s;
+
+    .nav-overlay-links a:hover,
+    .nav-overlay-links a.active {
+      color: #fff;
     }
-    .nav-menu a:hover, .nav-menu a.active { color: #fff; }
-    .nav-menu-inner { text-align: center; }
-    .nav-menu-label {
-      font-family: var(--font-mono), monospace;
+
+    .nav-overlay-label {
+      font-family: var(--font-mono);
       font-size: 9px;
-      letter-spacing: 2px;
+      letter-spacing: 3px;
       color: rgba(255,255,255,0.3);
-      margin-bottom: 20px;
+      margin-bottom: 30px;
     }
 
     @media (max-width: 768px) {
-      .menu-btn { bottom: 20px; right: 20px; }
-      .nav-menu a { font-size: 15px; padding: 8px 15px; }
+      .menu-toggle {
+        bottom: 20px;
+        right: 20px;
+        width: 50px;
+        height: 50px;
+      }
+      .nav-overlay-links a {
+        font-size: 16px;
+        letter-spacing: 3px;
+        padding: 10px 20px;
+      }
     }
 
   </style>
 </head>
 <body>
-  <!-- Navigation -->
-  <button class="menu-btn" id="menuBtn" onclick="document.getElementById('menuBtn').classList.toggle('open');document.getElementById('navMenu').classList.toggle('open');document.body.style.overflow=document.getElementById('navMenu').classList.contains('open')?'hidden':'';">
-    <span></span><span></span><span></span>
+
+  <!-- Hamburger Menu Button -->
+  <button class="menu-toggle" id="menu-toggle" onclick="toggleNav()">
+    <span></span>
   </button>
-  <nav class="nav-menu" id="navMenu">
-    <div class="nav-menu-inner">
-      <div class="nav-menu-label">NAVIGATION</div>
+
+  <!-- Full Screen Nav Overlay -->
+  <nav class="nav-overlay" id="nav-overlay">
+    <div class="nav-overlay-content">
+      <div class="nav-overlay-label">NAVIGATION</div>
+      <div class="nav-overlay-links">
         <a href="index.html">HOME</a>
         <a href="about.html">DOSSIER</a>
         <a href="cv.html">CV</a>
@@ -523,9 +589,9 @@
         <a href="transmissions.html">TRANSMISSIONS</a>
         <a href="confluence.html">CONFLUENCE</a>
         <a href="contact.html">CONTACT</a>
+      </div>
     </div>
   </nav>
-
 
   <!-- Loading Screen -->
   <div class="loading-screen" id="loading-screen">
@@ -712,53 +778,81 @@
 
     <section class="section">
       <div class="section-header">
-        <span class="section-tag">LAB PHASES</span>
+        <span class="section-tag">LAB CYCLES</span>
         <span class="section-status">● METHODOLOGY</span>
       </div>
-      <h2 class="section-title">CAPTURE INFRASTRUCTURE</h2>
+      <h2 class="section-title">RESEARCH INFRASTRUCTURE</h2>
 
       <div class="phase-card">
         <div class="phase-header">
-          <h3 class="phase-title">LAB PHASE I</h3>
-          <span class="phase-date">2023 · VCU</span>
+          <h3 class="phase-title">LAB ONE</h3>
+          <span class="phase-date">2023–2024 · CONFLUENCE MAP & ROOM</span>
         </div>
-        <p class="phase-tech">MOVELLA MARKER MOTION CAPTURE</p>
+        <p class="phase-tech">BUILDING THE RIVER SYSTEM</p>
         <p class="phase-text">
-          Initial lab captures using Movella marker-based motion capture system. Data simulation pipeline routed via Blender 
-          for rendering into video format visualization. Lab formats included BVH and MBX with low latency and precision. 
-          Blender renderings proved ineffective for analysis, but discoveries set the stage for developing the DRP Protocol—a 
-          systematic and ethical framework for assembling critical workflow and embodied captures.
+          Global Movement Research began with a simple but difficult question: can dances be treated as moving, relational archives instead of isolated pieces stored and forgotten in a repository. Lab One was the first attempt to answer that question in practice, building the foundations of the Thinking Archive by bringing geography, bodies, data, and description into one continuous environment.
+        </p>
+        <p class="phase-text">
+          The work centered on two linked prototypes: <strong>Confluence Map</strong> and <strong>Confluence Room</strong>. Confluence Map organizes dances into geographic confluences—Senegambia, Guinea Coast, Gold Coast, Bight of Benin, Niger Delta, Cameroon Grassfields, Congo Basin, Caribbean regions, and the Americas. These are not just map pins. They behave like river sources and meeting points where movement traditions gather, split, and rejoin. Paths between them trace how dances travel along trade routes, migration routes, and less visible lines of relation.
+        </p>
+        <p class="phase-text">
+          Confluence Room sits inside that cartography and lets visitors experience the archive at the scale of the body. Motion capture skeletons play in three-dimensional space with camera controls, time scrubbing, and layered descriptive panels. Each movement object carries several kinds of information at once: its biomechanical trace, its geographic and historical placement, and its cultural context. This is also where early experiments with the "Archive Voice" began.
+        </p>
+        <p class="phase-text">
+          Lab One also laid the analytic groundwork. Motion sequences are treated as movement objects that can be compared using Qualitative Trajectory Calculus (QTC) and Sequence Alignment Methods (SAM). These tools were adapted from work on spatial reasoning and dance movement analysis, then brought into conversation with the lived knowledge of dancers, choreographers, and communities.
         </p>
         <div class="phase-samples">
-          <a href="https://youtu.be/qhqRdtZKqBg" target="_blank" class="phase-sample">SAMPLE 1 →</a>
-          <a href="https://youtu.be/nkF5qlJ09QM" target="_blank" class="phase-sample">SAMPLE 2 →</a>
-          <a href="https://youtu.be/zobmpCRLI8Y" target="_blank" class="phase-sample">SAMPLE 3 →</a>
-          <a href="https://youtu.be/Y9mAJ3l5Lvo" target="_blank" class="phase-sample">SAMPLE 4 →</a>
+          <a href="https://youtu.be/qhqRdtZKqBg" target="_blank" class="phase-sample">CAPTURE SAMPLE 1 →</a>
+          <a href="https://youtu.be/nkF5qlJ09QM" target="_blank" class="phase-sample">CAPTURE SAMPLE 2 →</a>
+          <a href="https://youtu.be/zobmpCRLI8Y" target="_blank" class="phase-sample">CAPTURE SAMPLE 3 →</a>
+          <a href="https://youtu.be/Y9mAJ3l5Lvo" target="_blank" class="phase-sample">CAPTURE SAMPLE 4 →</a>
         </div>
       </div>
 
       <div class="phase-card">
         <div class="phase-header">
-          <h3 class="phase-title">LAB PHASE II</h3>
-          <span class="phase-date">2024 · UT AUSTIN AET DOTY LIBRARY</span>
+          <h3 class="phase-title">LAB TWO</h3>
+          <span class="phase-date">2024–PRESENT · REPLICATION STUDIO & MOVEMENT JOURNAL</span>
         </div>
-        <p class="phase-tech">CAPTURY MARKERLESS MOTION CAPTURE</p>
+        <p class="phase-tech">STUDYING THE RIVERBANK</p>
         <p class="phase-text">
-          Transition from Movella to Captury advanced markerless mocap system at UT Austin's AET Doty Library Media Lab. 
-          Generates immediately available visualization via FBX and humanoid renderings through Unity, Unreal Engine, and 
-          other visualization software. Major discoveries include establishment and implementation of ACF, DRP Protocol & Process, 
-          and direct lab collaboration implementing QTC/SAM and PPC frameworks.
+          If Lab One traced the rivers, Lab Two sits on the riverbank and studies one bend in detail. The focus of this phase is the Dance Replication Process (DRP) and the question of what it takes to understand one dance deeply enough that it can be replicated, compared, and carried forward as an authored movement object without losing its life.
         </p>
         <p class="phase-text">
-          This generative lab created practical and technological resources now translated into the Dance Confluence platform—
-          a full-fledged archival system enhanced by AI through AEI and AAF theoretical frameworks developed in late 2025/early 2026.
+          <strong>Replication Studio</strong> is the core instrument of this lab. It uses the same 3D skeleton base as Confluence Room, but everything about the interface is tuned toward study and making. A single dance is deliberately walked through nine DRP steps: from discovery and dispersal, through analysis and replication, into data, interpretation, contextualization, visualization, and finally dissemination. The interface provides space for reflection, still frames, analytic overlays, and cross-links back into other parts of the Confluence ecosystem.
+        </p>
+        <p class="phase-text">
+          <strong>Movement Journal</strong> extends this process into publication. Each completed DRP cycle results in a Movement Journal article built around the movement itself. A submission includes the recording, motion data, demographic and contextual information about the mover, and a written article of movement invention that describes process, influences, and cross-pollinations. Authorship and consent are foregrounded, and movements are treated as living publications that can be revised over time.
+        </p>
+        <p class="phase-text">
+          Lab Two clarifies what movement authorship might look like in an environment shaped by remix, diaspora, and shared vocabularies. Instead of imagining ownership as a permanent claim, this lab treats authorship as stewardship. Contributors maintain and periodically update their movement entries, similar to new editions of a text.
         </p>
         <div class="phase-samples">
-          <a href="https://youtu.be/SUL7R-bXTuo" target="_blank" class="phase-sample">SAMPLE 1 →</a>
-          <a href="https://youtu.be/R_y6OZFMbMo" target="_blank" class="phase-sample">SAMPLE 2 →</a>
-          <a href="https://youtu.be/hZGKcNHL_Mo" target="_blank" class="phase-sample">SAMPLE 3 →</a>
-          <a href="https://youtu.be/squIcA172hU" target="_blank" class="phase-sample">SAMPLE 4 →</a>
+          <a href="https://youtu.be/SUL7R-bXTuo" target="_blank" class="phase-sample">CAPTURE SAMPLE 1 →</a>
+          <a href="https://youtu.be/R_y6OZFMbMo" target="_blank" class="phase-sample">CAPTURE SAMPLE 2 →</a>
+          <a href="https://youtu.be/hZGKcNHL_Mo" target="_blank" class="phase-sample">CAPTURE SAMPLE 3 →</a>
+          <a href="https://youtu.be/squIcA172hU" target="_blank" class="phase-sample">CAPTURE SAMPLE 4 →</a>
         </div>
+      </div>
+
+      <div class="phase-card">
+        <div class="phase-header">
+          <h3 class="phase-title">ACTIVE BUILD OUTS</h3>
+          <span class="phase-date">2025–PRESENT · TOWARD THE THINKING ARCHIVE PLATFORM</span>
+        </div>
+        <p class="phase-tech">THE PIPELINE</p>
+        <p class="phase-text">
+          Several active build outs are now turning Global Movement Research into a full platform that can be used, audited, and extended by others. The first major build out is the <strong>Artificial Embodied Intelligence (AEI) pipeline</strong> that connects all parts of the ecosystem.
+        </p>
+        <p class="phase-text">
+          A single movement now travels through a clear sequence: it enters through the <strong>Portal</strong> page (a threshold for new contributions and experiment sessions), then routes into <strong>Confluence Room</strong> as a motion object, into <strong>Replication Studio</strong> for deeper study, into <strong>Movement Journal</strong> as a candidate publication, and finally into <strong>Living Confluence</strong> and the wider <strong>Confluence Map</strong>. Each step records provenance, consent, and context so that every use of the movement later can be traced back to its origin.
+        </p>
+        <p class="phase-text">
+          Underneath this pipeline sits an evolving data schema for the Thinking Archive. Movement objects now hold several families of information: raw recordings and motion data, geographic and confluence tags, demographic information where appropriate, consent level and access rules, and analytic layers such as QTC codes or SAM summaries. Authority fields record who can speak for a given dance and how that authority changes over time.
+        </p>
+        <p class="phase-text">
+          The AEI agent ecosystem is beginning to take interface shape. <strong>Analyzer</strong>, <strong>Interpreter</strong>, <strong>Archivist</strong>, <strong>Custodian</strong>, <strong>Exhibitor</strong>, and <strong>Companion</strong> are used as internal roles within the Archive Voice so that the same AI presence can speak differently in different contexts. These active build outs move Global Movement Research closer to its long-term vision: a Thinking Archive that can be visited, contributed to, and argued with by dancers, researchers, students, and communities.
+        </p>
       </div>
     </section>
 
@@ -776,6 +870,16 @@
       </div>
     </section>
   </main>
+
+  <nav class="nav-pills">
+    <a href="index.html" class="nav-pill">HOME</a>
+    <a href="about.html" class="nav-pill">BRIEFING</a>
+    <a href="labs-universe.html" class="nav-pill">LABS</a>
+    <a href="works.html" class="nav-pill">WORKS</a>
+    <a href="writing.html" class="nav-pill">WRITING</a>
+    <a href="confluence.html" class="nav-pill">CONFLUENCE</a>
+    <a href="contact.html" class="nav-pill">CONTACT</a>
+  </nav>
   <script>
     const loadingMessages = ['LOADING MOTION DATA', 'COMPUTING CONFLUENCES', 'BUILDING ARCHIVE', 'SYSTEM READY'];
     let loadProgress = 0;
@@ -832,6 +936,14 @@ if ('serviceWorker' in navigator) {
 }
 </script>
 <script>
+    // Nav Toggle
+    function toggleNav() {
+      const toggle = document.getElementById('menu-toggle');
+      const overlay = document.getElementById('nav-overlay');
+      toggle.classList.toggle('active');
+      overlay.classList.toggle('active');
+      document.body.style.overflow = overlay.classList.contains('active') ? 'hidden' : '';
+    }
 
   </script>
 </body>

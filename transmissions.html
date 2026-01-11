@@ -129,6 +129,155 @@
       font-family: var(--font-mono);
 
     /* Hamburger Menu Button - Bottom Right */
+    .menu-toggle {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 56px;
+      height: 56px;
+      background: var(--black);
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 10001;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+
+    .menu-toggle:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 30px rgba(0,0,0,0.4);
+    }
+
+    .menu-toggle span {
+      display: block;
+      width: 20px;
+      height: 2px;
+      background: var(--white);
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .menu-toggle span::before,
+    .menu-toggle span::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 2px;
+      background: var(--white);
+      transition: all 0.3s ease;
+    }
+
+    .menu-toggle span::before {
+      top: -6px;
+    }
+
+    .menu-toggle span::after {
+      top: 6px;
+    }
+
+    .menu-toggle.active span {
+      background: transparent;
+    }
+
+    .menu-toggle.active span::before {
+      top: 0;
+      transform: rotate(45deg);
+    }
+
+    .menu-toggle.active span::after {
+      top: 0;
+      transform: rotate(-45deg);
+    }
+
+    /* Full Screen Nav Overlay */
+    .nav-overlay {
+      position: fixed;
+      inset: 0;
+      background: var(--black);
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.4s ease;
+    }
+
+    .nav-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .nav-overlay .scanlines {
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(255, 255, 255, 0.015) 2px,
+        rgba(255, 255, 255, 0.015) 4px
+      );
+      pointer-events: none;
+    }
+
+    .nav-overlay-content {
+      text-align: center;
+      position: relative;
+      z-index: 10;
+    }
+
+    .nav-overlay-links {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .nav-overlay-links a {
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: 6px;
+      color: rgba(255,255,255,0.5);
+      text-decoration: none;
+      padding: 15px 30px;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .nav-overlay-links a:hover,
+    .nav-overlay-links a.active {
+      color: var(--white);
+    }
+
+    .nav-overlay-links a::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      bottom: 10px;
+      width: 0;
+      height: 1px;
+      background: var(--white);
+      transition: all 0.3s ease;
+      transform: translateX(-50%);
+    }
+
+    .nav-overlay-links a:hover::before,
+    .nav-overlay-links a.active::before {
+      width: 40px;
+    }
+
+    .nav-overlay-label {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 3px;
+      color: rgba(255,255,255,0.3);
+      margin-bottom: 40px;
+    }
       font-size: 10px;
       letter-spacing: 2px;
       color: var(--gray-500);
@@ -435,41 +584,16 @@
       position: fixed;
       inset: 0;
       background-image: 
-        linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px),
-        radial-gradient(circle at 50% 50%, transparent 0%, rgba(0,0,0,0.4) 100%);
-      background-size: 40px 40px, 40px 40px, 100% 100%;
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 60px 60px;
       pointer-events: none;
       z-index: 1;
     }
 
-    /* Corner brackets for military aesthetic */
-    .article-full::before,
-    .article-full::after {
-      content: '';
-      position: fixed;
-      width: 80px;
-      height: 80px;
-      border: 1px solid rgba(255,255,255,0.1);
-      pointer-events: none;
-      z-index: 9998;
-    }
-    .article-full::before {
-      top: 30px;
-      left: 30px;
-      border-right: none;
-      border-bottom: none;
-    }
-    .article-full::after {
-      bottom: 30px;
-      right: 30px;
-      border-left: none;
-      border-top: none;
-    }
-
     .article-inner {
-      padding: 100px 6% 150px;
-      max-width: 1000px;
+      padding: 120px 60px 150px;
+      max-width: 900px;
       margin: 0 auto;
       position: relative;
       z-index: 10;
@@ -490,9 +614,6 @@
       position: relative;
       z-index: 100;
       cursor: pointer;
-      background: none;
-      border: none;
-      padding: 10px 0;
     }
 
     .article-back:hover {
@@ -925,6 +1046,41 @@
     }
 
     /* Article Bottom Nav - Military */
+    .article-nav-pills {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      gap: 5px;
+      padding: 15px;
+      background: rgba(10,10,10,0.95);
+      border-top: 1px solid var(--mil-white-faint);
+      z-index: 10000;
+      backdrop-filter: blur(10px);
+    }
+
+    .article-nav-pills a {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 2px;
+      color: var(--mil-white-dim);
+      text-decoration: none;
+      padding: 8px 12px;
+      border: 1px solid transparent;
+      transition: all 0.3s;
+    }
+
+    .article-nav-pills a:hover {
+      color: var(--mil-white);
+      border-color: var(--mil-white-faint);
+    }
+
+    .article-nav-pills a.active {
+      color: var(--mil-white);
+      border-color: var(--mil-white);
+    }
 
     /* Article Feature Image - Military */
     .article-feature-image {
@@ -1159,6 +1315,19 @@
         font-size: 8px;
       }
 
+      .menu-toggle {
+        bottom: 20px;
+        right: 20px;
+        width: 50px;
+        height: 50px;
+      }
+
+      .nav-overlay-links a {
+        font-size: 18px;
+        letter-spacing: 4px;
+        padding: 12px 20px;
+      }
+
       .hero {
         padding: 100px 20px 40px;
       }
@@ -1210,9 +1379,7 @@
       }
 
       .article-inner {
-        padding: 80px 20px 100px;
-        max-width: 100%;
-        width: 100%;
+        padding: 80px 20px 120px;
       }
 
       .article-classification {
@@ -1254,6 +1421,19 @@
       .pull-quote::before {
         font-size: 60px;
         left: 15px;
+      }
+
+      .article-nav-pills {
+        gap: 2px;
+        padding: 10px 5px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .article-nav-pills a {
+        font-size: 7px;
+        letter-spacing: 1px;
+        padding: 6px 8px;
       }
 
       .share-section {
@@ -1337,155 +1517,9 @@
         padding-top: 30px;
       }
     }
-  
-    /* Minimal Hamburger Menu */
-    .menu-btn {
-      position: fixed;
-      bottom: 30px;
-      right: 30px;
-      width: 30px;
-      height: 20px;
-      cursor: pointer;
-      z-index: 9999;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      background: none;
-      border: none;
-      padding: 0;
-    }
-    .menu-btn span {
-      display: block;
-      width: 100%;
-      height: 2px;
-      background: rgba(0,0,0,0.5);
-      transition: all 0.3s ease;
-    }
-    .menu-btn:hover span { background: #000; }
-    .menu-btn.open span:nth-child(1) { transform: rotate(45deg) translate(6px, 6px); }
-    .menu-btn.open span:nth-child(2) { opacity: 0; }
-    .menu-btn.open span:nth-child(3) { transform: rotate(-45deg) translate(6px, -6px); }
-
-    .nav-menu {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.95);
-      z-index: 9998;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.3s ease;
-    }
-    .nav-menu.open { opacity: 1; visibility: visible; }
-    .nav-menu a {
-      display: block;
-      font-family: var(--font-display), 'Orbitron', sans-serif;
-      font-size: 18px;
-      font-weight: 500;
-      letter-spacing: 3px;
-      color: rgba(255,255,255,0.5);
-      text-decoration: none;
-      padding: 10px 20px;
-      text-align: center;
-      transition: color 0.2s;
-    }
-    .nav-menu a:hover, .nav-menu a.active { color: #fff; }
-    .nav-menu-inner { text-align: center; }
-    .nav-menu-label {
-      font-family: var(--font-mono), monospace;
-      font-size: 9px;
-      letter-spacing: 2px;
-      color: rgba(255,255,255,0.3);
-      margin-bottom: 20px;
-    }
-
-    @media (max-width: 768px) {
-      .menu-btn { bottom: 20px; right: 20px; }
-      .nav-menu a { font-size: 15px; padding: 8px 15px; }
-      
-      .article-inner {
-        padding: 70px 16px 80px;
-        max-width: 100%;
-        width: 100%;
-      }
-      
-      .article-body {
-        font-size: 16px;
-        line-height: 1.85;
-      }
-      
-      .article-body p {
-        margin-bottom: 1.5em;
-      }
-      
-      .article-header h1 {
-        font-size: 20px;
-        letter-spacing: 1px;
-        line-height: 1.4;
-      }
-      
-      .pull-quote {
-        padding: 20px;
-        margin: 2em -16px;
-        width: calc(100% + 32px);
-      }
-      
-      .pull-quote p {
-        font-size: 16px;
-      }
-      
-      .article-full .grid-overlay {
-        background-size: 30px 30px, 30px 30px, 100% 100%;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .article-inner {
-        padding: 60px 14px 70px;
-      }
-      
-      .article-header h1 {
-        font-size: 18px;
-      }
-      
-      .article-body {
-        font-size: 15px;
-      }
-      
-      .article-classification {
-        font-size: 7px;
-        letter-spacing: 1px;
-      }
-      
-      .article-back {
-        font-size: 9px;
-      }
-    }
-
   </style>
 </head>
 <body>
-  <!-- Navigation -->
-  <button class="menu-btn" id="menuBtn" onclick="document.getElementById('menuBtn').classList.toggle('open');document.getElementById('navMenu').classList.toggle('open');document.body.style.overflow=document.getElementById('navMenu').classList.contains('open')?'hidden':'';">
-    <span></span><span></span><span></span>
-  </button>
-  <nav class="nav-menu" id="navMenu">
-    <div class="nav-menu-inner">
-      <div class="nav-menu-label">NAVIGATION</div>
-        <a href="index.html">HOME</a>
-        <a href="about.html">DOSSIER</a>
-        <a href="cv.html">CV</a>
-        <a href="labs-universe.html">LABS</a>
-        <a href="works.html">WORKS</a>
-        <a href="writing.html">WRITING</a>
-        <a href="transmissions.html" class="active">TRANSMISSIONS</a>
-        <a href="confluence.html">CONFLUENCE</a>
-        <a href="contact.html">CONTACT</a>
-    </div>
-  </nav>
-
 
   <div class="scroll-progress" id="scroll-progress"></div>
 
@@ -1501,6 +1535,30 @@
       <a href="#newsletter" class="subscribe-btn">SUBSCRIBE</a>
     </div>
   </header>
+
+  <!-- Hamburger Menu Button -->
+  <button class="menu-toggle" id="menu-toggle" onclick="toggleNav()">
+    <span></span>
+  </button>
+
+  <!-- Full Screen Nav Overlay -->
+  <nav class="nav-overlay" id="nav-overlay">
+    <div class="scanlines"></div>
+    <div class="nav-overlay-content">
+      <div class="nav-overlay-label">NAVIGATION</div>
+      <div class="nav-overlay-links">
+        <a href="index.html">HOME</a>
+        <a href="about.html">DOSSIER</a>
+        <a href="cv.html">CV</a>
+        <a href="labs-universe.html">LABS</a>
+        <a href="works.html">WORKS</a>
+        <a href="writing.html">WRITING</a>
+        <a href="transmissions.html" class="active">TRANSMISSIONS</a>
+        <a href="confluence.html">CONFLUENCE</a>
+        <a href="contact.html">CONTACT</a>
+      </div>
+    </div>
+  </nav>
 
   <!-- Hero -->
   <section class="hero" id="hero">
@@ -1526,7 +1584,7 @@
     </div>
 
     <!-- New Article: Auntie -->
-    <div class="article-card fade-in visible" style="cursor:pointer;" onclick="document.getElementById('hero').style.display='none'; document.getElementById('articles-list').style.display='none'; document.getElementById('article-auntie').classList.add('active'); window.scrollTo(0,0);">
+    <div class="article-card fade-in visible" style="cursor:pointer;" onclick="document.getElementById('hero').style.display='none'; document.getElementById('articles-list').style.display='none'; var n=document.getElementById('newsletter');if(n)n.style.display='none'; document.getElementById('article-auntie').classList.add('active'); window.scrollTo(0,0);">
       <div class="article-meta">
         <span class="article-date">JANUARY 2026</span>
         <span class="article-category">MEMOIR</span>
@@ -1599,12 +1657,12 @@
     <div class="article-inner">
       <div class="article-classification">TRANSMISSION // CLASSIFIED DOCUMENT // CLEARANCE OMEGA</div>
       
-      <button type="button" class="article-back" onclick="document.querySelectorAll('.article-full').forEach(function(el){el.classList.remove('active')});document.getElementById('hero').style.display='block';document.getElementById('articles-list').style.display='block';var n=document.getElementById('newsletter');if(n)n.style.display='block';window.scrollTo(0,0);">
+      <a href="#" class="article-back" onclick="event.preventDefault();document.querySelectorAll('.article-full').forEach(function(el){el.classList.remove('active')});document.getElementById('hero').style.display='block';document.getElementById('articles-list').style.display='block';var n=document.getElementById('newsletter');if(n)n.style.display='block';window.scrollTo(0,0);">
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5">
           <path d="M19 12H5M12 19l-7-7 7-7"/>
         </svg>
         BACK TO TRANSMISSIONS
-      </button>
+      </a>
 
       <header class="article-header">
         <span class="article-category">TECHNIQUE</span>
@@ -1795,6 +1853,17 @@
     </div>
 
     <!-- Bottom Nav -->
+    <nav class="article-nav-pills">
+      <a href="index.html">HOME</a>
+      <a href="about.html">DOSSIER</a>
+      <a href="cv.html">CV</a>
+      <a href="labs-universe.html">LABS</a>
+      <a href="works.html">WORKS</a>
+      <a href="writing.html">WRITING</a>
+      <a href="transmissions.html" class="active">TRANSMISSIONS</a>
+      <a href="confluence.html">CONFLUENCE</a>
+      <a href="contact.html">CONTACT</a>
+    </nav>
   </article>
 
   <!-- Full Article: Refusal as Research -->
@@ -1805,12 +1874,12 @@
     <div class="article-inner">
       <div class="article-classification">TRANSMISSION // CLASSIFIED DOCUMENT // CLEARANCE OMEGA</div>
       
-      <button type="button" class="article-back" onclick="document.querySelectorAll('.article-full').forEach(function(el){el.classList.remove('active')});document.getElementById('hero').style.display='block';document.getElementById('articles-list').style.display='block';var n=document.getElementById('newsletter');if(n)n.style.display='block';window.scrollTo(0,0);">
+      <a href="#" class="article-back" onclick="event.preventDefault();document.querySelectorAll('.article-full').forEach(function(el){el.classList.remove('active')});document.getElementById('hero').style.display='block';document.getElementById('articles-list').style.display='block';var n=document.getElementById('newsletter');if(n)n.style.display='block';window.scrollTo(0,0);">
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5">
           <path d="M19 12H5M12 19l-7-7 7-7"/>
         </svg>
         BACK TO TRANSMISSIONS
-      </button>
+      </a>
 
       <header class="article-header">
         <span class="article-category">FILM / RESEARCH</span>
@@ -1983,9 +2052,21 @@
         </div>
       </div>
     </div>
+
+    <nav class="article-nav-pills">
+      <a href="index.html">HOME</a>
+      <a href="about.html">DOSSIER</a>
+      <a href="cv.html">CV</a>
+      <a href="labs-universe.html">LABS</a>
+      <a href="works.html">WORKS</a>
+      <a href="writing.html">WRITING</a>
+      <a href="transmissions.html" class="active">TRANSMISSIONS</a>
+      <a href="confluence.html">CONFLUENCE</a>
+      <a href="contact.html">CONTACT</a>
+    </nav>
   </article>
 
-  <!-- Full Article: Auntie -->
+  <!-- Full Article View: Auntie -->
   <article class="article-full" id="article-auntie">
     <div class="scanlines"></div>
     <div class="grid-overlay"></div>
@@ -1993,17 +2074,12 @@
     <div class="article-inner">
       <div class="article-classification">TRANSMISSION // CLASSIFIED DOCUMENT // CLEARANCE OMEGA</div>
       
-      <button type="button" class="article-back" onclick="document.querySelectorAll('.article-full').forEach(function(el){el.classList.remove('active')});document.getElementById('hero').style.display='block';document.getElementById('articles-list').style.display='block';var n=document.getElementById('newsletter');if(n)n.style.display='block';window.scrollTo(0,0);">
+      <a href="#" class="article-back" onclick="event.preventDefault();document.querySelectorAll('.article-full').forEach(function(el){el.classList.remove('active')});document.getElementById('hero').style.display='block';document.getElementById('articles-list').style.display='block';var n=document.getElementById('newsletter');if(n)n.style.display='block';window.scrollTo(0,0);">
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5">
           <path d="M19 12H5M12 19l-7-7 7-7"/>
         </svg>
         BACK TO TRANSMISSIONS
-      </button>
-
-      <!-- Hero Image -->
-      <div class="article-hero-image" style="margin-bottom: 50px; border-radius: 4px; overflow: hidden;">
-        <img src="auntie-hero.jpg" alt="Sensorium Project" style="width: 100%; height: auto; display: block;">
-      </div>
+      </a>
 
       <header class="article-header">
         <span class="article-category">MEMOIR</span>
@@ -2020,6 +2096,11 @@
           <span>SINCLAIR EMOGHENE</span>
         </div>
       </header>
+
+      <!-- Hero Image -->
+      <div style="margin: 40px 0; border: 1px solid rgba(255,255,255,0.1);">
+        <img src="auntie-hero.jpg" alt="Sensorium Project" style="width: 100%; height: auto; display: block;">
+      </div>
 
       <div class="article-body">
         <p>When I was seven, there was a day after dinner when the world felt like it belonged to children and small animals. That evening I was still outside, playing at the playground, listening the way you listen when you are young and everything is new. Frogs had started their mating rituals, their calls rising and falling like a conversation you do not need to understand to feel. Crickets chirped in the distance. Nearby, other children played and sang moonlight songs, their voices drifting through the air as if the night itself was singing back.</p>
@@ -2061,37 +2142,9 @@
       <div class="share-section">
         <div style="display: flex; align-items: center; gap: 20px;">
           <span class="share-label">SHARE THIS TRANSMISSION</span>
-          <button class="like-btn" id="like-btn-auntie" onclick="toggleLike('auntie')">
-            <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-            <span class="like-count" id="like-count-auntie">0</span>
-          </button>
-        </div>
-        <div class="share-buttons">
-          <button class="share-btn" onclick="shareTwitter()" title="Share on X">
-            <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-          </button>
-          <button class="share-btn" onclick="shareLinkedIn()" title="Share on LinkedIn">
-            <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
-          </button>
-          <button class="share-btn" onclick="shareEmail()" title="Share via Email">
-            <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><path d="M22 6l-10 7L2 6"/></svg>
-          </button>
-          <button class="share-btn" onclick="copyLink()" title="Copy Link">
-            <svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
-          </button>
-        </div>
-      </div>
-
-      <div class="confluence-section">
-        <h3>JOIN THE CONFLUENCE</h3>
-        <p>Responses, questions, reflections. This is an open conversation.</p>
-        
-        <div id="comments-list-auntie" style="margin-bottom: 30px;"></div>
-        
-        <div class="confluence-form">
-          <input type="text" id="comment-name-auntie" placeholder="Your name" style="flex: 1; min-width: 150px; padding: 15px 20px; background: transparent; border: 1px solid var(--mil-white-faint); color: var(--mil-white); font-family: var(--font-serif); font-size: 15px;">
-          <textarea id="comment-text-auntie" placeholder="Enter the confluence..."></textarea>
-          <button class="confluence-submit" type="button" onclick="submitComment('auntie')">SUBMIT</button>
+          <div style="display: flex; gap: 15px;">
+            <button onclick="navigator.clipboard.writeText(window.location.href)" class="share-btn">COPY LINK</button>
+          </div>
         </div>
       </div>
     </div>
@@ -2130,6 +2183,25 @@
   </footer>
 
   <script>
+    // Nav Toggle
+    function toggleNav() {
+      const toggle = document.getElementById('menu-toggle');
+      const overlay = document.getElementById('nav-overlay');
+      toggle.classList.toggle('active');
+      overlay.classList.toggle('active');
+      document.body.style.overflow = overlay.classList.contains('active') ? 'hidden' : '';
+    }
+
+    // Close nav when clicking a link
+    document.querySelectorAll('.nav-overlay-links a').forEach(link => {
+      link.addEventListener('click', () => {
+        const toggle = document.getElementById('menu-toggle');
+        const overlay = document.getElementById('nav-overlay');
+        toggle.classList.remove('active');
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+      });
+    });
 
     // Scroll Progress
     window.addEventListener('scroll', () => {
@@ -2264,13 +2336,9 @@
         .select('*', { count: 'exact', head: true })
         .eq('article_id', articleId);
       
-      // Get suffix based on articleId
-      let suffix = '';
-      if (articleId === 'refusal-research') suffix = '-refusal';
-      else if (articleId === 'auntie') suffix = '-auntie';
-      
-      const countEl = document.getElementById('like-count' + suffix);
-      const btnEl = document.getElementById('like-btn' + suffix);
+      // Try article-specific IDs first, then fallback to generic
+      const countEl = document.getElementById('like-count-' + articleId.replace('confluence-technique', '').replace('refusal-research', 'refusal')) || document.getElementById('like-count');
+      const btnEl = document.getElementById('like-btn-' + articleId.replace('confluence-technique', '').replace('refusal-research', 'refusal')) || document.getElementById('like-btn');
       
       if (!error && countEl) {
         countEl.textContent = count || 0;
@@ -2284,12 +2352,9 @@
 
     // Toggle like
     async function toggleLike(articleId) {
-      let suffix = '';
-      if (articleId === 'refusal-research') suffix = '-refusal';
-      else if (articleId === 'auntie') suffix = '-auntie';
-      
-      const btn = document.getElementById('like-btn' + suffix);
-      const countEl = document.getElementById('like-count' + suffix);
+      const btnSuffix = articleId === 'refusal-research' ? '-refusal' : '';
+      const btn = document.getElementById('like-btn' + btnSuffix);
+      const countEl = document.getElementById('like-count' + btnSuffix);
       const isLiked = localStorage.getItem(`liked_${articleId}`);
       
       if (isLiked) {
@@ -2317,11 +2382,8 @@
         .eq('article_id', articleId)
         .order('created_at', { ascending: false });
       
-      let suffix = '';
-      if (articleId === 'refusal-research') suffix = '-refusal';
-      else if (articleId === 'auntie') suffix = '-auntie';
-      
-      const container = document.getElementById('comments-list' + suffix);
+      const containerSuffix = articleId === 'refusal-research' ? '-refusal' : '';
+      const container = document.getElementById('comments-list' + containerSuffix);
       
       if (error || !data || data.length === 0) {
         container.innerHTML = '<p class="no-comments">NO TRANSMISSIONS YET. BE THE FIRST TO RESPOND.</p>';
@@ -2341,10 +2403,7 @@
 
     // Submit comment
     async function submitComment(articleId) {
-      let suffix = '';
-      if (articleId === 'refusal-research') suffix = '-refusal';
-      else if (articleId === 'auntie') suffix = '-auntie';
-      
+      const suffix = articleId === 'refusal-research' ? '-refusal' : '';
       const nameEl = document.getElementById('comment-name' + suffix);
       const textEl = document.getElementById('comment-text' + suffix);
       const name = nameEl.value.trim();
