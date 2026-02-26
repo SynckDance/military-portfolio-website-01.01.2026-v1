@@ -140,6 +140,8 @@
       top: 100px;
       right: 40px;
       width: 360px;
+      max-height: calc(100vh - 140px);
+      overflow-y: auto;
       background: rgba(0, 0, 0, 0.95);
       border: 1px solid var(--white-15);
       padding: 32px;
@@ -460,7 +462,7 @@
       .header-title { font-size: 16px; }
       .header-stat-val { font-size: 20px; }
       .header-stat-lbl { font-size: 10px; }
-      .info-panel { width: calc(100% - 48px); left: 24px; right: 24px; top: 80px; }
+      .info-panel { width: calc(100% - 48px); left: 24px; right: 24px; top: 80px; max-height: calc(100vh - 100px); }
       .instructions { display: none; }
       .menu-btn { bottom: 24px; right: 24px; width: 44px; height: 44px; }
       .nav-menu a { font-size: 24px; padding: 8px 24px; }
@@ -515,7 +517,7 @@
   </div>
 
   <!-- Info Panel -->
-  <div class="info-panel" id="info-panel">
+  <div class="info-panel" id="info-panel" data-lenis-prevent>
     <button class="info-close" id="info-close">&times;</button>
     <div class="info-header">
       <div class="info-tradition" id="info-tradition">NIGERIAN</div>
