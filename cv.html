@@ -140,16 +140,27 @@
       margin-bottom: 40px;
       text-transform: uppercase;
     }
-    .menu-links { display: flex; flex-direction: column; gap: 8px; }
-    .menu-links a {
-      font-family: 'Instrument Serif', serif;
-      font-size: clamp(32px, 6vw, 56px);
-      color: var(--white-30);
-      text-decoration: none;
-      transition: all 0.3s ease;
-      font-style: italic;
-    }
-    .menu-links a:hover, .menu-links a.active { color: var(--white); }
+    .menu-links { list-style: none; text-align: center; }
+    .menu-links li { overflow: hidden; }
+    .menu-links a { display: inline-block; font-family: 'Instrument Serif', serif; font-size: clamp(32px, 6vw, 64px); font-style: italic; color: var(--white-30); text-decoration: none; padding: 8px 0; transition: color 0.3s ease, transform 0.3s ease; transform: translateY(100%); }
+    .menu-overlay.open .menu-links a { transform: translateY(0); }
+    .menu-links li:nth-child(1) a { transition-delay: 0.05s; }
+    .menu-links li:nth-child(2) a { transition-delay: 0.1s; }
+    .menu-links li:nth-child(3) a { transition-delay: 0.15s; }
+    .menu-links li:nth-child(4) a { transition-delay: 0.2s; }
+    .menu-links li:nth-child(5) a { transition-delay: 0.25s; }
+    .menu-links li:nth-child(6) a { transition-delay: 0.3s; }
+    .menu-links li:nth-child(7) a { transition-delay: 0.35s; }
+    .menu-links li:nth-child(8) a { transition-delay: 0.4s; }
+    .menu-links a .num { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-style: normal; margin-right: 16px; opacity: 0.5; }
+    .menu-links li:nth-child(1) a:hover { color: var(--orange); }
+    .menu-links li:nth-child(2) a:hover { color: var(--purple); }
+    .menu-links li:nth-child(3) a:hover { color: var(--sage); }
+    .menu-links li:nth-child(4) a:hover { color: var(--coral); }
+    .menu-links li:nth-child(5) a:hover { color: var(--sky); }
+    .menu-links li:nth-child(6) a:hover { color: var(--amber); }
+    .menu-links li:nth-child(7) a:hover { color: var(--orange); }
+    .menu-links li:nth-child(8) a:hover { color: var(--purple); }
     /* Hero */
     .hero {
       min-height: 60vh;
@@ -427,17 +438,16 @@
 
   <!-- Fullscreen Menu -->
   <div class="menu-overlay" id="menuOverlay">
-    <div class="menu-content">
-      <div class="menu-label">Navigation</div>
-      <div class="menu-links">
-        <a href="index.html">Index</a>
-        <a href="about.html">About</a>
-        <a href="cv.html" class="active">CV</a>
-        <a href="playground.html">Playground</a>
-        <a href="writing.html">Writing</a>
-        <a href="contact.html">Contact</a>
-      </div>
-    </div>
+    <ul class="menu-links">
+      <li><a href="about.html"><span class="num">01</span>Dossier</a></li>
+      <li><a href="labs-universe.html"><span class="num">02</span>Labs</a></li>
+      <li><a href="works.html"><span class="num">03</span>Works</a></li>
+      <li><a href="playground.html"><span class="num">04</span>Playground</a></li>
+      <li><a href="writing.html"><span class="num">05</span>Writing</a></li>
+      <li><a href="confluence.html"><span class="num">06</span>Confluence</a></li>
+      <li><a href="cv.html"><span class="num">07</span>CV</a></li>
+      <li><a href="contact.html"><span class="num">08</span>Contact</a></li>
+    </ul>
   </div>
 
   <!-- Hero -->

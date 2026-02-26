@@ -1,1188 +1,734 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Clerk Authentication Protection -->
-  <script async crossorigin="anonymous" data-clerk-publishable-key="pk_test_bmF0aXZlLWFudGVhdGVyLTY3LmNsZXJrLmFjY291bnRzLmRldiQ" src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js" type="text/javascript"></script>
-  <script>window.addEventListener("load", async () => { if (window.Clerk) { try { await window.Clerk.load(); if (!window.Clerk.user) { window.location.href = "index.html"; } } catch (err) { window.location.href = "index.html"; } } else { setTimeout(() => { if (!window.Clerk?.user) { window.location.href = "index.html"; } }, 2000); } });</script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OPERATIONS // WORKS // EMOGHENE</title>
-<!-- PWA -->
-<link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#00ff41">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="SINCLAIR">
-<link rel="apple-touch-icon" href="/icons/icon-192x192.png">
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;500;700;900&display=swap');
+  <title>Works — Sinclair Emoghene</title>
+  <meta name="description" content="Dance films, performances, installations, and choreographic works by Sinclair Emoghene exploring migration, embodied archive, and speculative futures.">
 
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#000000">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Sinclair Emoghene">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lenis/1.1.18/lenis.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <style>
     :root {
-      --black: #000000;
+      --bg: #000000;
       --white: #ffffff;
-      --white-dim: rgba(255, 255, 255, 0.5);
-      --white-faint: rgba(255, 255, 255, 0.15);
-      --font-mono: 'Share Tech Mono', monospace;
-      --font-display: 'Orbitron', sans-serif;
+      --white-90: rgba(255,255,255,0.90);
+      --white-70: rgba(255,255,255,0.70);
+      --white-50: rgba(255,255,255,0.50);
+      --white-30: rgba(255,255,255,0.30);
+      --white-15: rgba(255,255,255,0.15);
+      --white-08: rgba(255,255,255,0.08);
+      --white-04: rgba(255,255,255,0.04);
+      --orange: #f97316;
+      --orange-soft: #fb923c;
+      --purple: #a78bfa;
+      --purple-soft: #c4b5fd;
+      --sage: #86efac;
+      --sage-soft: #bbf7d0;
+      --coral: #fb7185;
+      --amber: #fbbf24;
+      --sky: #38bdf8;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--white); font-family: 'Syne', sans-serif; line-height: 1.6; overflow-x: hidden; }
 
-    /* Loading Screen */
-    .loading-screen {
-      position: fixed;
-      inset: 0;
-      background: var(--black);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 10000;
-      transition: opacity 0.8s ease, visibility 0.8s ease;
-    }
+    .noise { position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E"); opacity: 0.02; pointer-events: none; z-index: 9999; }
 
-    .loading-screen.hidden {
-      opacity: 0;
-      visibility: hidden;
-    }
-
-    .loading-title {
-      font-family: var(--font-display);
-      font-size: 18px;
-      font-weight: 700;
-      letter-spacing: 6px;
-      margin-bottom: 40px;
-      color: var(--white);
-    }
-
-    .loading-bar-container {
-      width: 280px;
-      height: 1px;
-      background: var(--white-faint);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .loading-bar {
-      height: 100%;
-      background: var(--white);
-      width: 0%;
-      transition: width 0.2s ease;
-    }
-
-    .loading-text {
-      margin-top: 20px;
-      font-size: 9px;
-      letter-spacing: 3px;
-      color: var(--white-dim);
-    }
-
-    .loading-dots {
-      display: flex;
-      gap: 6px;
-      margin-top: 30px;
-    }
-
-    .loading-dot {
-      width: 6px;
-      height: 6px;
-      background: var(--white);
-      border-radius: 50%;
-      animation: dotPulse 1.4s ease-in-out infinite;
-    }
-
-    .loading-dot:nth-child(2) { animation-delay: 0.2s; }
-    .loading-dot:nth-child(3) { animation-delay: 0.4s; }
-
-    @keyframes dotPulse {
-      0%, 100% { transform: scale(1); opacity: 0.3; }
-      50% { transform: scale(1.4); opacity: 1; }
-    }
-
-    /* === ANIMATION SYSTEM === */
-    .page-content { animation: pageIn 0.6s ease-out; }
-    @keyframes pageIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-    .scroll-progress { position: fixed; top: 0; left: 0; height: 2px; background: var(--white); z-index: 10001; width: 0%; }
-    .glitch { position: relative; }
-    .glitch::before, .glitch::after { content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; }
-    .glitch::before { color: #ff0000; animation: glitch1 4s infinite; clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%); }
-    .glitch::after { color: #00ffff; animation: glitch2 3s infinite; clip-path: polygon(0 65%, 100% 65%, 100% 100%, 0 100%); }
-    @keyframes glitch1 { 0%, 92%, 100% { opacity: 0; } 93% { opacity: 0.7; transform: translate(-3px, 1px); } 94% { opacity: 0.7; transform: translate(3px, -1px); } 95% { opacity: 0; } }
-    @keyframes glitch2 { 0%, 88%, 100% { opacity: 0; } 89% { opacity: 0.7; transform: translate(3px, 1px); } 90% { opacity: 0.7; transform: translate(-3px, -1px); } 91% { opacity: 0; } }
-    .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease, transform 0.8s ease; }
-    .reveal.revealed { opacity: 1; transform: translateY(0); }
-    .reveal-delay-1 { transition-delay: 0.1s; } .reveal-delay-2 { transition-delay: 0.2s; } .reveal-delay-3 { transition-delay: 0.3s; } .reveal-delay-4 { transition-delay: 0.4s; }
-    .card-hover { transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease; }
-    .card-hover:hover { transform: translateY(-10px) scale(1.02); box-shadow: 0 30px 60px rgba(255,255,255,0.1), 0 0 40px rgba(255,255,255,0.05); border-color: var(--white) !important; }
-    .link-sweep { position: relative; overflow: hidden; }
-    .link-sweep::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent); transition: left 0.5s ease; }
-    .link-sweep:hover::before { left: 100%; }
-    .image-zoom { overflow: hidden; }
-    .image-zoom img, .image-zoom iframe { transition: transform 0.5s ease; }
-    .image-zoom:hover img, .image-zoom:hover iframe { transform: scale(1.08); }
-    #particle-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; opacity: 0.5; }
-    .grid-overlay { position: fixed; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px); background-size: 60px 60px; pointer-events: none; z-index: 2; animation: gridPulse 5s ease-in-out infinite; }
-    @keyframes gridPulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.7; } }
-    .radar-sweep { position: fixed; bottom: 30px; right: 30px; width: 100px; height: 100px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.15); pointer-events: none; z-index: 50; overflow: hidden; }
-    .radar-sweep::before { content: ''; position: absolute; top: 50%; left: 50%; width: 50%; height: 2px; background: linear-gradient(90deg, rgba(255,255,255,0.8), transparent); transform-origin: left center; animation: radarSweep 3s linear infinite; }
-    .radar-sweep::after { content: ''; position: absolute; top: 50%; left: 50%; width: 4px; height: 4px; background: var(--white); border-radius: 50%; transform: translate(-50%, -50%); }
-    @keyframes radarSweep { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-    .radar-ring { position: absolute; top: 50%; left: 50%; border: 1px solid rgba(255,255,255,0.08); border-radius: 50%; transform: translate(-50%, -50%); }
-    .radar-ring:nth-child(1) { width: 33%; height: 33%; } .radar-ring:nth-child(2) { width: 66%; height: 66%; } .radar-ring:nth-child(3) { width: 100%; height: 100%; }
-    .data-stream { position: fixed; top: 0; width: 14px; height: 100%; pointer-events: none; z-index: 3; overflow: hidden; opacity: 0.12; }
-    .data-stream-left { left: 15px; } .data-stream-right { right: 15px; }
-    .data-stream-content { font-family: var(--font-mono); font-size: 9px; color: var(--white); writing-mode: vertical-rl; animation: streamScroll 25s linear infinite; white-space: nowrap; }
-    @keyframes streamScroll { from { transform: translateY(-50%); } to { transform: translateY(0%); } }
-    @media (max-width: 768px) { .radar-sweep { width: 60px; height: 60px; bottom: 15px; right: 15px; } .data-stream { display: none; } }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    html, body {
-      min-height: 100vh;
-      background: var(--black);
-      color: var(--white);
-      font-family: var(--font-mono);
-      cursor: crosshair;
-    }
-
-    .scanlines {
-      position: fixed;
-      inset: 0;
-      background: repeating-linear-gradient(
-        0deg,
-        transparent,
-        transparent 2px,
-        rgba(255, 255, 255, 0.02) 2px,
-        rgba(255, 255, 255, 0.02) 4px
-      );
-      pointer-events: none;
-      z-index: 9999;
-    }
-
-    /* Header */
-    .header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 60px;
-      background: var(--black);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 30px;
-      z-index: 100;
-      border-bottom: 1px solid var(--white-faint);
-    }
-
-    .header-left {
-      display: flex;
-      align-items: center;
-      gap: 30px;
-    }
-
-    .back-btn {
-      color: var(--white-dim);
-      text-decoration: none;
-      font-size: 11px;
-      letter-spacing: 2px;
-      transition: color 0.3s;
-    }
-
-    .back-btn:hover {
-      color: var(--white);
-    }
-
-    .header-title {
-      font-family: var(--font-display);
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 4px;
-    }
-
-    .header-right {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-    }
-
-    .header-stat {
-      text-align: right;
-    }
-
-    .header-stat-val {
-      font-family: var(--font-display);
-      font-size: 16px;
-      font-weight: 700;
-    }
-
-    .header-stat-lbl {
-      font-size: 8px;
-      color: var(--white-dim);
-      letter-spacing: 2px;
-    }
-
-    /* Main Content */
-    .main-content { position: relative; z-index: 10;
-      padding: 120px 40px 120px;
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-
-    .page-header {
-      margin-bottom: 60px;
-    }
-
-    .section-label {
-      font-size: 10px;
-      color: var(--white-dim);
-      letter-spacing: 4px;
-      margin-bottom: 15px;
-    }
-
-    .section-title {
-      font-family: var(--font-display);
-      font-size: 32px;
-      font-weight: 700;
-      letter-spacing: 6px;
-      margin-bottom: 20px;
-    }
-
-    .section-subtitle {
-      font-size: 12px;
-      color: var(--white-dim);
-      line-height: 1.8;
-      max-width: 600px;
-    }
-
-    /* Filter Tabs */
-    .filter-tabs {
-      display: flex;
-      gap: 5px;
-      margin-bottom: 50px;
-      flex-wrap: wrap;
-    }
-
-    .filter-tab {
-      background: transparent;
-      border: 1px solid var(--white-faint);
-      color: var(--white-dim);
-      padding: 10px 20px;
-      font-family: var(--font-mono);
-      font-size: 10px;
-      letter-spacing: 2px;
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-
-    .filter-tab:hover {
-      border-color: var(--white);
-      color: var(--white);
-    }
-
-    .filter-tab.active {
-      background: var(--white);
-      color: var(--black);
-      border-color: var(--white);
-    }
-
-    /* Works Grid */
-    .works-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-      gap: 40px;
-    }
-
-    .work-card {
-      border: 1px solid var(--white-faint);
-      transition: all 0.3s;
-      overflow: hidden;
-    }
-
-    .work-card:hover {
-      border-color: var(--white);
-    }
-
-    .work-media {
-      position: relative;
-      width: 100%;
-      padding-top: 56.25%; /* 16:9 aspect ratio */
-      background: #0a0a0a;
-      overflow: hidden;
-    }
-
-    .work-media iframe,
-    .work-media video,
-    .work-media img {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .work-placeholder {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
-    }
-
-    .work-placeholder-text {
-      font-size: 10px;
-      color: var(--white-dim);
-      letter-spacing: 3px;
-    }
-
-    .work-content {
-      padding: 25px;
-    }
-
-    .work-meta {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
-    }
-
-    .work-category {
-      font-size: 9px;
-      color: var(--white-dim);
-      letter-spacing: 2px;
-    }
-
-    .work-year {
-      font-size: 9px;
-      color: var(--white-dim);
-      letter-spacing: 1px;
-    }
-
-    .work-title {
-      font-family: var(--font-display);
-      font-size: 16px;
-      font-weight: 700;
-      letter-spacing: 2px;
-      margin-bottom: 10px;
-    }
-
-    .work-description {
-      font-size: 11px;
-      color: var(--white-dim);
-      line-height: 1.8;
-      margin-bottom: 15px;
-    }
-
-    .work-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 20px;
-    }
-
-    .work-tag {
-      font-size: 8px;
-      color: var(--white-dim);
-      letter-spacing: 1px;
-      padding: 4px 8px;
-      border: 1px solid var(--white-faint);
-    }
-
-    .work-awards {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 20px;
-    }
-
-    .work-award {
-      font-size: 8px;
-      color: var(--black);
-      background: var(--white);
-      letter-spacing: 1px;
-      padding: 4px 8px;
-    }
-
-    .work-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      color: var(--white);
-      text-decoration: none;
-      font-size: 10px;
-      letter-spacing: 2px;
-      padding: 10px 0;
-      border-bottom: 1px solid var(--white-faint);
-      transition: all 0.3s;
-    }
-
-    .work-link:hover {
-      border-color: var(--white);
-    }
-
-    .work-link .arrow {
-      transition: transform 0.3s;
-    }
-
-    .work-link:hover .arrow {
-      transform: translateX(5px);
-    }
-
-    /* Featured Work */
-    .work-card.featured {
-      grid-column: span 2;
-    }
-
-    .work-card.featured .work-media {
-      padding-top: 45%;
-    }
+    .cursor-dot { position: fixed; width: 6px; height: 6px; background: var(--white); border-radius: 50%; pointer-events: none; z-index: 10001; mix-blend-mode: difference; }
+    .cursor-ring { position: fixed; width: 40px; height: 40px; border: 1px solid var(--white-50); border-radius: 50%; pointer-events: none; z-index: 10000; mix-blend-mode: difference; transition: width 0.2s ease, height 0.2s ease; }
+    .cursor-ring.hover { width: 60px; height: 60px; border-color: var(--white); }
+    @media (max-width: 768px) { .cursor-dot, .cursor-ring { display: none; } }
 
     /* Navigation */
+    .nav { position: fixed; top: 0; left: 0; right: 0; height: 80px; display: flex; align-items: center; justify-content: space-between; padding: 0 48px; z-index: 1000; mix-blend-mode: difference; }
+    .nav-logo { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 400; letter-spacing: 0.05em; color: var(--white); text-decoration: none; text-transform: uppercase; }
+    .nav-menu-btn { display: flex; flex-direction: column; gap: 6px; cursor: pointer; padding: 10px; background: none; border: none; }
+    .nav-menu-btn span { display: block; width: 24px; height: 1px; background: var(--white); transition: transform 0.3s ease, opacity 0.3s ease; }
+    .nav-menu-btn.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+    .nav-menu-btn.open span:nth-child(2) { opacity: 0; }
+    .nav-menu-btn.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
 
-    .nav-pill {
-      color: var(--white-dim);
-      text-decoration: none;
-      font-size: 10px;
-      letter-spacing: 2px;
-      transition: color 0.3s;
-    }
+    .menu-overlay { position: fixed; inset: 0; background: var(--bg); z-index: 999; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: opacity 0.4s ease, visibility 0.4s ease; }
+    .menu-overlay.open { opacity: 1; visibility: visible; }
+    .menu-links { list-style: none; text-align: center; }
+    .menu-links li { overflow: hidden; }
+    .menu-links a { display: inline-block; font-family: 'Instrument Serif', serif; font-size: clamp(32px, 6vw, 64px); font-style: italic; color: var(--white-30); text-decoration: none; padding: 8px 0; transition: color 0.3s ease, transform 0.3s ease; transform: translateY(100%); }
+    .menu-overlay.open .menu-links a { transform: translateY(0); }
+    .menu-links li:nth-child(1) a { transition-delay: 0.05s; }
+    .menu-links li:nth-child(2) a { transition-delay: 0.1s; }
+    .menu-links li:nth-child(3) a { transition-delay: 0.15s; }
+    .menu-links li:nth-child(4) a { transition-delay: 0.2s; }
+    .menu-links li:nth-child(5) a { transition-delay: 0.25s; }
+    .menu-links li:nth-child(6) a { transition-delay: 0.3s; }
+    .menu-links li:nth-child(7) a { transition-delay: 0.35s; }
+    .menu-links li:nth-child(8) a { transition-delay: 0.4s; }
+    .menu-links a .num { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-style: normal; margin-right: 16px; opacity: 0.5; }
+    .menu-links li:nth-child(1) a:hover { color: var(--orange); }
+    .menu-links li:nth-child(2) a:hover { color: var(--purple); }
+    .menu-links li:nth-child(3) a:hover { color: var(--sage); }
+    .menu-links li:nth-child(4) a:hover { color: var(--coral); }
+    .menu-links li:nth-child(5) a:hover { color: var(--sky); }
+    .menu-links li:nth-child(6) a:hover { color: var(--amber); }
+    .menu-links li:nth-child(7) a:hover { color: var(--orange); }
+    .menu-links li:nth-child(8) a:hover { color: var(--purple); }
 
-    .nav-pill:hover, .nav-pill.active {
-      color: var(--white);
-    }
+    /* Hero */
+    .hero { min-height: 60vh; display: flex; flex-direction: column; justify-content: flex-end; padding: 120px 48px 80px; }
+    .hero-label { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--coral); margin-bottom: 24px; display: flex; align-items: center; gap: 12px; }
+    .hero-label::before { content: ''; width: 8px; height: 8px; background: var(--coral); border-radius: 50%; animation: pulse 2s ease infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+    .hero-title { font-family: 'Instrument Serif', serif; font-size: clamp(48px, 12vw, 140px); font-weight: 400; font-style: italic; line-height: 0.95; letter-spacing: -0.02em; margin-bottom: 32px; }
+    .hero-title .line { display: block; overflow: hidden; }
+    .hero-title .line-inner { display: block; transform: translateY(110%); }
+    .hero-desc { font-family: 'Syne', sans-serif; font-size: clamp(16px, 2vw, 20px); color: var(--white-50); max-width: 600px; line-height: 1.7; }
 
-    /* Responsive */
-    @media (max-width: 900px) {
-      .works-grid {
-        grid-template-columns: 1fr;
-      }
+    /* Section */
+    section { padding: 80px 48px; }
+    @media (max-width: 768px) { section { padding: 60px 24px; } .nav { padding: 0 24px; } .hero { padding: 120px 24px 60px; } }
 
-      .work-card.featured {
-        grid-column: span 1;
-      }
+    .section-header { display: flex; align-items: center; gap: 24px; margin-bottom: 48px; }
+    .section-label { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 400; letter-spacing: 0.1em; text-transform: uppercase; color: var(--white-50); }
+    .section-line { flex: 1; height: 1px; background: var(--white-08); }
 
-      .work-card.featured .work-media {
-        padding-top: 56.25%;
-      }
-    }
-  
-    
+    /* Filter Tabs */
+    .filter-tabs { display: flex; gap: 8px; margin-bottom: 48px; flex-wrap: wrap; }
+    .filter-tab { background: transparent; border: 1px solid var(--white-15); color: var(--white-50); padding: 10px 20px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.05em; cursor: pointer; transition: all 0.3s ease; text-decoration: none; }
+    .filter-tab:hover { border-color: var(--white-50); color: var(--white); }
+    .filter-tab.active { background: var(--white); color: var(--bg); border-color: var(--white); }
 
-  
-    /* Minimal Hamburger Menu */
-    .menu-btn {
-      position: fixed;
-      bottom: 30px;
-      right: 30px;
-      width: 30px;
-      height: 20px;
-      cursor: pointer;
-      z-index: 9999;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      background: none;
-      border: none;
-      padding: 0;
-    }
-    .menu-btn span {
-      display: block;
-      width: 100%;
-      height: 2px;
-      background: rgba(255,255,255,0.6);
-      transition: all 0.3s ease;
-    }
-    .menu-btn:hover span { background: #fff; }
-    .menu-btn.open span:nth-child(1) { transform: rotate(45deg) translate(6px, 6px); }
-    .menu-btn.open span:nth-child(2) { opacity: 0; }
-    .menu-btn.open span:nth-child(3) { transform: rotate(-45deg) translate(6px, -6px); }
+    /* Works Grid */
+    .works-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px; }
+    @media (max-width: 900px) { .works-grid { grid-template-columns: 1fr; } }
 
-    .nav-menu {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.95);
-      z-index: 9998;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.3s ease;
-    }
-    .nav-menu.open { opacity: 1; visibility: visible; }
-    .nav-menu a {
-      display: block;
-      font-family: var(--font-display), 'Orbitron', sans-serif;
-      font-size: 18px;
-      font-weight: 500;
-      letter-spacing: 3px;
-      color: rgba(255,255,255,0.5);
-      text-decoration: none;
-      padding: 10px 20px;
-      text-align: center;
-      transition: color 0.2s;
-    }
-    .nav-menu a:hover, .nav-menu a.active { color: #fff; }
-    .nav-menu-inner { text-align: center; }
-    .nav-menu-label {
-      font-family: var(--font-mono), monospace;
-      font-size: 9px;
-      letter-spacing: 2px;
-      color: rgba(255,255,255,0.3);
-      margin-bottom: 20px;
-    }
+    .work-card { background: var(--white-04); border: 1px solid var(--white-08); transition: all 0.3s ease; text-decoration: none; display: block; position: relative; overflow: hidden; }
+    .work-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; transform: scaleX(0); transform-origin: left; transition: transform 0.4s ease; }
+    .work-card:hover { background: rgba(255,255,255,0.025); }
+    .work-card:hover::before { transform: scaleX(1); }
+    .work-card.film::before { background: var(--purple); }
+    .work-card.performance::before { background: var(--orange); }
+    .work-card.installation::before { background: var(--sage); }
+    .work-card.research::before { background: var(--sky); }
 
-    @media (max-width: 768px) {
-      .menu-btn { bottom: 20px; right: 20px; }
-      .nav-menu a { font-size: 15px; padding: 8px 15px; }
-    }
+    .work-card.featured { grid-column: span 2; }
+    @media (max-width: 900px) { .work-card.featured { grid-column: span 1; } }
 
+    .work-media { position: relative; width: 100%; padding-top: 56.25%; background: var(--white-04); overflow: hidden; }
+    .work-card.featured .work-media { padding-top: 45%; }
+    @media (max-width: 900px) { .work-card.featured .work-media { padding-top: 56.25%; } }
+    .work-media iframe, .work-media video, .work-media img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
+    .work-placeholder { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: var(--white-04); }
+    .work-placeholder span { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--white-30); letter-spacing: 0.1em; }
+
+    .work-content { padding: 32px; }
+    .work-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .work-category { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; }
+    .work-card.film .work-category { color: var(--purple); }
+    .work-card.performance .work-category { color: var(--orange); }
+    .work-card.installation .work-category { color: var(--sage); }
+    .work-card.research .work-category { color: var(--sky); }
+    .work-year { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--white-30); }
+    .work-title { font-family: 'Instrument Serif', serif; font-size: 24px; font-style: italic; color: var(--white); margin-bottom: 12px; line-height: 1.2; }
+    .work-desc { font-family: 'Syne', sans-serif; font-size: 14px; color: var(--white-50); line-height: 1.7; margin-bottom: 20px; }
+    .work-awards { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+    .work-award { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.05em; background: var(--amber); color: var(--bg); padding: 4px 10px; }
+    .work-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+    .work-tag { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.05em; color: var(--white-30); padding: 4px 10px; border: 1px solid var(--white-15); }
+    .work-link { display: inline-flex; align-items: center; gap: 8px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--white); transition: gap 0.3s ease; }
+    .work-card:hover .work-link { gap: 14px; }
+
+    /* Ventures Section */
+    .ventures-section { background: var(--white-04); border: 1px solid var(--white-08); padding: 48px; margin-top: 80px; }
+    .ventures-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+    @media (max-width: 900px) { .ventures-grid { grid-template-columns: 1fr; } }
+    .venture-card { border: 1px solid var(--white-15); padding: 32px; transition: border-color 0.3s ease; }
+    .venture-card:first-child { border-color: var(--white); }
+    .venture-card:hover { border-color: var(--white-50); }
+    .venture-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+    .venture-title { font-family: 'Instrument Serif', serif; font-size: 20px; font-style: italic; color: var(--white); }
+    .venture-date { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--white-30); }
+    .venture-type { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--purple); margin-bottom: 16px; }
+    .venture-desc { font-family: 'Syne', sans-serif; font-size: 14px; color: var(--white-50); line-height: 1.7; }
+    .venture-link { display: inline-flex; align-items: center; gap: 8px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--white-50); margin-top: 20px; text-decoration: none; transition: color 0.3s ease; }
+    .venture-link:hover { color: var(--white); }
+
+    /* Triadic Mind Footer */
+    .triadic-footer { position: relative; padding: 160px 48px; overflow: hidden; background: radial-gradient(ellipse 80% 50% at 50% 100%, rgba(167,139,250,0.15) 0%, transparent 60%); }
+    .triadic-orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.4; pointer-events: none; }
+    .triadic-orb-1 { width: 300px; height: 300px; background: var(--purple); bottom: -100px; left: 20%; animation: orbFloat1 8s ease-in-out infinite; }
+    .triadic-orb-2 { width: 200px; height: 200px; background: var(--sage); bottom: 0; right: 25%; animation: orbFloat2 10s ease-in-out infinite; }
+    .triadic-orb-3 { width: 250px; height: 250px; background: var(--sky); bottom: -50px; right: 10%; animation: orbFloat3 12s ease-in-out infinite; }
+    @keyframes orbFloat1 { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(20px, -30px); } }
+    @keyframes orbFloat2 { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(-15px, -20px); } }
+    @keyframes orbFloat3 { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(10px, -25px); } }
+    .triadic-content { position: relative; z-index: 1; text-align: center; max-width: 800px; margin: 0 auto; }
+    .triadic-badge { display: inline-flex; align-items: center; gap: 8px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--purple); margin-bottom: 32px; }
+    .triadic-badge-dot { width: 8px; height: 8px; background: var(--purple); border-radius: 50%; animation: pulse 2s ease infinite; }
+    .triadic-title { font-family: 'Instrument Serif', serif; font-size: clamp(48px, 10vw, 120px); font-style: italic; line-height: 1; margin-bottom: 32px; background: linear-gradient(90deg, var(--purple), var(--sky), var(--sage), var(--purple)); background-size: 300% 100%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; animation: gradientShift 6s ease infinite; }
+    @keyframes gradientShift { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+    .triadic-desc { font-family: 'Syne', sans-serif; font-size: 18px; color: var(--white-50); line-height: 1.7; margin-bottom: 48px; }
+    .btn-triadic { display: inline-flex; align-items: center; gap: 12px; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--bg); background: var(--purple-soft); padding: 18px 36px; text-decoration: none; transition: all 0.3s ease; }
+    .btn-triadic:hover { background: var(--white); box-shadow: 0 0 40px rgba(167,139,250,0.4); }
+    @media (max-width: 768px) { .triadic-footer { padding: 80px 24px; } .ventures-section { padding: 32px 24px; } }
+
+    /* Footer */
+    .footer { padding: 32px 48px; border-top: 1px solid var(--white-08); display: flex; align-items: center; justify-content: space-between; }
+    @media (max-width: 768px) { .footer { flex-direction: column; gap: 24px; padding: 32px 24px; text-align: center; } }
+    .footer-copy { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--white-30); }
+    .footer-social { display: flex; gap: 24px; }
+    .footer-social a { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--white-30); text-decoration: none; transition: color 0.3s ease; }
+    .footer-social a:hover { color: var(--white); }
+
+    [data-reveal] { opacity: 0; transform: translateY(44px); }
+    [data-reveal].revealed { opacity: 1; transform: translateY(0); transition: opacity 0.8s ease, transform 0.8s ease; }
   </style>
 </head>
 <body id="top">
-  <!-- Navigation -->
-  <button class="menu-btn" id="menuBtn" onclick="document.getElementById('menuBtn').classList.toggle('open');document.getElementById('navMenu').classList.toggle('open');document.body.style.overflow=document.getElementById('navMenu').classList.contains('open')?'hidden':'';">
-    <span></span><span></span><span></span>
-  </button>
-  <nav class="nav-menu" id="navMenu">
-    <div class="nav-menu-inner">
-      <div class="nav-menu-label">NAVIGATION</div>
-        <a href="index.html">HOME</a>
-        <a href="about.html">DOSSIER</a>
-        <a href="cv.html">CV</a>
-        <a href="labs-universe.html">LABS</a>
-        <a href="works.html" class="active">WORKS</a>
-        <a href="writing.html">WRITING</a>
-        <a href="transmissions.html">TRANSMISSIONS</a>
-        <a href="confluence.html">CONFLUENCE</a>
-        <a href="contact.html">CONTACT</a>
-    </div>
+  <div class="noise"></div>
+  <div class="cursor-dot"></div>
+  <div class="cursor-ring"></div>
+
+  <nav class="nav">
+    <a href="index.html" class="nav-logo">Sinclair Emoghene</a>
+    <button class="nav-menu-btn" id="menuBtn" aria-label="Menu"><span></span><span></span><span></span></button>
   </nav>
 
-
-  <!-- Loading Screen -->
-  <div class="loading-screen" id="loading-screen">
-    <div class="loading-title">OPERATIONS ARCHIVE</div>
-    <div class="loading-bar-container">
-      <div class="loading-bar" id="loading-bar"></div>
-    </div>
-    <div class="loading-text" id="loading-text">ACCESSING CLASSIFIED WORKS</div>
-    <div class="loading-dots">
-      <div class="loading-dot"></div>
-      <div class="loading-dot"></div>
-      <div class="loading-dot"></div>
-    </div>
+  <div class="menu-overlay" id="menuOverlay">
+    <ul class="menu-links">
+      <li><a href="about.html"><span class="num">01</span>Dossier</a></li>
+      <li><a href="labs-universe.html"><span class="num">02</span>Labs</a></li>
+      <li><a href="works.html"><span class="num">03</span>Works</a></li>
+      <li><a href="playground.html"><span class="num">04</span>Playground</a></li>
+      <li><a href="writing.html"><span class="num">05</span>Writing</a></li>
+      <li><a href="confluence.html"><span class="num">06</span>Confluence</a></li>
+      <li><a href="cv.html"><span class="num">07</span>CV</a></li>
+      <li><a href="contact.html"><span class="num">08</span>Contact</a></li>
+    </ul>
   </div>
 
-  <div class="scanlines"></div>
-  <div class="scroll-progress" id="scroll-progress"></div>
-  <canvas id="particle-canvas"></canvas>
-  <div class="grid-overlay"></div>
-  <div class="radar-sweep"><div class="radar-ring"></div><div class="radar-ring"></div><div class="radar-ring"></div></div>
-  <div class="data-stream data-stream-left"><div class="data-stream-content">01001101 MOTION CAPTURE ARCHIVE DANCE FORMS GLOBAL MOVEMENT RESEARCH CONFLUENCE DATA STREAM ACTIVE PROCESS SYSTEM ONLINE 01001101 MOTION CAPTURE ARCHIVE DANCE</div></div>
-  <div class="data-stream data-stream-right"><div class="data-stream-content">EMOGHENE SINCLAIR UT AUSTIN DANCE ARCHIVE GMR THINKING ARCHIVE MOTION CAPTURE QTC SAM ACF DRP CONFLUENCE ETHICAL AI EMBODIED RESEARCH</div></div>
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-label">Choreographic Archive</div>
+    <h1 class="hero-title">
+      <span class="line"><span class="line-inner">Works</span></span>
+    </h1>
+    <p class="hero-desc">Dance films, performances, installations, and choreographic works exploring migration, embodied archive, cultural confluence, and speculative futures.</p>
+  </section>
 
-  <header class="header">
-    <div class="header-left">
-      <a href="index.html" class="back-btn">← HOME</a>
-      <span class="header-title">OPERATIONS</span>
-    </div>
-    <div class="header-right">
-      <div class="header-stat">
-        <div class="header-stat-val">19</div>
-        <div class="header-stat-lbl">WORKS</div>
-      </div>
-    </div>
-  </header>
-
-  <main class="main-content">
-    <div class="page-header">
-      <p class="section-label">CHOREOGRAPHIC ARCHIVE</p>
-      <h1 class="section-title">WORKS</h1>
-      <p class="section-subtitle">
-        Dance films, performances, installations, and choreographic works exploring 
-        migration, embodied archive, cultural confluence, and speculative futures.
-      </p>
-    </div>
-
+  <!-- Works Section -->
+  <section>
     <div class="filter-tabs">
-      <button class="filter-tab active" data-filter="all">ALL</button>
-      <button class="filter-tab" data-filter="film">FILM</button>
-      <button class="filter-tab" data-filter="performance">PERFORMANCE</button>
-      <button class="filter-tab" data-filter="installation">INSTALLATION</button>
-      <button class="filter-tab" data-filter="research">RESEARCH</button>
-      <a href="#ventures" class="filter-tab" style="text-decoration: none;">VENTURES ↓</a>
+      <button class="filter-tab active" data-filter="all">All</button>
+      <button class="filter-tab" data-filter="film">Film</button>
+      <button class="filter-tab" data-filter="performance">Performance</button>
+      <button class="filter-tab" data-filter="installation">Installation</button>
+      <button class="filter-tab" data-filter="research">Research</button>
+      <a href="#ventures" class="filter-tab">Ventures</a>
     </div>
 
     <div class="works-grid">
-      
       <!-- FEATURED: Ten Poem Project -->
-      <article class="work-card reveal card-hover featured" data-category="film">
+      <article class="work-card film featured" data-category="film" data-reveal>
         <div class="work-media">
           <iframe src="https://player.vimeo.com/video/1146485835" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
         </div>
         <div class="work-content">
           <div class="work-meta">
-            <span class="work-category">DANCE FILM</span>
+            <span class="work-category">Dance Film</span>
             <span class="work-year">2025</span>
           </div>
-          <h2 class="work-title">TEN POEM PROJECT: AUNTIE</h2>
-          <p class="work-description">
-            Dance film exploring migration, queerness, aging, trauma, and resilience through 12 poems and embodied movement. 
-            A writing-to-film practice developed across a decade of asylum-pending life in the United States.
-          </p>
+          <h2 class="work-title">Ten Poem Project: Auntie</h2>
+          <p class="work-desc">Dance film exploring migration, queerness, aging, trauma, and resilience through 12 poems and embodied movement. A writing-to-film practice developed across a decade of asylum-pending life in the United States.</p>
           <div class="work-awards">
-            <span class="work-award">★ GRAND PRIZE</span>
-            <span class="work-award">★ BEST DIRECTOR</span>
-            <span class="work-award">★ BEST CINEMATOGRAPHY</span>
-            <span class="work-award">★ BEST MUSIC SCORE</span>
+            <span class="work-award">Grand Prize</span>
+            <span class="work-award">Best Director</span>
+            <span class="work-award">Best Cinematography</span>
+            <span class="work-award">Best Music Score</span>
           </div>
           <div class="work-tags">
-            <span class="work-tag">MIGRATION</span>
-            <span class="work-tag">QUEERNESS</span>
-            <span class="work-tag">TRAUMA</span>
-            <span class="work-tag">RESILIENCE</span>
+            <span class="work-tag">Migration</span>
+            <span class="work-tag">Queerness</span>
+            <span class="work-tag">Trauma</span>
+            <span class="work-tag">Resilience</span>
           </div>
-          <a href="ten-poem.html" class="work-link">
-            VIEW LAB <span class="arrow">→</span>
-          </a>
+          <a href="ten-poem.html" class="work-link">View Lab <span>→</span></a>
         </div>
       </article>
 
-      <!-- Me Duniya (Sensorium) -->
-      <article class="work-card reveal card-hover" data-category="installation">
+      <!-- Me Duniya -->
+      <article class="work-card installation" data-category="installation" data-reveal>
         <div class="work-media">
           <iframe src="https://player.vimeo.com/video/1150790036" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
         </div>
         <div class="work-content">
           <div class="work-meta">
-            <span class="work-category">INSTALLATION</span>
+            <span class="work-category">Installation</span>
             <span class="work-year">2025</span>
           </div>
-          <h2 class="work-title">ME DUNIYA</h2>
-          <p class="work-description">
-            Soft robotics and fluidic/haptic sensing in dance performance. The ACCS system translates touch intensity into real-time visual and spatial transformations. Part of The Sensorium Project.
-          </p>
+          <h2 class="work-title">Me Duniya</h2>
+          <p class="work-desc">Soft robotics and fluidic/haptic sensing in dance performance. The ACCS system translates touch intensity into real-time visual and spatial transformations.</p>
           <div class="work-tags">
-            <span class="work-tag">SOFT ROBOTICS</span>
-            <span class="work-tag">HAPTICS</span>
-            <span class="work-tag">SENSORIUM</span>
+            <span class="work-tag">Soft Robotics</span>
+            <span class="work-tag">Haptics</span>
+            <span class="work-tag">Sensorium</span>
           </div>
-          <a href="sensorium.html" class="work-link">
-            VIEW LAB <span class="arrow">→</span>
-          </a>
+          <a href="sensorium.html" class="work-link">View Lab <span>→</span></a>
         </div>
       </article>
 
-      <!-- Sensorium Project: Setup -->
-      <article class="work-card reveal card-hover" data-category="installation">
+      <!-- Sensorium Process -->
+      <article class="work-card installation" data-category="installation" data-reveal>
         <div class="work-media">
           <iframe src="https://player.vimeo.com/video/1150790258" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
         </div>
         <div class="work-content">
           <div class="work-meta">
-            <span class="work-category">DOCUMENTATION</span>
+            <span class="work-category">Documentation</span>
             <span class="work-year">2025</span>
           </div>
-          <h2 class="work-title">THE SENSORIUM PROJECT: PROCESS</h2>
-          <p class="work-description">
-            Behind-the-scenes documentation of The Sensorium Project installation setup, technical infrastructure, and the ACCS (Affective-Computational Choreography System) in action.
-          </p>
+          <h2 class="work-title">The Sensorium Project: Process</h2>
+          <p class="work-desc">Behind-the-scenes documentation of The Sensorium Project installation setup and the ACCS (Affective-Computational Choreography System) in action.</p>
           <div class="work-tags">
-            <span class="work-tag">PROCESS</span>
-            <span class="work-tag">DOCUMENTATION</span>
+            <span class="work-tag">Process</span>
+            <span class="work-tag">Documentation</span>
             <span class="work-tag">ACCS</span>
           </div>
-          <a href="sensorium.html" class="work-link">
-            VIEW LAB <span class="arrow">→</span>
-          </a>
-        </div>
-      </article>
-
-      <!-- Kaleidoscope of Tuts -->
-      <article class="work-card reveal card-hover" data-category="performance">
-        <div class="work-media">
-          <div class="work-placeholder">
-            <div class="loading-dots" style="justify-content: center; padding: 40px 0;">
-              <div class="loading-dot"></div>
-              <div class="loading-dot"></div>
-              <div class="loading-dot"></div>
-            </div>
-            <span class="work-placeholder-text">KENNEDY CENTER</span>
-          </div>
-        </div>
-        <div class="work-content">
-          <div class="work-meta">
-            <span class="work-category">PERFORMANCE</span>
-            <span class="work-year">2020</span>
-          </div>
-          <h2 class="work-title">KALEIDOSCOPE OF TUTS</h2>
-          <p class="work-description">
-            Kennedy Center Millennium Stage Black History Month commission by Sinclair Dance. The journey of two young men, 
-            one from Israel and the other from Nigeria, both gay men seeking protection from countries where homosexuality 
-            is criminal. In collaboration with BREathe Dance Project and Artistic Director Bre Seals.
-          </p>
-          <div class="work-tags">
-            <span class="work-tag">QUEERNESS</span>
-            <span class="work-tag">ASYLUM</span>
-            <span class="work-tag">SINCLAIR DANCE</span>
-          </div>
-          <a href="https://www.kennedy-center.org/whats-on/millennium-stage/2020/february/sinclair-dance-breathe-dance-project/" target="_blank" class="work-link">
-            KENNEDY CENTER <span class="arrow">→</span>
-          </a>
-        </div>
-      </article>
-
-      <!-- The REACH Residency -->
-      <article class="work-card reveal card-hover" data-category="performance">
-        <div class="work-media">
-          <div class="work-placeholder">
-            <div class="loading-dots" style="justify-content: center; padding: 40px 0;">
-              <div class="loading-dot"></div>
-              <div class="loading-dot"></div>
-              <div class="loading-dot"></div>
-            </div>
-            <span class="work-placeholder-text">THE REACH</span>
-          </div>
-        </div>
-        <div class="work-content">
-          <div class="work-meta">
-            <span class="work-category">RESIDENCY</span>
-            <span class="work-year">2019</span>
-          </div>
-          <h2 class="work-title">THE REACH ARTIST RESIDENCY</h2>
-          <p class="work-description">
-            Week-long Kennedy Center artist residency at The REACH, the Kennedy Center's newest campus. 
-            Developed new choreographic work exploring pre-African dance roots and contemporary African dance practices. A Sinclair Dance production.
-          </p>
-          <div class="work-tags">
-            <span class="work-tag">KENNEDY CENTER</span>
-            <span class="work-tag">SINCLAIR DANCE</span>
-            <span class="work-tag">THE REACH</span>
-          </div>
-          <a href="https://www.kennedy-center.org" target="_blank" class="work-link">
-            KENNEDY CENTER <span class="arrow">→</span>
-          </a>
-        </div>
-      </article>
-
-      <!-- TogethRAPart -->
-      <article class="work-card reveal card-hover" data-category="performance">
-        <div class="work-media">
-          <iframe src="https://www.youtube.com/embed/y5Aa95r7s28" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </div>
-        <div class="work-content">
-          <div class="work-meta">
-            <span class="work-category">COMMISSION</span>
-            <span class="work-year">2018</span>
-          </div>
-          <h2 class="work-title">TOGETHRAPART</h2>
-          <p class="work-description">
-            Sandy Springs Museum commission in collaboration with Dance In Time dance organization. 
-            A Sinclair Dance production exploring themes of connection and separation through movement.
-          </p>
-          <div class="work-tags">
-            <span class="work-tag">COMMISSION</span>
-            <span class="work-tag">SINCLAIR DANCE</span>
-            <span class="work-tag">MUSEUM</span>
-          </div>
-          <a href="https://youtu.be/y5Aa95r7s28" target="_blank" class="work-link">
-            WATCH ON YOUTUBE <span class="arrow">→</span>
-          </a>
-        </div>
-      </article>
-
-      <!-- Ainihi e Alteridade -->
-      <article class="work-card reveal card-hover" data-category="performance">
-        <div class="work-media">
-          <iframe src="https://www.youtube.com/embed/09wklOEhEnc" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </div>
-        <div class="work-content">
-          <div class="work-meta">
-            <span class="work-category">PERFORMANCE</span>
-            <span class="work-year">2021</span>
-          </div>
-          <h2 class="work-title">AINIHI E ALTERIDADE: PERFORMING OTHERNESS</h2>
-          <p class="work-description">
-            Dance and music project examining "identity" (ainihi in Hausa) and "otherness" (alteridade in Portuguese) based on Nigerian and Brazilian traditions. Created with Pablo Regis de Oliveira and Kate Spanos for NextLOOK at The Clarice.
-          </p>
-          <div class="work-tags">
-            <span class="work-tag">NIGERIA</span>
-            <span class="work-tag">BRAZIL</span>
-            <span class="work-tag">IDENTITY</span>
-          </div>
-          <a href="https://youtu.be/09wklOEhEnc" target="_blank" class="work-link">
-            WATCH ON YOUTUBE <span class="arrow">→</span>
-          </a>
-        </div>
-      </article>
-
-      <!-- ROAMS -->
-      <article class="work-card reveal card-hover" data-category="installation">
-        <div class="work-media">
-          <iframe src="https://www.youtube.com/embed/0AYMNYYHEmc" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </div>
-        <div class="work-content">
-          <div class="work-meta">
-            <span class="work-category">INSTALLATION</span>
-            <span class="work-year">2016</span>
-          </div>
-          <h2 class="work-title">ROOTED ON A MOVING SPOT (ROAMS)</h2>
-          <p class="work-description">
-            Site-specific installation exploring privilege and marginalization through Nigerian traditional dance frameworks. 
-            Performed at The Arts and Sociology Metal Shop, University of Maryland.
-          </p>
-          <div class="work-tags">
-            <span class="work-tag">SITE-SPECIFIC</span>
-            <span class="work-tag">INSTALLATION</span>
-            <span class="work-tag">PRIVILEGE</span>
-          </div>
-          <a href="https://youtu.be/0AYMNYYHEmc" target="_blank" class="work-link">
-            WATCH ON YOUTUBE <span class="arrow">→</span>
-          </a>
-        </div>
-      </article>
-
-      <!-- Nyam Chiem -->
-      <article class="work-card reveal card-hover" data-category="film">
-        <div class="work-media">
-          <iframe src="https://www.youtube.com/embed/cKPG_frb_RI" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </div>
-        <div class="work-content">
-          <div class="work-meta">
-            <span class="work-category">DANCE FILM</span>
-            <span class="work-year">2015</span>
-          </div>
-          <h2 class="work-title">NYAM CHIEM (NIGHTMARE)</h2>
-          <p class="work-description">
-            Dance work exploring themes of trauma, memory, and the subconscious through West African movement vocabularies. 
-            Presented at The Clarice Smith Performing Arts Center, Maryland.
-          </p>
-          <div class="work-tags">
-            <span class="work-tag">TRAUMA</span>
-            <span class="work-tag">MEMORY</span>
-            <span class="work-tag">WEST AFRICAN</span>
-          </div>
-          <a href="https://youtu.be/cKPG_frb_RI" target="_blank" class="work-link">
-            WATCH ON YOUTUBE <span class="arrow">→</span>
-          </a>
-        </div>
-      </article>
-
-      <!-- Nyam Chiem Experiment B -->
-      <article class="work-card reveal card-hover" data-category="film">
-        <div class="work-media">
-          <iframe src="https://www.youtube.com/embed/cH8fF_LIUk4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </div>
-        <div class="work-content">
-          <div class="work-meta">
-            <span class="work-category">EXPERIMENTAL FILM</span>
-            <span class="work-year">2015</span>
-          </div>
-          <h2 class="work-title">NYAM CHIEM: EXPERIMENT B</h2>
-          <p class="work-description">
-            Experimental film iteration of Nyam Chiem, exploring alternative visual and choreographic approaches to the original work.
-          </p>
-          <div class="work-tags">
-            <span class="work-tag">EXPERIMENTAL</span>
-            <span class="work-tag">FILM</span>
-            <span class="work-tag">ITERATION</span>
-          </div>
-          <a href="https://youtu.be/cH8fF_LIUk4" target="_blank" class="work-link">
-            WATCH ON YOUTUBE <span class="arrow">→</span>
-          </a>
-        </div>
-      </article>
-
-      <!-- I'll Take My Chances -->
-      <article class="work-card reveal card-hover" data-category="film">
-        <div class="work-media">
-          <iframe src="https://www.youtube.com/embed/HfIWjjCM6ds" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </div>
-        <div class="work-content">
-          <div class="work-meta">
-            <span class="work-category">DANCE FILM</span>
-            <span class="work-year">2011</span>
-          </div>
-          <h2 class="work-title">I'LL TAKE MY CHANCES</h2>
-          <p class="work-description">
-            Large-scale Nigerian dance film commissioned by WXYZ Arts Factory and produced by The Royal Arts Academy, 
-            Surulere, Lagos, Nigeria. Created for Nollywood audiences, marking an early exploration of dance film as medium.
-          </p>
-          <div class="work-tags">
-            <span class="work-tag">NIGERIA</span>
-            <span class="work-tag">NOLLYWOOD</span>
-            <span class="work-tag">WXYZ ARTS FACTORY</span>
-          </div>
-          <a href="https://youtu.be/HfIWjjCM6ds" target="_blank" class="work-link">
-            WATCH ON YOUTUBE <span class="arrow">→</span>
-          </a>
-        </div>
-      </article>
-
-      <!-- GMR Cyberspace -->
-      <article class="work-card reveal card-hover" data-category="research">
-        <div class="work-media">
-          <iframe src="https://player.vimeo.com/video/1130370479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
-        </div>
-        <div class="work-content">
-          <div class="work-meta">
-            <span class="work-category">RESEARCH / VISUALIZATION</span>
-            <span class="work-year">2023–PRESENT</span>
-          </div>
-          <h2 class="work-title">GMR CYBERSPACE VISUALIZATIONS</h2>
-          <p class="work-description">
-            33 motion capture visualizations across 6 traditions. Three.js-powered 3D renderings of embodied dance data with multiple display modes. Part of Global Movement Research.
-          </p>
-          <div class="work-tags">
-            <span class="work-tag">MOTION CAPTURE</span>
-            <span class="work-tag">THREE.JS</span>
-            <span class="work-tag">ARCHIVE</span>
-          </div>
-          <a href="gmr.html" class="work-link">
-            VIEW GMR LAB <span class="arrow">→</span>
-          </a>
-        </div>
-      </article>
-
-      <!-- Silence in Progress -->
-      <article class="work-card reveal card-hover" data-category="performance">
-        <div class="work-media">
-          <iframe src="https://www.youtube.com/embed/sLV1xfdwkeU" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </div>
-        <div class="work-content">
-          <div class="work-meta">
-            <span class="work-category">PERFORMANCE</span>
-            <span class="work-year">2014</span>
-          </div>
-          <h2 class="work-title">SILENCE IN PROGRESS</h2>
-          <p class="work-description">
-            Early performance work exploring stillness, pause, and the spaces between movement.
-          </p>
-          <div class="work-tags">
-            <span class="work-tag">SILENCE</span>
-            <span class="work-tag">STILLNESS</span>
-            <span class="work-tag">PERFORMANCE</span>
-          </div>
-          <a href="https://youtu.be/sLV1xfdwkeU" target="_blank" class="work-link">
-            WATCH ON YOUTUBE <span class="arrow">→</span>
-          </a>
-        </div>
-      </article>
-
-      <!-- Love + Hate = Bad Name -->
-      <article class="work-card reveal card-hover" data-category="performance">
-        <div class="work-media">
-          <iframe src="https://www.youtube.com/embed/36eu53L2Sl0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </div>
-        <div class="work-content">
-          <div class="work-meta">
-            <span class="work-category">PERFORMANCE</span>
-            <span class="work-year">2016</span>
-          </div>
-          <h2 class="work-title">LOVE + HATE = BAD NAME</h2>
-          <p class="work-description">
-            Performance exploring the duality of human emotion and the consequences of extremes.
-          </p>
-          <div class="work-tags">
-            <span class="work-tag">EMOTION</span>
-            <span class="work-tag">DUALITY</span>
-            <span class="work-tag">PERFORMANCE</span>
-          </div>
-          <a href="https://youtu.be/36eu53L2Sl0" target="_blank" class="work-link">
-            WATCH ON YOUTUBE <span class="arrow">→</span>
-          </a>
-        </div>
-      </article>
-
-      <!-- Facets of Esoteric -->
-      <article class="work-card reveal card-hover" data-category="installation">
-        <div class="work-media">
-          <iframe src="https://www.youtube.com/embed/uVvI9dI34hQ?start=1587" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </div>
-        <div class="work-content">
-          <div class="work-meta">
-            <span class="work-category">INSTALLATION</span>
-            <span class="work-year">2020</span>
-          </div>
-          <h2 class="work-title">FACETS OF ESOTERIC</h2>
-          <p class="work-description">
-            Installation work exploring hidden dimensions of movement and embodied knowledge.
-          </p>
-          <div class="work-tags">
-            <span class="work-tag">ESOTERIC</span>
-            <span class="work-tag">EMBODIMENT</span>
-            <span class="work-tag">INSTALLATION</span>
-          </div>
-          <a href="https://youtu.be/uVvI9dI34hQ?t=1587" target="_blank" class="work-link">
-            WATCH ON YOUTUBE <span class="arrow">→</span>
-          </a>
-        </div>
-      </article>
-
-      <!-- Therapy -->
-      <article class="work-card reveal card-hover" data-category="film">
-        <div class="work-media">
-          <iframe src="https://www.youtube.com/embed/XFoPyze8xk0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </div>
-        <div class="work-content">
-          <div class="work-meta">
-            <span class="work-category">DANCE FILM</span>
-            <span class="work-year">2021</span>
-          </div>
-          <h2 class="work-title">THERAPY</h2>
-          <p class="work-description">
-            Dance film exploring healing, processing, and the therapeutic dimensions of movement practice.
-          </p>
-          <div class="work-tags">
-            <span class="work-tag">HEALING</span>
-            <span class="work-tag">THERAPY</span>
-            <span class="work-tag">FILM</span>
-          </div>
-          <a href="https://youtu.be/XFoPyze8xk0" target="_blank" class="work-link">
-            WATCH ON YOUTUBE <span class="arrow">→</span>
-          </a>
+          <a href="sensorium.html" class="work-link">View Lab <span>→</span></a>
         </div>
       </article>
 
       <!-- Experimental Collaboration -->
-      <article class="work-card reveal card-hover" data-category="performance">
+      <article class="work-card performance" data-category="performance" data-reveal>
         <div class="work-media">
           <iframe src="https://www.youtube.com/embed/mcM09SvIxSA" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
         <div class="work-content">
           <div class="work-meta">
-            <span class="work-category">PERFORMANCE</span>
+            <span class="work-category">Performance</span>
             <span class="work-year">2024</span>
           </div>
-          <h2 class="work-title">EXPERIMENTAL COLLABORATION AND LIVE PERFORMANCE</h2>
-          <p class="work-description">
-            Collaboration with Stephen Vitiello at Virginia Commonwealth University, Spring 2024. Directed and choreographed by Sinclair Emoghene. 
-            Original sound design by Stephen Vitiello. Director of Photography: Evan McNair. Dancers and Tumblers: Addison Harksen and Robert Parietti. 
-            Location Manager: Alexandre Jones. Support: School of the Arts - Virginia Commonwealth University.
-          </p>
+          <h2 class="work-title">Experimental Collaboration and Live Performance</h2>
+          <p class="work-desc">Collaboration with Stephen Vitiello at Virginia Commonwealth University. Directed and choreographed by Sinclair Emoghene with original sound design by Stephen Vitiello.</p>
           <div class="work-tags">
             <span class="work-tag">VCU</span>
-            <span class="work-tag">COLLABORATION</span>
-            <span class="work-tag">SOUND DESIGN</span>
+            <span class="work-tag">Collaboration</span>
+            <span class="work-tag">Sound Design</span>
           </div>
-          <a href="https://youtu.be/mcM09SvIxSA" target="_blank" class="work-link">
-            WATCH ON YOUTUBE <span class="arrow">→</span>
-          </a>
+          <a href="https://youtu.be/mcM09SvIxSA" target="_blank" class="work-link">Watch <span>→</span></a>
+        </div>
+      </article>
+
+      <!-- GMR Cyberspace -->
+      <article class="work-card research" data-category="research" data-reveal>
+        <div class="work-media">
+          <iframe src="https://player.vimeo.com/video/1130370479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="work-content">
+          <div class="work-meta">
+            <span class="work-category">Research</span>
+            <span class="work-year">2023–Present</span>
+          </div>
+          <h2 class="work-title">GMR Cyberspace Visualizations</h2>
+          <p class="work-desc">33 motion capture visualizations across 6 traditions. Three.js-powered 3D renderings of embodied dance data with multiple display modes.</p>
+          <div class="work-tags">
+            <span class="work-tag">Motion Capture</span>
+            <span class="work-tag">Three.js</span>
+            <span class="work-tag">Archive</span>
+          </div>
+          <a href="gmr.html" class="work-link">View GMR Lab <span>→</span></a>
         </div>
       </article>
 
       <!-- I'll Marry When I Want -->
-      <article class="work-card reveal card-hover" data-category="performance">
+      <article class="work-card performance" data-category="performance" data-reveal>
         <div class="work-media">
           <iframe src="https://www.youtube.com/embed/SjTSZCzqwN8" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
         <div class="work-content">
           <div class="work-meta">
-            <span class="work-category">PERFORMANCE</span>
+            <span class="work-category">Performance</span>
             <span class="work-year">2023</span>
           </div>
-          <h2 class="work-title">I'LL MARRY WHEN I WANT</h2>
-          <p class="work-description">
-            Contemporary dance inspired by the 1970 East African play "Ngaahika Ndeenda" by Ngũgĩ wa Thiong'o and Ngugi wa Mirii. 
-            Exploring themes of class struggle, poverty, gender, culture, religion, and the tension between modernity and tradition 
-            through movement that navigates the complexities and constraints imposed by societal expectations.
-          </p>
+          <h2 class="work-title">I'll Marry When I Want</h2>
+          <p class="work-desc">Contemporary dance inspired by the 1970 East African play by Ngugi wa Thiong'o. Exploring class struggle, poverty, gender, culture, and the tension between modernity and tradition.</p>
           <div class="work-tags">
-            <span class="work-tag">EAST AFRICA</span>
-            <span class="work-tag">CLASS STRUGGLE</span>
-            <span class="work-tag">IDENTITY</span>
+            <span class="work-tag">East Africa</span>
+            <span class="work-tag">Class Struggle</span>
+            <span class="work-tag">Identity</span>
           </div>
-          <a href="https://youtu.be/SjTSZCzqwN8" target="_blank" class="work-link">
-            WATCH ON YOUTUBE <span class="arrow">→</span>
-          </a>
+          <a href="https://youtu.be/SjTSZCzqwN8" target="_blank" class="work-link">Watch <span>→</span></a>
         </div>
       </article>
 
+      <!-- Ainihi e Alteridade -->
+      <article class="work-card performance" data-category="performance" data-reveal>
+        <div class="work-media">
+          <iframe src="https://www.youtube.com/embed/09wklOEhEnc" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="work-content">
+          <div class="work-meta">
+            <span class="work-category">Performance</span>
+            <span class="work-year">2021</span>
+          </div>
+          <h2 class="work-title">Ainihi e Alteridade: Performing Otherness</h2>
+          <p class="work-desc">Dance and music project examining "identity" (ainihi in Hausa) and "otherness" (alteridade in Portuguese) based on Nigerian and Brazilian traditions. Created for NextLOOK at The Clarice.</p>
+          <div class="work-tags">
+            <span class="work-tag">Nigeria</span>
+            <span class="work-tag">Brazil</span>
+            <span class="work-tag">Identity</span>
+          </div>
+          <a href="https://youtu.be/09wklOEhEnc" target="_blank" class="work-link">Watch <span>→</span></a>
+        </div>
+      </article>
+
+      <!-- Therapy -->
+      <article class="work-card film" data-category="film" data-reveal>
+        <div class="work-media">
+          <iframe src="https://www.youtube.com/embed/XFoPyze8xk0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="work-content">
+          <div class="work-meta">
+            <span class="work-category">Dance Film</span>
+            <span class="work-year">2021</span>
+          </div>
+          <h2 class="work-title">Therapy</h2>
+          <p class="work-desc">Dance film exploring healing, processing, and the therapeutic dimensions of movement practice.</p>
+          <div class="work-tags">
+            <span class="work-tag">Healing</span>
+            <span class="work-tag">Therapy</span>
+            <span class="work-tag">Film</span>
+          </div>
+          <a href="https://youtu.be/XFoPyze8xk0" target="_blank" class="work-link">Watch <span>→</span></a>
+        </div>
+      </article>
+
+      <!-- Kaleidoscope of Tuts -->
+      <article class="work-card performance" data-category="performance" data-reveal>
+        <div class="work-media">
+          <div class="work-placeholder"><span>Kennedy Center</span></div>
+        </div>
+        <div class="work-content">
+          <div class="work-meta">
+            <span class="work-category">Performance</span>
+            <span class="work-year">2020</span>
+          </div>
+          <h2 class="work-title">Kaleidoscope of Tuts</h2>
+          <p class="work-desc">Kennedy Center Millennium Stage Black History Month commission by Sinclair Dance. The journey of two young men seeking protection from countries where homosexuality is criminal.</p>
+          <div class="work-tags">
+            <span class="work-tag">Queerness</span>
+            <span class="work-tag">Asylum</span>
+            <span class="work-tag">Sinclair Dance</span>
+          </div>
+          <a href="https://www.kennedy-center.org/whats-on/millennium-stage/2020/february/sinclair-dance-breathe-dance-project/" target="_blank" class="work-link">Kennedy Center <span>→</span></a>
+        </div>
+      </article>
+
+      <!-- Facets of Esoteric -->
+      <article class="work-card installation" data-category="installation" data-reveal>
+        <div class="work-media">
+          <iframe src="https://www.youtube.com/embed/uVvI9dI34hQ?start=1587" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="work-content">
+          <div class="work-meta">
+            <span class="work-category">Installation</span>
+            <span class="work-year">2020</span>
+          </div>
+          <h2 class="work-title">Facets of Esoteric</h2>
+          <p class="work-desc">Installation work exploring hidden dimensions of movement and embodied knowledge.</p>
+          <div class="work-tags">
+            <span class="work-tag">Esoteric</span>
+            <span class="work-tag">Embodiment</span>
+            <span class="work-tag">Installation</span>
+          </div>
+          <a href="https://youtu.be/uVvI9dI34hQ?t=1587" target="_blank" class="work-link">Watch <span>→</span></a>
+        </div>
+      </article>
+
+      <!-- The REACH Residency -->
+      <article class="work-card performance" data-category="performance" data-reveal>
+        <div class="work-media">
+          <div class="work-placeholder"><span>The REACH</span></div>
+        </div>
+        <div class="work-content">
+          <div class="work-meta">
+            <span class="work-category">Residency</span>
+            <span class="work-year">2019</span>
+          </div>
+          <h2 class="work-title">The REACH Artist Residency</h2>
+          <p class="work-desc">Week-long Kennedy Center artist residency at The REACH. Developed new choreographic work exploring pre-African dance roots and contemporary African dance practices.</p>
+          <div class="work-tags">
+            <span class="work-tag">Kennedy Center</span>
+            <span class="work-tag">Sinclair Dance</span>
+            <span class="work-tag">The REACH</span>
+          </div>
+          <a href="https://www.kennedy-center.org" target="_blank" class="work-link">Kennedy Center <span>→</span></a>
+        </div>
+      </article>
+
+      <!-- TogethRAPart -->
+      <article class="work-card performance" data-category="performance" data-reveal>
+        <div class="work-media">
+          <iframe src="https://www.youtube.com/embed/y5Aa95r7s28" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="work-content">
+          <div class="work-meta">
+            <span class="work-category">Commission</span>
+            <span class="work-year">2018</span>
+          </div>
+          <h2 class="work-title">TogethRAPart</h2>
+          <p class="work-desc">Sandy Springs Museum commission in collaboration with Dance In Time. A Sinclair Dance production exploring themes of connection and separation through movement.</p>
+          <div class="work-tags">
+            <span class="work-tag">Commission</span>
+            <span class="work-tag">Sinclair Dance</span>
+            <span class="work-tag">Museum</span>
+          </div>
+          <a href="https://youtu.be/y5Aa95r7s28" target="_blank" class="work-link">Watch <span>→</span></a>
+        </div>
+      </article>
+
+      <!-- ROAMS -->
+      <article class="work-card installation" data-category="installation" data-reveal>
+        <div class="work-media">
+          <iframe src="https://www.youtube.com/embed/0AYMNYYHEmc" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="work-content">
+          <div class="work-meta">
+            <span class="work-category">Installation</span>
+            <span class="work-year">2016</span>
+          </div>
+          <h2 class="work-title">Rooted On A Moving Spot (ROAMS)</h2>
+          <p class="work-desc">Site-specific installation exploring privilege and marginalization through Nigerian traditional dance frameworks at University of Maryland.</p>
+          <div class="work-tags">
+            <span class="work-tag">Site-Specific</span>
+            <span class="work-tag">Installation</span>
+            <span class="work-tag">Privilege</span>
+          </div>
+          <a href="https://youtu.be/0AYMNYYHEmc" target="_blank" class="work-link">Watch <span>→</span></a>
+        </div>
+      </article>
+
+      <!-- Love + Hate = Bad Name -->
+      <article class="work-card performance" data-category="performance" data-reveal>
+        <div class="work-media">
+          <iframe src="https://www.youtube.com/embed/36eu53L2Sl0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="work-content">
+          <div class="work-meta">
+            <span class="work-category">Performance</span>
+            <span class="work-year">2016</span>
+          </div>
+          <h2 class="work-title">Love + Hate = Bad Name</h2>
+          <p class="work-desc">Performance exploring the duality of human emotion and the consequences of extremes.</p>
+          <div class="work-tags">
+            <span class="work-tag">Emotion</span>
+            <span class="work-tag">Duality</span>
+            <span class="work-tag">Performance</span>
+          </div>
+          <a href="https://youtu.be/36eu53L2Sl0" target="_blank" class="work-link">Watch <span>→</span></a>
+        </div>
+      </article>
+
+      <!-- Nyam Chiem -->
+      <article class="work-card film" data-category="film" data-reveal>
+        <div class="work-media">
+          <iframe src="https://www.youtube.com/embed/cKPG_frb_RI" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="work-content">
+          <div class="work-meta">
+            <span class="work-category">Dance Film</span>
+            <span class="work-year">2015</span>
+          </div>
+          <h2 class="work-title">Nyam Chiem (Nightmare)</h2>
+          <p class="work-desc">Dance work exploring themes of trauma, memory, and the subconscious through West African movement vocabularies at The Clarice Smith Performing Arts Center.</p>
+          <div class="work-tags">
+            <span class="work-tag">Trauma</span>
+            <span class="work-tag">Memory</span>
+            <span class="work-tag">West African</span>
+          </div>
+          <a href="https://youtu.be/cKPG_frb_RI" target="_blank" class="work-link">Watch <span>→</span></a>
+        </div>
+      </article>
+
+      <!-- Nyam Chiem B -->
+      <article class="work-card film" data-category="film" data-reveal>
+        <div class="work-media">
+          <iframe src="https://www.youtube.com/embed/cH8fF_LIUk4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="work-content">
+          <div class="work-meta">
+            <span class="work-category">Experimental Film</span>
+            <span class="work-year">2015</span>
+          </div>
+          <h2 class="work-title">Nyam Chiem: Experiment B</h2>
+          <p class="work-desc">Experimental film iteration exploring alternative visual and choreographic approaches to the original work.</p>
+          <div class="work-tags">
+            <span class="work-tag">Experimental</span>
+            <span class="work-tag">Film</span>
+            <span class="work-tag">Iteration</span>
+          </div>
+          <a href="https://youtu.be/cH8fF_LIUk4" target="_blank" class="work-link">Watch <span>→</span></a>
+        </div>
+      </article>
+
+      <!-- Silence in Progress -->
+      <article class="work-card performance" data-category="performance" data-reveal>
+        <div class="work-media">
+          <iframe src="https://www.youtube.com/embed/sLV1xfdwkeU" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="work-content">
+          <div class="work-meta">
+            <span class="work-category">Performance</span>
+            <span class="work-year">2014</span>
+          </div>
+          <h2 class="work-title">Silence in Progress</h2>
+          <p class="work-desc">Early performance work exploring stillness, pause, and the spaces between movement.</p>
+          <div class="work-tags">
+            <span class="work-tag">Silence</span>
+            <span class="work-tag">Stillness</span>
+            <span class="work-tag">Performance</span>
+          </div>
+          <a href="https://youtu.be/sLV1xfdwkeU" target="_blank" class="work-link">Watch <span>→</span></a>
+        </div>
+      </article>
+
+      <!-- I'll Take My Chances -->
+      <article class="work-card film" data-category="film" data-reveal>
+        <div class="work-media">
+          <iframe src="https://www.youtube.com/embed/HfIWjjCM6ds" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="work-content">
+          <div class="work-meta">
+            <span class="work-category">Dance Film</span>
+            <span class="work-year">2011</span>
+          </div>
+          <h2 class="work-title">I'll Take My Chances</h2>
+          <p class="work-desc">Large-scale Nigerian dance film commissioned by WXYZ Arts Factory and produced by The Royal Arts Academy, Lagos. Created for Nollywood audiences.</p>
+          <div class="work-tags">
+            <span class="work-tag">Nigeria</span>
+            <span class="work-tag">Nollywood</span>
+            <span class="work-tag">WXYZ Arts Factory</span>
+          </div>
+          <a href="https://youtu.be/HfIWjjCM6ds" target="_blank" class="work-link">Watch <span>→</span></a>
+        </div>
+      </article>
     </div>
 
-    <!-- Entrepreneurial Ventures Section -->
-    <section id="ventures" style="margin-top: 80px; padding: 40px; border: 1px solid var(--white-faint); background: rgba(255,255,255,0.02);">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-        <p class="section-label" style="margin: 0;">ENTREPRENEURIAL VENTURES</p>
-        <a href="#top" style="font-size: 10px; color: var(--white-dim); letter-spacing: 1px; text-decoration: none;">↑ BACK TO TOP</a>
+    <!-- Ventures Section -->
+    <div class="ventures-section" id="ventures">
+      <div class="section-header" style="margin-bottom: 32px;">
+        <span class="section-label">Entrepreneurial Ventures</span>
+        <div class="section-line"></div>
+        <a href="#top" style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--white-30); text-decoration: none;">Back to top</a>
       </div>
-      <h2 style="font-family: var(--font-display); font-size: 20px; letter-spacing: 3px; margin-bottom: 30px;">CREATIVE ENTERPRISES</h2>
-      
-      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px;">
-        <div style="border: 1px solid var(--white); padding: 25px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-            <h3 style="font-family: var(--font-display); font-size: 14px; letter-spacing: 2px;">STEPMATE LLC</h3>
-            <span style="font-size: 9px; color: var(--white-dim); letter-spacing: 1px;">2025–PRESENT</span>
-          </div>
-          <p style="font-size: 10px; color: var(--white-dim); letter-spacing: 1px; margin-bottom: 12px;">TEXAS STATE REGISTERED LLC</p>
-          <p style="font-size: 11px; color: var(--white-dim); line-height: 1.8;">
-            Developing technological interfaces that reenvision how dance can be performed, preserved, and circulated 
-            across modern societies. Core innovations: mobile applications, advanced archival dance platforms, and 
-            sensorial studio spaces for experiential performance and activation.
-          </p>
-        </div>
-        
-        <div style="border: 1px solid var(--white-faint); padding: 25px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-            <h3 style="font-family: var(--font-display); font-size: 14px; letter-spacing: 2px;">SINCLAIR DANCE</h3>
-            <span style="font-size: 9px; color: var(--white-dim); letter-spacing: 1px;">WASHINGTON D.C.</span>
-          </div>
-          <p style="font-size: 10px; color: var(--white-dim); letter-spacing: 1px; margin-bottom: 12px;">REGIONAL DANCE COMPANY</p>
-          <p style="font-size: 11px; color: var(--white-dim); line-height: 1.8; margin-bottom: 15px;">
-            Regional dance company in the Washington D.C. area. Major performances include Sandy Springs Museum 
-            commission with Dance In Time for "TogethRAPart" (2018), Kennedy Center Millennium Stage Black History Month 
-            commission "Kaleidoscope of Tuts" (2020), and week-long Kennedy Center residency at The REACH.
-          </p>
-          <a href="https://www.kennedy-center.org/whats-on/millennium-stage/2020/february/sinclair-dance-breathe-dance-project/" target="_blank" style="font-size: 10px; color: var(--white); letter-spacing: 1px; text-decoration: none; border-bottom: 1px solid var(--white-faint);">
-            VIEW KENNEDY CENTER PERFORMANCE →
-          </a>
-        </div>
-        
-        <div style="border: 1px solid var(--white-faint); padding: 25px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-            <h3 style="font-family: var(--font-display); font-size: 14px; letter-spacing: 2px;">WXYZ ARTS FACTORY</h3>
-            <span style="font-size: 9px; color: var(--white-dim); letter-spacing: 1px;">EST. 2009</span>
-          </div>
-          <p style="font-size: 10px; color: var(--white-dim); letter-spacing: 1px; margin-bottom: 12px;">BENIN CITY, NIGERIA</p>
-          <p style="font-size: 11px; color: var(--white-dim); line-height: 1.8;">
-            Dance company established in 2009 in Benin City, Nigeria. Core activities include developing young talents 
-            in the region and performing both regionally and nationally. Seminal work: commission of the large-scale 
-            Nigerian dance film "I'll Take My Chances" produced by The Royal Arts Academy (2011).
-          </p>
-        </div>
-      </div>
-    </section>
 
-  </main>
+      <div class="ventures-grid">
+        <div class="venture-card">
+          <div class="venture-header">
+            <h3 class="venture-title">StepMate LLC</h3>
+            <span class="venture-date">2025–Present</span>
+          </div>
+          <div class="venture-type">Texas State Registered LLC</div>
+          <p class="venture-desc">Developing technological interfaces that reenvision how dance can be performed, preserved, and circulated. Core innovations: mobile applications, advanced archival dance platforms, and sensorial studio spaces.</p>
+        </div>
+
+        <div class="venture-card">
+          <div class="venture-header">
+            <h3 class="venture-title">Sinclair Dance</h3>
+            <span class="venture-date">Washington D.C.</span>
+          </div>
+          <div class="venture-type">Regional Dance Company</div>
+          <p class="venture-desc">Regional dance company with performances at Sandy Springs Museum, Kennedy Center Millennium Stage, and week-long residency at The REACH.</p>
+          <a href="https://www.kennedy-center.org/whats-on/millennium-stage/2020/february/sinclair-dance-breathe-dance-project/" target="_blank" class="venture-link">View Kennedy Center Performance <span>→</span></a>
+        </div>
+
+        <div class="venture-card">
+          <div class="venture-header">
+            <h3 class="venture-title">WXYZ Arts Factory</h3>
+            <span class="venture-date">Est. 2009</span>
+          </div>
+          <div class="venture-type">Benin City, Nigeria</div>
+          <p class="venture-desc">Dance company established in Benin City, Nigeria. Core activities include developing young talents and performing regionally and nationally. Seminal work: "I'll Take My Chances" (2011).</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Triadic Mind Footer -->
+  <section class="triadic-footer">
+    <div class="triadic-orb triadic-orb-1"></div>
+    <div class="triadic-orb triadic-orb-2"></div>
+    <div class="triadic-orb triadic-orb-3"></div>
+    <div class="triadic-content">
+      <div class="triadic-badge"><span class="triadic-badge-dot"></span>AI for Dance — Live Now</div>
+      <h2 class="triadic-title">Triadic Mind</h2>
+      <p class="triadic-desc">An AI-powered research companion for dance scholarship. Ask questions, explore archives, generate insights, and discover connections across the global movement research database.</p>
+      <a href="https://mind.thetriadic.studio" target="_blank" class="btn-triadic">Launch Triadic Mind <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></a>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <span class="footer-copy">© 2025 Sinclair Emoghene</span>
+    <div class="footer-social">
+      <a href="https://instagram.com/sinclairdance" target="_blank">Instagram</a>
+      <a href="https://twitter.com/sinclairdance" target="_blank">Twitter</a>
+      <a href="https://vimeo.com/sinclairdance" target="_blank">Vimeo</a>
+      <a href="https://github.com/SynckDance" target="_blank">GitHub</a>
+    </div>
+  </footer>
 
   <script>
+    const lenis = new Lenis({ duration: 1.4, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smoothWheel: true, touchMultiplier: 1.5 });
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add(t => { lenis.raf(t * 1000); });
+    gsap.ticker.lagSmoothing(0);
 
+    const cursorDot = document.querySelector('.cursor-dot');
+    const cursorRing = document.querySelector('.cursor-ring');
+    if (cursorDot && cursorRing) {
+      let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+      document.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; cursorDot.style.left = mouseX - 3 + 'px'; cursorDot.style.top = mouseY - 3 + 'px'; });
+      function animateRing() { ringX += (mouseX - ringX) * 0.15; ringY += (mouseY - ringY) * 0.15; cursorRing.style.left = ringX - 20 + 'px'; cursorRing.style.top = ringY - 20 + 'px'; requestAnimationFrame(animateRing); }
+      animateRing();
+      document.querySelectorAll('a, button, .work-card').forEach(el => { el.addEventListener('mouseenter', () => cursorRing.classList.add('hover')); el.addEventListener('mouseleave', () => cursorRing.classList.remove('hover')); });
+    }
+
+    const menuBtn = document.getElementById('menuBtn');
+    const menuOverlay = document.getElementById('menuOverlay');
+    menuBtn.addEventListener('click', () => { menuBtn.classList.toggle('open'); menuOverlay.classList.toggle('open'); document.body.style.overflow = menuOverlay.classList.contains('open') ? 'hidden' : ''; });
+
+    gsap.to('.hero-title .line-inner', { y: 0, duration: 1.2, ease: 'power4.out', stagger: 0.1, delay: 0.3 });
+    gsap.utils.toArray('[data-reveal]').forEach(el => { ScrollTrigger.create({ trigger: el, start: 'top 85%', onEnter: () => el.classList.add('revealed') }); });
 
     // Filter functionality
-    const filterTabs = document.querySelectorAll('.filter-tab');
+    const filterTabs = document.querySelectorAll('.filter-tab[data-filter]');
     const workCards = document.querySelectorAll('.work-card');
-
     filterTabs.forEach(tab => {
       tab.addEventListener('click', () => {
-        // Update active tab
         filterTabs.forEach(t => t.classList.remove('active'));
         tab.classList.add('active');
-
         const filter = tab.dataset.filter;
-
-        // Filter cards
         workCards.forEach(card => {
           if (filter === 'all' || card.dataset.category === filter) {
             card.style.display = 'block';
-            card.style.animation = 'fadeIn 0.3s ease';
+            gsap.fromTo(card, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.4 });
           } else {
             card.style.display = 'none';
           }
@@ -1190,93 +736,7 @@
       });
     });
 
-    // Fade in animation
-    const style = document.createElement('style');
-    style.textContent = `
-      @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
-      }
-      html {
-        scroll-behavior: smooth;
-      }
-    `;
-    document.head.appendChild(style);
-
-    // Loading animation
-    const loadingMessages = [
-      'ACCESSING CLASSIFIED WORKS',
-      'LOADING PERFORMANCE DATA',
-      'DECRYPTING MEDIA FILES',
-      'ARCHIVE READY'
-    ];
-
-    let loadProgress = 0;
-    function simulateLoading() {
-      const bar = document.getElementById('loading-bar');
-      const text = document.getElementById('loading-text');
-      const interval = setInterval(() => {
-        loadProgress += Math.random() * 20 + 10;
-        if (loadProgress > 100) loadProgress = 100;
-        bar.style.width = loadProgress + '%';
-        const msgIndex = Math.min(Math.floor(loadProgress / 28), loadingMessages.length - 1);
-        text.textContent = loadingMessages[msgIndex];
-        if (loadProgress >= 100) {
-          clearInterval(interval);
-          setTimeout(() => {
-            document.getElementById('loading-screen').classList.add('hidden');
-            initAnimations();
-          }, 400);
-        }
-      }, 150);
-    }
-    simulateLoading();
-
-    // === ANIMATION SYSTEM ===
-    function initAnimations() { initParticles(); initScrollReveal(); initScrollProgress(); initPageTransitions(); }
-    
-    function initParticles() {
-      const canvas = document.getElementById('particle-canvas'); if (!canvas) return;
-      const ctx = canvas.getContext('2d');
-      function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-      resize(); window.addEventListener('resize', resize);
-      const particles = [];
-      for (let i = 0; i < 50; i++) particles.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, vx: (Math.random() - 0.5) * 0.3, vy: (Math.random() - 0.5) * 0.3, size: Math.random() * 2 + 0.5, opacity: Math.random() * 0.5 + 0.2 });
-      function animate() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        particles.forEach(p => { p.x += p.vx; p.y += p.vy; if (p.x < 0) p.x = canvas.width; if (p.x > canvas.width) p.x = 0; if (p.y < 0) p.y = canvas.height; if (p.y > canvas.height) p.y = 0; ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fillStyle = `rgba(255,255,255,${p.opacity})`; ctx.fill(); });
-        particles.forEach((p1, i) => { particles.slice(i + 1).forEach(p2 => { const dx = p1.x - p2.x, dy = p1.y - p2.y, dist = Math.sqrt(dx*dx + dy*dy); if (dist < 100) { ctx.beginPath(); ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y); ctx.strokeStyle = `rgba(255,255,255,${0.1 * (1 - dist/100)})`; ctx.stroke(); } }); });
-        requestAnimationFrame(animate);
-      }
-      animate();
-    }
-    
-    function initScrollReveal() {
-      const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('revealed'); }); }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
-      document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-    }
-    
-    function initScrollProgress() {
-      const bar = document.getElementById('scroll-progress'); if (!bar) return;
-      window.addEventListener('scroll', () => { const progress = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100; bar.style.width = progress + '%'; });
-    }
-    
-    function initPageTransitions() {
-      document.querySelectorAll('a').forEach(link => {
-        if (link.hostname === window.location.hostname && !link.hasAttribute('target')) {
-          link.addEventListener('click', (e) => { const href = link.getAttribute('href'); if (href && !href.startsWith('#')) { e.preventDefault(); document.body.style.opacity = '0'; document.body.style.transition = 'opacity 0.3s'; setTimeout(() => window.location.href = href, 300); } });
-        }
-      });
-    }
+    if ('serviceWorker' in navigator) { navigator.serviceWorker.register('service-worker.js').catch(err => console.log('SW failed:', err)); }
   </script>
-
-<!-- Service Worker -->
-<script>
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/service-worker.js')
-        .then(reg => console.log('[PWA] Registered'))
-        .catch(err => console.error('[PWA] Failed:', err));
-}
-</script>
 </body>
 </html>

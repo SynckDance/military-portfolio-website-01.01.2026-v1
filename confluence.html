@@ -1,125 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Clerk Authentication Protection -->
-  <script async crossorigin="anonymous" data-clerk-publishable-key="pk_test_bmF0aXZlLWFudGVhdGVyLTY3LmNsZXJrLmFjY291bnRzLmRldiQ" src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js" type="text/javascript"></script>
-  <script>window.addEventListener("load", async () => { if (window.Clerk) { try { await window.Clerk.load(); if (!window.Clerk.user) { window.location.href = "index.html"; } } catch (err) { window.location.href = "index.html"; } } else { setTimeout(() => { if (!window.Clerk?.user) { window.location.href = "index.html"; } }, 2000); } });</script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>THE CONFLUENCE // NEURAL DANCE NETWORK // EMOGHENE</title>
-<!-- PWA -->
-<link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#00ff41">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="SINCLAIR">
-<link rel="apple-touch-icon" href="/icons/icon-192x192.png">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;500;700;900&display=swap');
+  <title>The Confluence — Sinclair Emoghene</title>
+  <meta name="description" content="An interactive neural network visualization of global dance traditions and their connections.">
 
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#000000">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Sinclair Emoghene">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Three.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <style>
     :root {
-      --black: #000000;
+      --bg: #000000;
       --white: #ffffff;
-      --white-dim: rgba(255, 255, 255, 0.5);
-      --white-faint: rgba(255, 255, 255, 0.15);
-      --cyan: #00ffff;
-      --font-mono: 'Share Tech Mono', monospace;
-      --font-display: 'Orbitron', sans-serif;
+      --white-90: rgba(255,255,255,0.90);
+      --white-70: rgba(255,255,255,0.70);
+      --white-50: rgba(255,255,255,0.50);
+      --white-30: rgba(255,255,255,0.30);
+      --white-15: rgba(255,255,255,0.15);
+      --white-08: rgba(255,255,255,0.08);
+      --white-04: rgba(255,255,255,0.04);
+      --orange: #f97316;
+      --purple: #a78bfa;
+      --sage: #86efac;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
-    html, body {
-      height: 100%;
-      background: var(--black);
+    html { font-size: 16px; }
+
+    body {
+      background: var(--bg);
       color: var(--white);
-      font-family: var(--font-mono);
+      font-family: 'Syne', sans-serif;
+      line-height: 1.6;
       overflow: hidden;
+      height: 100vh;
     }
 
-    /* Loading Screen */
-    .loading-screen {
+    .noise {
       position: fixed;
       inset: 0;
-      background: var(--black);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 10000;
-      transition: opacity 1s ease, visibility 1s ease;
-    }
-
-    .loading-screen.hidden {
-      opacity: 0;
-      visibility: hidden;
-    }
-
-    .loading-title {
-      font-family: var(--font-display);
-      font-size: 24px;
-      font-weight: 700;
-      letter-spacing: 8px;
-      margin-bottom: 40px;
-    }
-
-    .loading-bar-container {
-      width: 300px;
-      height: 2px;
-      background: var(--white-faint);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .loading-bar {
-      height: 100%;
-      background: var(--white);
-      width: 0%;
-      transition: width 0.3s ease;
-    }
-
-    .loading-text {
-      margin-top: 20px;
-      font-size: 10px;
-      letter-spacing: 3px;
-      color: var(--white-dim);
-    }
-
-    .loading-nodes {
-      display: flex;
-      gap: 8px;
-      margin-top: 30px;
-    }
-
-    .loading-node {
-      width: 8px;
-      height: 8px;
-      background: var(--white);
-      border-radius: 50%;
-      animation: nodePulse 1.5s ease-in-out infinite;
-    }
-
-    .loading-node:nth-child(2) { animation-delay: 0.2s; }
-    .loading-node:nth-child(3) { animation-delay: 0.4s; }
-    .loading-node:nth-child(4) { animation-delay: 0.6s; }
-    .loading-node:nth-child(5) { animation-delay: 0.8s; }
-
-    @keyframes nodePulse {
-      0%, 100% { transform: scale(1); opacity: 0.3; }
-      50% { transform: scale(1.5); opacity: 1; }
-    }
-
-    .scanlines {
-      position: fixed;
-      inset: 0;
-      background: repeating-linear-gradient(
-        0deg,
-        transparent,
-        transparent 2px,
-        rgba(255, 255, 255, 0.01) 2px,
-        rgba(255, 255, 255, 0.01) 4px
-      );
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      opacity: 0.02;
       pointer-events: none;
       z-index: 9999;
     }
@@ -127,6 +64,7 @@
     #canvas-container {
       position: fixed;
       inset: 0;
+      z-index: 1;
     }
 
     /* Header */
@@ -135,26 +73,28 @@
       top: 0;
       left: 0;
       right: 0;
-      height: 60px;
+      height: 80px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 30px;
+      padding: 0 40px;
       z-index: 100;
-      background: linear-gradient(to bottom, rgba(0,0,0,0.95) 0%, transparent 100%);
+      background: linear-gradient(to bottom, var(--bg) 0%, rgba(0,0,0,0.8) 80%, transparent 100%);
+      border-bottom: 1px solid var(--white-08);
     }
 
     .header-left {
       display: flex;
       align-items: center;
-      gap: 30px;
+      gap: 32px;
     }
 
     .back-btn {
-      color: var(--white-dim);
+      color: var(--white-50);
       text-decoration: none;
-      font-size: 11px;
-      letter-spacing: 2px;
+      font-size: 13px;
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: 0.5px;
       transition: color 0.3s;
     }
 
@@ -163,16 +103,16 @@
     }
 
     .header-title {
-      font-family: var(--font-display);
-      font-size: 14px;
-      font-weight: 700;
-      letter-spacing: 4px;
+      font-family: 'Instrument Serif', serif;
+      font-size: 20px;
+      font-style: italic;
+      letter-spacing: 0.5px;
     }
 
     .header-right {
       display: flex;
       align-items: center;
-      gap: 25px;
+      gap: 32px;
     }
 
     .header-stat {
@@ -180,44 +120,54 @@
     }
 
     .header-stat-val {
-      font-family: var(--font-display);
-      font-size: 18px;
+      font-size: 24px;
       font-weight: 700;
       color: var(--white);
+      line-height: 1;
     }
 
     .header-stat-lbl {
-      font-size: 8px;
-      color: var(--white-dim);
-      letter-spacing: 2px;
+      font-size: 11px;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--white-50);
+      letter-spacing: 0.5px;
+      margin-top: 4px;
     }
 
     /* Info Panel */
     .info-panel {
       position: fixed;
-      top: 80px;
-      right: 30px;
-      width: 320px;
+      top: 100px;
+      right: 40px;
+      width: 360px;
       background: rgba(0, 0, 0, 0.95);
-      border: 1px solid var(--white-faint);
-      padding: 25px;
+      border: 1px solid var(--white-15);
+      padding: 32px;
       z-index: 100;
       display: none;
+      backdrop-filter: blur(10px);
     }
 
     .info-panel.active {
       display: block;
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .info-close {
       position: absolute;
-      top: 15px;
-      right: 15px;
+      top: 20px;
+      right: 20px;
       background: none;
       border: none;
-      color: var(--white-dim);
-      font-size: 18px;
+      color: var(--white-50);
+      font-size: 24px;
       cursor: pointer;
+      transition: color 0.3s;
     }
 
     .info-close:hover {
@@ -225,40 +175,42 @@
     }
 
     .info-header {
-      margin-bottom: 20px;
-      padding-bottom: 15px;
-      border-bottom: 1px solid var(--white-faint);
+      margin-bottom: 24px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--white-08);
     }
 
     .info-tradition {
-      font-size: 9px;
-      color: var(--white-dim);
-      letter-spacing: 3px;
+      font-size: 11px;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--orange);
+      letter-spacing: 1px;
       margin-bottom: 8px;
     }
 
     .info-title {
-      font-family: var(--font-display);
-      font-size: 20px;
-      font-weight: 700;
-      letter-spacing: 2px;
+      font-family: 'Instrument Serif', serif;
+      font-size: 28px;
+      font-style: italic;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
     }
 
     .info-performer {
-      font-size: 11px;
-      color: var(--white-dim);
-      margin-top: 8px;
+      font-size: 14px;
+      color: var(--white-70);
     }
 
     .info-section {
-      margin-bottom: 20px;
+      margin-bottom: 24px;
     }
 
     .info-section-title {
-      font-size: 9px;
-      color: var(--white-dim);
-      letter-spacing: 2px;
-      margin-bottom: 10px;
+      font-size: 11px;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--white-50);
+      letter-spacing: 1px;
+      margin-bottom: 12px;
     }
 
     .info-stat-grid {
@@ -269,26 +221,28 @@
 
     .info-stat {
       text-align: center;
-      padding: 12px;
-      border: 1px solid var(--white-faint);
+      padding: 16px;
+      border: 1px solid var(--white-08);
+      background: var(--white-04);
     }
 
     .info-stat-val {
-      font-family: var(--font-display);
-      font-size: 18px;
+      font-size: 20px;
       font-weight: 700;
       color: var(--white);
+      line-height: 1;
     }
 
     .info-stat-lbl {
-      font-size: 8px;
-      color: var(--white-dim);
-      letter-spacing: 1px;
-      margin-top: 4px;
+      font-size: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--white-50);
+      letter-spacing: 0.5px;
+      margin-top: 6px;
     }
 
     .similarity-list {
-      max-height: 120px;
+      max-height: 160px;
       overflow-y: auto;
     }
 
@@ -296,9 +250,9 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 8px 0;
-      border-bottom: 1px solid var(--white-faint);
-      font-size: 11px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--white-08);
+      font-size: 14px;
     }
 
     .similarity-item:last-child {
@@ -306,25 +260,25 @@
     }
 
     .similarity-name {
-      color: var(--white-dim);
+      color: var(--white-70);
     }
 
     .similarity-score {
-      font-family: var(--font-display);
+      font-weight: 700;
       color: var(--white);
     }
 
     .info-cta {
       display: block;
       width: 100%;
-      padding: 12px;
-      margin-top: 20px;
-      border: 1px solid var(--white);
+      padding: 14px;
+      margin-top: 24px;
+      border: 1px solid var(--white-30);
       background: transparent;
       color: var(--white);
-      font-family: var(--font-mono);
-      font-size: 10px;
-      letter-spacing: 2px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 0.5px;
       text-align: center;
       text-decoration: none;
       cursor: pointer;
@@ -333,18 +287,20 @@
 
     .info-cta:hover {
       background: var(--white);
-      color: var(--black);
+      color: var(--bg);
+      border-color: var(--white);
     }
 
     /* Tooltip */
     .tooltip {
       position: fixed;
       background: rgba(0, 0, 0, 0.95);
-      border: 1px solid var(--white-faint);
+      border: 1px solid var(--white-15);
       padding: 12px 16px;
       pointer-events: none;
       z-index: 1000;
       display: none;
+      backdrop-filter: blur(10px);
     }
 
     .tooltip.visible {
@@ -352,57 +308,46 @@
     }
 
     .tooltip-title {
-      font-family: var(--font-display);
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 1px;
+      font-family: 'Instrument Serif', serif;
+      font-size: 16px;
+      font-style: italic;
+      letter-spacing: 0.5px;
       margin-bottom: 4px;
     }
 
     .tooltip-sub {
-      font-size: 10px;
-      color: var(--white-dim);
-    }
-
-    /* Navigation */
-
-    .nav-pill {
-      color: var(--white-dim);
-      text-decoration: none;
-      font-size: 10px;
-      letter-spacing: 2px;
-      transition: color 0.3s;
-    }
-
-    .nav-pill:hover, .nav-pill.active {
-      color: var(--white);
+      font-size: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--white-70);
     }
 
     /* Instructions */
     .instructions {
       position: fixed;
       bottom: 100px;
-      right: 30px;
+      right: 40px;
       text-align: right;
       z-index: 50;
     }
 
     .instruction {
-      font-size: 9px;
-      color: var(--white-dim);
-      letter-spacing: 1px;
-      margin-bottom: 5px;
-      opacity: 0.6;
+      font-size: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--white-50);
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
     }
 
     .instruction kbd {
       display: inline-block;
-      padding: 2px 6px;
-      border: 1px solid var(--white-faint);
-      margin: 0 3px;
+      padding: 4px 8px;
+      border: 1px solid var(--white-15);
+      background: var(--white-04);
+      margin: 0 4px;
+      font-size: 11px;
     }
 
-    /* Center text */
+    /* Center label */
     .center-label {
       position: fixed;
       top: 50%;
@@ -414,151 +359,152 @@
     }
 
     .center-title {
-      font-family: var(--font-display);
-      font-size: 10px;
-      letter-spacing: 6px;
-      color: var(--white-dim);
-      opacity: 0.4;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: var(--white-30);
     }
 
-    @media (max-width: 768px) {
-      .info-panel {
-        width: calc(100% - 40px);
-        left: 20px;
-        right: 20px;
-      }
-      .instructions {
-        display: none;
-      }
-    }
-  
-    
-
-  
-    /* Minimal Hamburger Menu */
+    /* Hamburger Menu */
     .menu-btn {
       position: fixed;
-      bottom: 30px;
-      right: 30px;
-      width: 30px;
-      height: 20px;
+      bottom: 40px;
+      right: 40px;
+      width: 48px;
+      height: 48px;
       cursor: pointer;
-      z-index: 9999;
+      z-index: 10001;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
-      background: none;
-      border: none;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+      background: var(--white-04);
+      border: 1px solid var(--white-15);
+      border-radius: 50%;
       padding: 0;
+      transition: all 0.3s;
     }
+
+    .menu-btn:hover {
+      background: var(--white-08);
+      border-color: var(--white-30);
+    }
+
     .menu-btn span {
       display: block;
-      width: 100%;
+      width: 20px;
       height: 2px;
-      background: rgba(255,255,255,0.6);
+      background: var(--white);
       transition: all 0.3s ease;
     }
-    .menu-btn:hover span { background: #fff; }
-    .menu-btn.open span:nth-child(1) { transform: rotate(45deg) translate(6px, 6px); }
+
+    .menu-btn.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
     .menu-btn.open span:nth-child(2) { opacity: 0; }
-    .menu-btn.open span:nth-child(3) { transform: rotate(-45deg) translate(6px, -6px); }
+    .menu-btn.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
 
     .nav-menu {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.95);
-      z-index: 9998;
+      background: rgba(0,0,0,0.98);
+      z-index: 10000;
       display: flex;
       align-items: center;
       justify-content: center;
       opacity: 0;
       visibility: hidden;
-      transition: all 0.3s ease;
+      transition: all 0.4s ease;
+      backdrop-filter: blur(10px);
     }
+
     .nav-menu.open { opacity: 1; visibility: visible; }
+
+    .nav-menu-inner { text-align: center; }
+
+    .nav-menu-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: var(--white-30);
+      margin-bottom: 40px;
+    }
+
     .nav-menu a {
       display: block;
-      font-family: var(--font-display), 'Orbitron', sans-serif;
-      font-size: 18px;
-      font-weight: 500;
-      letter-spacing: 3px;
-      color: rgba(255,255,255,0.5);
+      font-family: 'Instrument Serif', serif;
+      font-size: 32px;
+      font-style: italic;
+      letter-spacing: 0.5px;
+      color: var(--white-50);
       text-decoration: none;
-      padding: 10px 20px;
-      text-align: center;
-      transition: color 0.2s;
+      padding: 12px 40px;
+      transition: color 0.3s;
     }
-    .nav-menu a:hover, .nav-menu a.active { color: #fff; }
-    .nav-menu-inner { text-align: center; }
-    .nav-menu-label {
-      font-family: var(--font-mono), monospace;
-      font-size: 9px;
-      letter-spacing: 2px;
-      color: rgba(255,255,255,0.3);
-      margin-bottom: 20px;
+
+    .nav-menu a:hover,
+    .nav-menu a.active {
+      color: var(--white);
+    }
+
+    .nav-menu a::before {
+      content: attr(data-num);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-style: normal;
+      color: var(--white-30);
+      margin-right: 16px;
     }
 
     @media (max-width: 768px) {
-      .menu-btn { bottom: 20px; right: 20px; }
-      .nav-menu a { font-size: 15px; padding: 8px 15px; }
+      .header { padding: 0 24px; height: 64px; }
+      .header-title { font-size: 16px; }
+      .header-stat-val { font-size: 20px; }
+      .header-stat-lbl { font-size: 10px; }
+      .info-panel { width: calc(100% - 48px); left: 24px; right: 24px; top: 80px; }
+      .instructions { display: none; }
+      .menu-btn { bottom: 24px; right: 24px; width: 44px; height: 44px; }
+      .nav-menu a { font-size: 24px; padding: 8px 24px; }
     }
-
   </style>
 </head>
 <body>
-  <!-- Navigation -->
-  <button class="menu-btn" id="menuBtn" onclick="document.getElementById('menuBtn').classList.toggle('open');document.getElementById('navMenu').classList.toggle('open');document.body.style.overflow=document.getElementById('navMenu').classList.contains('open')?'hidden':'';">
+  <div class="noise"></div>
+
+  <!-- Hamburger Menu -->
+  <button class="menu-btn" id="menuBtn" onclick="toggleMenu()">
     <span></span><span></span><span></span>
   </button>
+
   <nav class="nav-menu" id="navMenu">
     <div class="nav-menu-inner">
       <div class="nav-menu-label">NAVIGATION</div>
-        <a href="index.html">HOME</a>
-        <a href="about.html">DOSSIER</a>
-        <a href="cv.html">CV</a>
-        <a href="labs-universe.html">LABS</a>
-        <a href="works.html">WORKS</a>
-        <a href="writing.html">WRITING</a>
-        <a href="transmissions.html">TRANSMISSIONS</a>
-        <a href="confluence.html" class="active">CONFLUENCE</a>
-        <a href="contact.html">CONTACT</a>
+      <a href="about.html" data-num="01">Dossier</a>
+      <a href="labs-universe.html" data-num="02">Labs</a>
+      <a href="works.html" data-num="03">Works</a>
+      <a href="playground.html" data-num="04">Playground</a>
+      <a href="writing.html" data-num="05">Writing</a>
+      <a href="confluence.html" data-num="06" class="active">Confluence</a>
+      <a href="cv.html" data-num="07">CV</a>
+      <a href="contact.html" data-num="08">Contact</a>
     </div>
   </nav>
 
-
-  <!-- Loading Screen -->
-  <div class="loading-screen" id="loading-screen">
-    <div class="loading-title">THE CONFLUENCE</div>
-    <div class="loading-bar-container">
-      <div class="loading-bar" id="loading-bar"></div>
-    </div>
-    <div class="loading-text" id="loading-text">INITIALIZING NEURAL NETWORK</div>
-    <div class="loading-nodes">
-      <div class="loading-node"></div>
-      <div class="loading-node"></div>
-      <div class="loading-node"></div>
-      <div class="loading-node"></div>
-      <div class="loading-node"></div>
-    </div>
-  </div>
-
-  <div class="scanlines"></div>
   <div id="canvas-container"></div>
 
   <!-- Header -->
   <header class="header">
     <div class="header-left">
-      <a href="labs-universe.html" class="back-btn">← LABS</a>
-      <span class="header-title">THE CONFLUENCE</span>
+      <a href="labs-universe.html" class="back-btn">← Labs</a>
+      <span class="header-title">The Confluence</span>
     </div>
     <div class="header-right">
       <div class="header-stat">
         <div class="header-stat-val">28</div>
-        <div class="header-stat-lbl">NODES</div>
+        <div class="header-stat-lbl">Nodes</div>
       </div>
       <div class="header-stat">
         <div class="header-stat-val">198</div>
-        <div class="header-stat-lbl">SYNAPSES</div>
+        <div class="header-stat-lbl">Synapses</div>
       </div>
     </div>
   </header>
@@ -573,7 +519,7 @@
     <button class="info-close" id="info-close">&times;</button>
     <div class="info-header">
       <div class="info-tradition" id="info-tradition">NIGERIAN</div>
-      <h2 class="info-title" id="info-title">BATA</h2>
+      <h2 class="info-title" id="info-title">Bata</h2>
       <p class="info-performer" id="info-performer">Performer: Sinclair Emoghene</p>
     </div>
     <div class="info-section">
@@ -581,19 +527,19 @@
       <div class="info-stat-grid">
         <div class="info-stat">
           <div class="info-stat-val" id="info-frames">4,231</div>
-          <div class="info-stat-lbl">FRAMES</div>
+          <div class="info-stat-lbl">Frames</div>
         </div>
         <div class="info-stat">
           <div class="info-stat-val" id="info-duration">2:21</div>
-          <div class="info-stat-lbl">DURATION</div>
+          <div class="info-stat-lbl">Duration</div>
         </div>
         <div class="info-stat">
           <div class="info-stat-val" id="info-joints">32</div>
-          <div class="info-stat-lbl">JOINTS</div>
+          <div class="info-stat-lbl">Joints</div>
         </div>
         <div class="info-stat">
           <div class="info-stat-val" id="info-qtc">2,847</div>
-          <div class="info-stat-lbl">QTC STATES</div>
+          <div class="info-stat-lbl">QTC States</div>
         </div>
       </div>
     </div>
@@ -601,12 +547,12 @@
       <div class="info-section-title">NEURAL CONNECTIONS</div>
       <div class="similarity-list" id="similarity-list"></div>
     </div>
-    <a href="https://confluence.dance" target="_blank" class="info-cta">EXPLORE CONFLUENCE.DANCE →</a>
+    <a href="https://confluence.dance" target="_blank" class="info-cta">Explore Confluence.dance →</a>
   </div>
 
   <!-- Tooltip -->
   <div class="tooltip" id="tooltip">
-    <div class="tooltip-title" id="tooltip-title">BATA</div>
+    <div class="tooltip-title" id="tooltip-title">Bata</div>
     <div class="tooltip-sub" id="tooltip-sub">Yoruba · Sinclair</div>
   </div>
 
@@ -617,10 +563,14 @@
     <div class="instruction"><kbd>SCROLL</kbd> to zoom</div>
   </div>
 
-  <!-- Navigation -->
-
   <script>
-
+    function toggleMenu() {
+      const btn = document.getElementById('menuBtn');
+      const menu = document.getElementById('navMenu');
+      btn.classList.toggle('open');
+      menu.classList.toggle('open');
+      document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : '';
+    }
 
     // Dance nodes data
     const dances = [
@@ -630,21 +580,21 @@
       { id: 'ugho', name: 'UGHO', tradition: 'Nigerian', region: 'Benin/Bini', performer: 'Sinclair', frames: 3845, orbit: 2.1, speed: 0.14, offset: 2.5 },
       { id: 'swange', name: 'SWANGE', tradition: 'Nigerian', region: 'Tiv', performer: 'Sinclair', frames: 5123, orbit: 2.3, speed: 0.11, offset: 3.8 },
       { id: 'esapkaide', name: 'ESAPKAIDE', tradition: 'Nigerian', region: 'Benin/Bini', performer: 'Sinclair', frames: 4567, orbit: 2.0, speed: 0.13, offset: 5.0 },
-      
+
       // Ghanaian - Second orbit
       { id: 'adowa', name: 'ADOWA', tradition: 'Ghanaian', region: 'Ashanti', performer: 'Mustapha', frames: 5234, orbit: 3.2, speed: 0.10, offset: 0.5 },
       { id: 'agbadza', name: 'AGBADZA', tradition: 'Ghanaian', region: 'Ewe', performer: 'Mustapha', frames: 4890, orbit: 3.4, speed: 0.09, offset: 1.8 },
       { id: 'adzogbo', name: 'ADZOGBO', tradition: 'Ghanaian', region: 'Ewe', performer: 'Mustapha', frames: 6012, orbit: 3.1, speed: 0.11, offset: 3.1 },
       { id: 'atsiagbekor', name: 'ATSIAGBEKOR', tradition: 'Ghanaian', region: 'Ewe', performer: 'Mustapha', frames: 5567, orbit: 3.5, speed: 0.08, offset: 4.4 },
       { id: 'kpanlongo', name: 'KPANLONGO', tradition: 'Ghanaian', region: 'Ga', performer: 'Mustapha', frames: 4234, orbit: 3.3, speed: 0.10, offset: 5.7 },
-      
+
       // Diaspora - Third orbit
       { id: 'chango', name: 'CHANGÓ', tradition: 'Afro-Cuban', region: 'Cuba', performer: 'Nadia', frames: 4521, orbit: 4.3, speed: 0.07, offset: 0.3 },
       { id: 'kuele', name: 'KUELE KUELE', tradition: 'Afro-Cuban', region: 'Cuba', performer: 'Nadia', frames: 3890, orbit: 4.5, speed: 0.06, offset: 2.1 },
       { id: 'yemaya', name: 'YEMAYÁ', tradition: 'Afro-Cuban', region: 'Cuba', performer: 'Nadia', frames: 5234, orbit: 4.2, speed: 0.08, offset: 4.0 },
       { id: 'samba', name: 'SAMBA', tradition: 'Brazilian', region: 'Brazil', performer: 'Kate', frames: 4123, orbit: 4.6, speed: 0.065, offset: 5.5 },
       { id: 'frevo', name: 'FREVO', tradition: 'Brazilian', region: 'Brazil', performer: 'Kate', frames: 3567, orbit: 4.4, speed: 0.075, offset: 1.0 },
-      
+
       // Global - Outer orbit
       { id: 'gajaga', name: 'GAJAGA VANNAMA', tradition: 'Sri Lankan', region: 'Sri Lanka', performer: 'Sudesh', frames: 5890, orbit: 5.5, speed: 0.05, offset: 0.8 },
       { id: 'kohomba', name: 'KOHOMBA KANKARIYA', tradition: 'Sri Lankan', region: 'Sri Lanka', performer: 'Sudesh', frames: 6234, orbit: 5.7, speed: 0.045, offset: 2.5 },
@@ -696,51 +646,14 @@
     let previousMouse = { x: 0, y: 0 };
     let autoRotate = true;
 
-    // Loading simulation
-    let loadProgress = 0;
-    const loadingMessages = [
-      'INITIALIZING NEURAL NETWORK',
-      'LOADING MOTION CAPTURE DATA',
-      'COMPUTING QTC ENCODINGS',
-      'BUILDING SIMILARITY MATRIX',
-      'ESTABLISHING SYNAPTIC CONNECTIONS',
-      'CALIBRATING ORBITAL TRAJECTORIES',
-      'ACTIVATING CONFLUENCE NODES',
-      'SYSTEM READY'
-    ];
-
-    function simulateLoading() {
-      const loadingBar = document.getElementById('loading-bar');
-      const loadingText = document.getElementById('loading-text');
-      
-      const interval = setInterval(() => {
-        loadProgress += Math.random() * 15 + 5;
-        if (loadProgress > 100) loadProgress = 100;
-        
-        loadingBar.style.width = loadProgress + '%';
-        
-        const msgIndex = Math.min(Math.floor(loadProgress / 12.5), loadingMessages.length - 1);
-        loadingText.textContent = loadingMessages[msgIndex];
-        
-        if (loadProgress >= 100) {
-          clearInterval(interval);
-          setTimeout(() => {
-            document.getElementById('loading-screen').classList.add('hidden');
-          }, 500);
-        }
-      }, 200);
-    }
-
     function init() {
-      simulateLoading();
-      
       const container = document.getElementById('canvas-container');
-      
+
       scene = new THREE.Scene();
-      
+
       camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
       updateCameraPosition();
-      
+
       renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
       renderer.setSize(window.innerWidth, window.innerHeight);
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -752,7 +665,7 @@
 
       // Create center core
       const coreGeometry = new THREE.SphereGeometry(0.3, 32, 32);
-      const coreMaterial = new THREE.MeshBasicMaterial({ 
+      const coreMaterial = new THREE.MeshBasicMaterial({
         color: 0x111111,
         transparent: true,
         opacity: 0.8
@@ -763,8 +676,8 @@
       // Core glow rings
       for (let i = 0; i < 3; i++) {
         const ringGeometry = new THREE.RingGeometry(0.5 + i * 0.3, 0.52 + i * 0.3, 64);
-        const ringMaterial = new THREE.MeshBasicMaterial({ 
-          color: 0xffffff, 
+        const ringMaterial = new THREE.MeshBasicMaterial({
+          color: 0xffffff,
           side: THREE.DoubleSide,
           transparent: true,
           opacity: 0.1 - i * 0.03
@@ -777,8 +690,8 @@
       // Create orbit rings
       [2.15, 3.3, 4.4, 5.55].forEach((radius, i) => {
         const orbitGeometry = new THREE.RingGeometry(radius - 0.01, radius + 0.01, 128);
-        const orbitMaterial = new THREE.MeshBasicMaterial({ 
-          color: 0xffffff, 
+        const orbitMaterial = new THREE.MeshBasicMaterial({
+          color: 0xffffff,
           side: THREE.DoubleSide,
           transparent: true,
           opacity: 0.05
@@ -788,11 +701,10 @@
         scene.add(orbit);
       });
 
-      // Create nodes (black spheres)
+      // Create nodes
       dances.forEach(dance => {
-        // Main sphere - black
         const geometry = new THREE.SphereGeometry(0.12, 32, 32);
-        const material = new THREE.MeshBasicMaterial({ 
+        const material = new THREE.MeshBasicMaterial({
           color: 0x000000
         });
         const mesh = new THREE.Mesh(geometry, material);
@@ -802,8 +714,8 @@
 
         // White outline ring
         const ringGeometry = new THREE.RingGeometry(0.13, 0.15, 32);
-        const ringMaterial = new THREE.MeshBasicMaterial({ 
-          color: 0xffffff, 
+        const ringMaterial = new THREE.MeshBasicMaterial({
+          color: 0xffffff,
           side: THREE.DoubleSide,
           transparent: true,
           opacity: 0.6
@@ -872,14 +784,14 @@
       canvas.height = 64;
       const ctx = canvas.getContext('2d');
       ctx.fillStyle = '#ffffff';
-      ctx.font = 'bold 28px Share Tech Mono';
+      ctx.font = 'bold 28px JetBrains Mono';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.fillText(text, 256, 32);
-      
+
       const texture = new THREE.CanvasTexture(canvas);
-      const material = new THREE.SpriteMaterial({ 
-        map: texture, 
+      const material = new THREE.SpriteMaterial({
+        map: texture,
         transparent: true,
         opacity: 0.9
       });
@@ -890,7 +802,6 @@
 
     function createConnections() {
       connections.forEach(conn => {
-        // Create tube geometry for each connection
         const lineMaterial = new THREE.ShaderMaterial({
           uniforms: {
             time: { value: 0 },
@@ -922,7 +833,7 @@
         const lineGeometry = new THREE.BufferGeometry();
         const positions = new Float32Array(6);
         lineGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-        
+
         const line = new THREE.Line(lineGeometry, lineMaterial);
         line.userData = conn;
         scene.add(line);
@@ -935,7 +846,7 @@
         const conn = line.userData;
         const fromNode = nodes[conn.from];
         const toNode = nodes[conn.to];
-        
+
         if (fromNode && toNode) {
           const positions = line.geometry.attributes.position.array;
           positions[0] = fromNode.position.x;
@@ -945,8 +856,7 @@
           positions[4] = toNode.position.y;
           positions[5] = toNode.position.z;
           line.geometry.attributes.position.needsUpdate = true;
-          
-          // Update shader time
+
           line.material.uniforms.time.value = time;
         }
       });
@@ -991,17 +901,17 @@
       const intersects = raycaster.intersectObjects(meshes);
 
       const tooltip = document.getElementById('tooltip');
-      
+
       if (intersects.length > 0) {
         const node = intersects[0].object.userData;
         hoveredNode = node;
-        
+
         tooltip.classList.add('visible');
         tooltip.style.left = e.clientX + 15 + 'px';
         tooltip.style.top = e.clientY + 15 + 'px';
         document.getElementById('tooltip-title').textContent = node.name;
         document.getElementById('tooltip-sub').textContent = `${node.region} · ${node.performer}`;
-        
+
         renderer.domElement.style.cursor = 'pointer';
       } else {
         hoveredNode = null;
@@ -1044,12 +954,12 @@
       const related = connections.filter(c => c.from === dance.id || c.to === dance.id);
       const simList = document.getElementById('similarity-list');
       simList.innerHTML = '';
-      
+
       related.sort((a, b) => b.score - a.score).forEach(conn => {
         const otherId = conn.from === dance.id ? conn.to : conn.from;
         const other = dances.find(d => d.id === otherId);
         if (!other) return;
-        
+
         const item = document.createElement('div');
         item.className = 'similarity-item';
         item.innerHTML = `
@@ -1068,7 +978,7 @@
 
     function animate() {
       requestAnimationFrame(animate);
-      
+
       time += 0.016;
 
       // Auto rotate camera
@@ -1077,14 +987,13 @@
         updateCameraPosition();
       }
 
-      // Update node positions (orbiting)
+      // Update node positions
       dances.forEach(dance => {
         const node = nodes[dance.id];
         const angle = time * dance.speed + dance.offset;
-        
-        // Add slight vertical oscillation
+
         const yOffset = Math.sin(time * 0.5 + dance.offset) * 0.1;
-        
+
         node.position.x = Math.cos(angle) * dance.orbit;
         node.position.z = Math.sin(angle) * dance.orbit;
         node.position.y = yOffset;
@@ -1117,14 +1026,5 @@
 
     init();
   </script>
-
-<!-- Service Worker -->
-<script>
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/service-worker.js')
-        .then(reg => console.log('[PWA] Registered'))
-        .catch(err => console.error('[PWA] Failed:', err));
-}
-</script>
 </body>
 </html>
