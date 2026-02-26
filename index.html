@@ -3,739 +3,1164 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SINCLAIR EMOGHENE // CLASSIFIED ARCHIVE</title>
-<!-- PWA -->
-<link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#00ff41">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="SINCLAIR">
-<link rel="apple-touch-icon" href="/icons/icon-192x192.png">
-  
-  <!-- Clerk Authentication -->
-  <script 
-    async 
-    crossorigin="anonymous" 
-    data-clerk-publishable-key="pk_test_bmF0aXZlLWFudGVhdGVyLTY3LmNsZXJrLmFjY291bnRzLmRldiQ"
-    src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"
-    type="text/javascript"
-  ></script>
+  <title>Sinclair Emoghene — Choreographer, Researcher, Filmmaker</title>
+  <meta name="description" content="Sinclair Emoghene is a choreographer, researcher, and filmmaker. Assistant Professor of Dance at the University of Texas at Austin.">
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#000000">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Sinclair Emoghene">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lenis/1.1.18/lenis.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;500;700;900&display=swap');
-
     :root {
-      --black: #000000;
+      --bg: #000000;
       --white: #ffffff;
-      --white-dim: rgba(255, 255, 255, 0.5);
-      --white-faint: rgba(255, 255, 255, 0.15);
-      --font-mono: 'Share Tech Mono', monospace;
-      --font-display: 'Orbitron', sans-serif;
+      --white-90: rgba(255,255,255,0.90);
+      --white-70: rgba(255,255,255,0.70);
+      --white-50: rgba(255,255,255,0.50);
+      --white-30: rgba(255,255,255,0.30);
+      --white-15: rgba(255,255,255,0.15);
+      --white-08: rgba(255,255,255,0.08);
+      --white-04: rgba(255,255,255,0.04);
+      --orange: #f97316;
+      --orange-soft: #fb923c;
+      --purple: #a78bfa;
+      --purple-soft: #c4b5fd;
+      --sage: #86efac;
+      --sage-soft: #bbf7d0;
+      --coral: #fb7185;
+      --amber: #fbbf24;
+      --sky: #38bdf8;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
-    html, body {
-      height: 100%;
-      background: var(--black);
+    html { font-size: 16px; }
+
+    body {
+      background: var(--bg);
       color: var(--white);
-      font-family: var(--font-mono);
-      overflow: hidden;
-      cursor: crosshair;
+      font-family: 'Syne', sans-serif;
+      line-height: 1.6;
+      overflow-x: hidden;
     }
 
-    /* Scanlines */
-    .scanlines {
+    /* Noise Overlay */
+    .noise {
       position: fixed;
       inset: 0;
-      background: repeating-linear-gradient(
-        0deg,
-        transparent,
-        transparent 2px,
-        rgba(255, 255, 255, 0.015) 2px,
-        rgba(255, 255, 255, 0.015) 4px
-      );
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      opacity: 0.02;
       pointer-events: none;
       z-index: 9999;
     }
 
-    /* Grid Overlay */
-    .grid-overlay {
+    /* Custom Cursor */
+    .cursor-dot {
       position: fixed;
-      inset: 0;
-      background-image: 
-        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-      background-size: 60px 60px;
-      pointer-events: none;
-      z-index: 1;
-      animation: gridPulse 5s ease-in-out infinite;
-    }
-
-    @keyframes gridPulse {
-      0%, 100% { opacity: 0.3; }
-      50% { opacity: 0.6; }
-    }
-
-    /* Split Layout */
-    .split-container {
-      display: flex;
-      height: 100vh;
-      position: relative;
-      z-index: 10;
-    }
-
-    /* Left Panel - Identity */
-    .left-panel {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 60px 80px;
-      border-right: 1px solid var(--white-faint);
-      position: relative;
-    }
-
-    .classification-tag {
-      position: absolute;
-      top: 40px;
-      left: 80px;
-      font-size: 9px;
-      letter-spacing: 4px;
-      color: var(--white-dim);
-    }
-
-    .identity-section {
-      max-width: 500px;
-    }
-
-    .name-label {
-      font-size: 9px;
-      letter-spacing: 4px;
-      color: var(--white-dim);
-      margin-bottom: 20px;
-    }
-
-    .name-main {
-      font-family: var(--font-display);
-      font-size: 48px;
-      font-weight: 900;
-      letter-spacing: 6px;
-      line-height: 1.1;
-      margin-bottom: 30px;
-    }
-
-    .name-title {
-      font-size: 11px;
-      letter-spacing: 3px;
-      color: var(--white-dim);
-      line-height: 1.8;
-      margin-bottom: 40px;
-    }
-
-    .coords {
-      font-size: 10px;
-      letter-spacing: 2px;
-      color: var(--white-faint);
-    }
-
-    .divider-line {
-      width: 60px;
-      height: 1px;
-      background: var(--white-dim);
-      margin: 40px 0;
-    }
-
-    .tagline {
-      font-size: 11px;
-      letter-spacing: 2px;
-      color: var(--white-dim);
-      line-height: 2;
-      max-width: 400px;
-    }
-
-    /* Right Panel - Access */
-    .right-panel {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 60px 80px;
-      position: relative;
-    }
-
-    .access-label {
-      position: absolute;
-      top: 40px;
-      right: 80px;
-      font-size: 9px;
-      letter-spacing: 4px;
-      color: var(--white-dim);
-    }
-
-    .access-content {
-      text-align: center;
-      max-width: 400px;
-    }
-
-    .access-icon {
-      width: 80px;
-      height: 80px;
-      border: 1px solid var(--white-faint);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 40px;
-      position: relative;
-    }
-
-    .access-icon::before {
-      content: '';
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      border: 1px solid var(--white-faint);
-      border-radius: 50%;
-      animation: iconPulse 2s ease-in-out infinite;
-    }
-
-    @keyframes iconPulse {
-      0%, 100% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.2); opacity: 0; }
-    }
-
-    .access-icon svg {
-      width: 30px;
-      height: 30px;
-      stroke: var(--white);
-      stroke-width: 1;
-      fill: none;
-    }
-
-    .access-title {
-      font-family: var(--font-display);
-      font-size: 14px;
-      letter-spacing: 6px;
-      margin-bottom: 15px;
-    }
-
-    .access-subtitle {
-      font-size: 10px;
-      letter-spacing: 2px;
-      color: var(--white-dim);
-      margin-bottom: 50px;
-    }
-
-    /* Clerk Auth Container */
-    #clerk-auth {
-      margin-bottom: 30px;
-      min-height: 45px;
-    }
-
-    /* Access Button */
-    .access-btn {
-      display: inline-block;
-      padding: 18px 50px;
-      background: transparent;
-      border: 1px solid var(--white);
-      color: var(--white);
-      font-family: var(--font-display);
-      font-size: 11px;
-      letter-spacing: 4px;
-      text-decoration: none;
-      transition: all 0.3s ease;
-      cursor: pointer;
-      margin-bottom: 20px;
-    }
-
-    .access-btn:hover {
-      background: var(--white);
-      color: var(--black);
-    }
-
-    .access-btn.secondary {
-      background: var(--white);
-      color: var(--black);
-      margin-left: 15px;
-    }
-
-    .access-btn.secondary:hover {
-      background: transparent;
-      color: var(--white);
-    }
-
-    .access-note {
-      font-size: 9px;
-      letter-spacing: 2px;
-      color: var(--white-faint);
-      margin-top: 30px;
-    }
-
-    /* Status Indicators */
-    .status-row {
-      display: flex;
-      justify-content: center;
-      gap: 40px;
-      margin-top: 50px;
-    }
-
-    .status-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 9px;
-      letter-spacing: 2px;
-      color: var(--white-dim);
-    }
-
-    .status-dot {
       width: 6px;
       height: 6px;
       background: var(--white);
       border-radius: 50%;
-      animation: statusBlink 2s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 10001;
+      mix-blend-mode: difference;
+      transition: transform 0.1s ease;
     }
 
-    .status-dot.active {
-      background: #4ade80;
-    }
-
-    @keyframes statusBlink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.4; }
-    }
-
-    /* Bottom Nav */
-    .bottom-nav {
+    .cursor-ring {
       position: fixed;
-      bottom: 30px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 40px;
-      z-index: 100;
-    }
-
-    .bottom-link {
-      font-size: 9px;
-      letter-spacing: 3px;
-      color: var(--white-dim);
-      text-decoration: none;
-      transition: color 0.3s;
-    }
-
-    .bottom-link:hover {
-      color: var(--white);
-    }
-
-    /* Radar */
-    .radar {
-      position: fixed;
-      bottom: 30px;
-      right: 30px;
-      width: 80px;
-      height: 80px;
+      width: 40px;
+      height: 40px;
+      border: 1px solid var(--white-50);
       border-radius: 50%;
-      border: 1px solid var(--white-faint);
-      z-index: 50;
+      pointer-events: none;
+      z-index: 10000;
+      mix-blend-mode: difference;
+      transition: transform 0.15s ease, width 0.2s ease, height 0.2s ease;
     }
 
-    .radar::before {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 50%;
-      height: 2px;
-      background: linear-gradient(90deg, rgba(255,255,255,0.6), transparent);
-      transform-origin: left center;
-      animation: radarSweep 3s linear infinite;
+    .cursor-ring.hover {
+      width: 60px;
+      height: 60px;
+      border-color: var(--white);
     }
 
-    .radar::after {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 4px;
-      height: 4px;
-      background: var(--white);
-      border-radius: 50%;
-      transform: translate(-50%, -50%);
-    }
-
-    @keyframes radarSweep {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-
-    /* Live Clock */
-    .live-clock {
-      position: fixed;
-      top: 40px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 10px;
-      letter-spacing: 4px;
-      color: var(--white-dim);
-      z-index: 100;
-    }
-
-    /* Responsive */
-    @media (max-width: 1024px) {
-      .split-container {
-        flex-direction: column;
-      }
-
-      .left-panel {
-        border-right: none;
-        border-bottom: 1px solid var(--white-faint);
-        padding: 80px 40px 60px;
-        flex: none;
-      }
-
-      .right-panel {
-        padding: 60px 40px 100px;
-        flex: none;
-      }
-
-      .name-main {
-        font-size: 32px;
-      }
-
-      .classification-tag,
-      .access-label {
-        left: 40px;
-        right: 40px;
-      }
-
-      .radar {
-        display: none;
-      }
-
-      .status-row {
-        flex-direction: column;
-        gap: 15px;
-      }
-
-      .access-btn {
-        display: block;
-        margin-bottom: 15px;
-      }
-
-      .access-btn.secondary {
-        margin-left: 0;
-      }
-    }
-
-    /* Mobile scroll fix */
     @media (max-width: 768px) {
-        html, body {
-            overflow-y: auto !important;
-            height: auto !important;
-            min-height: 100vh;
-            position: relative !important;
-        }
-
-        .container, .main, main, .content, .wrapper {
-            overflow-y: auto !important;
-            height: auto !important;
-            min-height: 100vh;
-            position: relative !important;
-        }
+      .cursor-dot, .cursor-ring { display: none; }
     }
-  
-    
 
-  
-    /* Minimal Hamburger Menu */
-    .menu-btn {
+    /* Navigation */
+    .nav {
       position: fixed;
-      bottom: 30px;
-      right: 30px;
-      width: 30px;
-      height: 20px;
-      cursor: pointer;
-      z-index: 9999;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 48px;
+      z-index: 1000;
+      mix-blend-mode: difference;
+    }
+
+    .nav-logo {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.05em;
+      color: var(--white);
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    .nav-menu-btn {
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      gap: 6px;
+      cursor: pointer;
+      padding: 10px;
       background: none;
       border: none;
-      padding: 0;
     }
-    .menu-btn span {
-      display: block;
-      width: 100%;
-      height: 2px;
-      background: rgba(255,255,255,0.6);
-      transition: all 0.3s ease;
-    }
-    .menu-btn:hover span { background: #fff; }
-    .menu-btn.open span:nth-child(1) { transform: rotate(45deg) translate(6px, 6px); }
-    .menu-btn.open span:nth-child(2) { opacity: 0; }
-    .menu-btn.open span:nth-child(3) { transform: rotate(-45deg) translate(6px, -6px); }
 
-    .nav-menu {
+    .nav-menu-btn span {
+      display: block;
+      width: 24px;
+      height: 1px;
+      background: var(--white);
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    .nav-menu-btn.open span:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);
+    }
+
+    .nav-menu-btn.open span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .nav-menu-btn.open span:nth-child(3) {
+      transform: rotate(-45deg) translate(5px, -5px);
+    }
+
+    /* Fullscreen Menu */
+    .menu-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.95);
-      z-index: 9998;
+      background: var(--bg);
+      z-index: 999;
       display: flex;
       align-items: center;
       justify-content: center;
       opacity: 0;
       visibility: hidden;
-      transition: all 0.3s ease;
+      transition: opacity 0.4s ease, visibility 0.4s ease;
     }
-    .nav-menu.open { opacity: 1; visibility: visible; }
-    .nav-menu a {
-      display: block;
-      font-family: var(--font-display), 'Orbitron', sans-serif;
-      font-size: 18px;
-      font-weight: 500;
-      letter-spacing: 3px;
-      color: rgba(255,255,255,0.5);
-      text-decoration: none;
-      padding: 10px 20px;
+
+    .menu-overlay.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .menu-links {
+      list-style: none;
       text-align: center;
-      transition: color 0.2s;
     }
-    .nav-menu a:hover, .nav-menu a.active { color: #fff; }
-    .nav-menu-inner { text-align: center; }
-    .nav-menu-label {
-      font-family: var(--font-mono), monospace;
-      font-size: 9px;
-      letter-spacing: 2px;
-      color: rgba(255,255,255,0.3);
-      margin-bottom: 20px;
+
+    .menu-links li {
+      overflow: hidden;
+    }
+
+    .menu-links a {
+      display: inline-block;
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(32px, 6vw, 64px);
+      font-style: italic;
+      color: var(--white-30);
+      text-decoration: none;
+      padding: 8px 0;
+      transition: color 0.3s ease, transform 0.3s ease;
+      transform: translateY(100%);
+    }
+
+    .menu-overlay.open .menu-links a {
+      transform: translateY(0);
+    }
+
+    .menu-links li:nth-child(1) a { transition-delay: 0.05s; }
+    .menu-links li:nth-child(2) a { transition-delay: 0.1s; }
+    .menu-links li:nth-child(3) a { transition-delay: 0.15s; }
+    .menu-links li:nth-child(4) a { transition-delay: 0.2s; }
+    .menu-links li:nth-child(5) a { transition-delay: 0.25s; }
+    .menu-links li:nth-child(6) a { transition-delay: 0.3s; }
+    .menu-links li:nth-child(7) a { transition-delay: 0.35s; }
+    .menu-links li:nth-child(8) a { transition-delay: 0.4s; }
+
+    .menu-links a .num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-style: normal;
+      margin-right: 16px;
+      opacity: 0.5;
+    }
+
+    .menu-links li:nth-child(1) a:hover { color: var(--orange); }
+    .menu-links li:nth-child(2) a:hover { color: var(--purple); }
+    .menu-links li:nth-child(3) a:hover { color: var(--sage); }
+    .menu-links li:nth-child(4) a:hover { color: var(--coral); }
+    .menu-links li:nth-child(5) a:hover { color: var(--sky); }
+    .menu-links li:nth-child(6) a:hover { color: var(--amber); }
+    .menu-links li:nth-child(7) a:hover { color: var(--orange); }
+    .menu-links li:nth-child(8) a:hover { color: var(--purple); }
+
+    /* Hero */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 120px 48px 80px;
+      position: relative;
+    }
+
+    .hero-title {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(48px, 12vw, 160px);
+      font-weight: 400;
+      font-style: italic;
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      margin-bottom: 32px;
+      overflow: hidden;
+    }
+
+    .hero-title .line {
+      display: block;
+      overflow: hidden;
+    }
+
+    .hero-title .line-inner {
+      display: block;
+      transform: translateY(110%);
+    }
+
+    .hero-title .gradient-text {
+      background: linear-gradient(90deg, var(--orange), var(--purple), var(--sage), var(--coral), var(--sky), var(--orange));
+      background-size: 300% 100%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: gradientShift 8s ease infinite;
+    }
+
+    @keyframes gradientShift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    .hero-subtitle {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--white-50);
+      letter-spacing: 0.02em;
+      line-height: 1.8;
+      max-width: 480px;
+    }
+
+    .hero-subtitle span {
+      display: block;
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 48px;
+      left: 48px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--white-30);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .hero-scroll-line {
+      width: 48px;
+      height: 1px;
+      background: var(--white-15);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-scroll-line::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--white-50);
+      animation: scrollLine 2s ease infinite;
+    }
+
+    @keyframes scrollLine {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
     }
 
     @media (max-width: 768px) {
-      .menu-btn { bottom: 20px; right: 20px; }
-      .nav-menu a { font-size: 15px; padding: 8px 15px; }
+      .hero-scroll { display: none; }
     }
 
+    /* Sections */
+    section {
+      padding: 120px 48px;
+    }
+
+    @media (max-width: 768px) {
+      section { padding: 80px 24px; }
+      .nav { padding: 0 24px; }
+      .hero { padding: 120px 24px 80px; }
+    }
+
+    /* Intro */
+    .intro-text {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(20px, 3vw, 32px);
+      font-weight: 400;
+      line-height: 1.6;
+      color: var(--white-70);
+      max-width: 900px;
+    }
+
+    .intro-text .highlight-orange { color: var(--orange); }
+    .intro-text .highlight-purple { color: var(--purple); }
+    .intro-text .highlight-sage { color: var(--sage); }
+    .intro-text .highlight-coral { color: var(--coral); }
+
+    /* Section Headers */
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      margin-bottom: 64px;
+    }
+
+    .section-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--white-50);
+    }
+
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: var(--white-08);
+    }
+
+    /* Research Grid */
+    .research-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    @media (max-width: 1024px) {
+      .research-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 768px) {
+      .research-grid { grid-template-columns: 1fr; }
+    }
+
+    .research-card {
+      background: var(--white-04);
+      border: 1px solid var(--white-08);
+      padding: 32px;
+      position: relative;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      text-decoration: none;
+      display: block;
+    }
+
+    .research-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+
+    .research-card:hover {
+      background: rgba(255,255,255,0.025);
+    }
+
+    .research-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .research-card:nth-child(1)::before { background: var(--orange); }
+    .research-card:nth-child(2)::before { background: var(--purple); }
+    .research-card:nth-child(3)::before { background: var(--sage); }
+    .research-card:nth-child(4)::before { background: var(--coral); }
+    .research-card:nth-child(5)::before { background: var(--sky); }
+    .research-card:nth-child(6)::before { background: var(--amber); }
+
+    .research-card-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--white-30);
+      margin-bottom: 16px;
+    }
+
+    .research-card:nth-child(1) .research-card-label { color: var(--orange); }
+    .research-card:nth-child(2) .research-card-label { color: var(--purple); }
+    .research-card:nth-child(3) .research-card-label { color: var(--sage); }
+    .research-card:nth-child(4) .research-card-label { color: var(--coral); }
+    .research-card:nth-child(5) .research-card-label { color: var(--sky); }
+    .research-card:nth-child(6) .research-card-label { color: var(--amber); }
+
+    .research-card-title {
+      font-family: 'Instrument Serif', serif;
+      font-size: 28px;
+      font-style: italic;
+      color: var(--white);
+      margin-bottom: 12px;
+    }
+
+    .research-card-desc {
+      font-family: 'Syne', sans-serif;
+      font-size: 14px;
+      color: var(--white-50);
+      line-height: 1.6;
+    }
+
+    .research-card-arrow {
+      position: absolute;
+      bottom: 32px;
+      right: 32px;
+      width: 24px;
+      height: 24px;
+      opacity: 0;
+      transform: translate(-8px, 8px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .research-card:hover .research-card-arrow {
+      opacity: 1;
+      transform: translate(0, 0);
+    }
+
+    /* Stats Marquee */
+    .stats-marquee {
+      padding: 80px 0;
+      overflow: hidden;
+      border-top: 1px solid var(--white-08);
+      border-bottom: 1px solid var(--white-08);
+    }
+
+    .stats-track {
+      display: flex;
+      gap: 80px;
+      animation: marquee 30s linear infinite;
+    }
+
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    .stat-item {
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+      white-space: nowrap;
+    }
+
+    .stat-number {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(48px, 8vw, 96px);
+      font-style: italic;
+      line-height: 1;
+    }
+
+    .stat-item:nth-child(1) .stat-number,
+    .stat-item:nth-child(5) .stat-number { color: var(--orange); }
+    .stat-item:nth-child(2) .stat-number,
+    .stat-item:nth-child(6) .stat-number { color: var(--purple); }
+    .stat-item:nth-child(3) .stat-number,
+    .stat-item:nth-child(7) .stat-number { color: var(--sage); }
+    .stat-item:nth-child(4) .stat-number,
+    .stat-item:nth-child(8) .stat-number { color: var(--coral); }
+
+    .stat-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--white-50);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    /* Parallax Text */
+    .parallax-section {
+      padding: 160px 48px;
+      overflow: hidden;
+    }
+
+    .parallax-text {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(32px, 6vw, 80px);
+      font-style: italic;
+      color: var(--white-15);
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    /* Playground Teaser */
+    .playground-teaser {
+      background: var(--white-04);
+      border: 1px solid var(--white-08);
+      padding: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 48px;
+    }
+
+    @media (max-width: 768px) {
+      .playground-teaser {
+        flex-direction: column;
+        padding: 48px 24px;
+        text-align: center;
+      }
+    }
+
+    .playground-teaser-content h3 {
+      font-family: 'Instrument Serif', serif;
+      font-size: 32px;
+      font-style: italic;
+      color: var(--white);
+      margin-bottom: 12px;
+    }
+
+    .playground-teaser-content p {
+      font-family: 'Syne', sans-serif;
+      font-size: 16px;
+      color: var(--white-50);
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--bg);
+      background: var(--white);
+      padding: 16px 32px;
+      text-decoration: none;
+      transition: background 0.3s ease, transform 0.3s ease;
+    }
+
+    .btn-primary:hover {
+      background: var(--white-90);
+      transform: translateY(-2px);
+    }
+
+    /* Transmissions */
+    .transmissions-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      background: var(--white-08);
+    }
+
+    .transmission-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 32px 0;
+      background: var(--bg);
+      cursor: pointer;
+      transition: padding 0.3s ease;
+      text-decoration: none;
+    }
+
+    .transmission-item:hover {
+      padding-left: 24px;
+    }
+
+    .transmission-meta {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .transmission-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 6px 12px;
+      border: 1px solid;
+    }
+
+    .transmission-item:nth-child(1) .transmission-tag {
+      color: var(--orange);
+      border-color: var(--orange);
+    }
+
+    .transmission-item:nth-child(2) .transmission-tag {
+      color: var(--purple);
+      border-color: var(--purple);
+    }
+
+    .transmission-item:nth-child(3) .transmission-tag {
+      color: var(--sage);
+      border-color: var(--sage);
+    }
+
+    .transmission-title {
+      font-family: 'Instrument Serif', serif;
+      font-size: 24px;
+      font-style: italic;
+      color: var(--white);
+    }
+
+    .transmission-date {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--white-30);
+    }
+
+    @media (max-width: 768px) {
+      .transmission-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+      }
+      .transmission-date { display: none; }
+    }
+
+    /* Triadic Mind Footer */
+    .triadic-footer {
+      position: relative;
+      padding: 160px 48px;
+      overflow: hidden;
+      background: radial-gradient(ellipse 80% 50% at 50% 100%, rgba(167,139,250,0.15) 0%, transparent 60%);
+    }
+
+    .triadic-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+    .triadic-orb-1 {
+      width: 300px;
+      height: 300px;
+      background: var(--purple);
+      bottom: -100px;
+      left: 20%;
+      animation: orbFloat1 8s ease-in-out infinite;
+    }
+
+    .triadic-orb-2 {
+      width: 200px;
+      height: 200px;
+      background: var(--sage);
+      bottom: 0;
+      right: 25%;
+      animation: orbFloat2 10s ease-in-out infinite;
+    }
+
+    .triadic-orb-3 {
+      width: 250px;
+      height: 250px;
+      background: var(--sky);
+      bottom: -50px;
+      right: 10%;
+      animation: orbFloat3 12s ease-in-out infinite;
+    }
+
+    @keyframes orbFloat1 {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(20px, -30px); }
+    }
+
+    @keyframes orbFloat2 {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(-15px, -20px); }
+    }
+
+    @keyframes orbFloat3 {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(10px, -25px); }
+    }
+
+    .triadic-content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .triadic-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--purple);
+      margin-bottom: 32px;
+    }
+
+    .triadic-badge-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--purple);
+      border-radius: 50%;
+      animation: pulseDot 2s ease infinite;
+    }
+
+    @keyframes pulseDot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.2); }
+    }
+
+    .triadic-title {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(48px, 10vw, 120px);
+      font-style: italic;
+      line-height: 1;
+      margin-bottom: 32px;
+      background: linear-gradient(90deg, var(--purple), var(--sky), var(--sage), var(--purple));
+      background-size: 300% 100%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: gradientShift 6s ease infinite;
+    }
+
+    .triadic-desc {
+      font-family: 'Syne', sans-serif;
+      font-size: 18px;
+      color: var(--white-50);
+      line-height: 1.7;
+      margin-bottom: 48px;
+    }
+
+    .btn-triadic {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--bg);
+      background: var(--purple-soft);
+      padding: 18px 36px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .btn-triadic:hover {
+      background: var(--white);
+      box-shadow: 0 0 40px rgba(167,139,250,0.4);
+    }
+
+    /* Slim Footer */
+    .footer {
+      padding: 32px 48px;
+      border-top: 1px solid var(--white-08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    @media (max-width: 768px) {
+      .footer {
+        flex-direction: column;
+        gap: 24px;
+        padding: 32px 24px;
+        text-align: center;
+      }
+    }
+
+    .footer-copy {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--white-30);
+    }
+
+    .footer-social {
+      display: flex;
+      gap: 24px;
+    }
+
+    .footer-social a {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--white-30);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .footer-social a:hover { color: var(--white); }
+
+    /* Reveal Animation */
+    [data-reveal] {
+      opacity: 0;
+      transform: translateY(44px);
+    }
+
+    [data-reveal].revealed {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
   </style>
 </head>
 <body>
+  <!-- Noise Overlay -->
+  <div class="noise"></div>
+
+  <!-- Custom Cursor -->
+  <div class="cursor-dot"></div>
+  <div class="cursor-ring"></div>
+
   <!-- Navigation -->
-  <button class="menu-btn" id="menuBtn" onclick="document.getElementById('menuBtn').classList.toggle('open');document.getElementById('navMenu').classList.toggle('open');document.body.style.overflow=document.getElementById('navMenu').classList.contains('open')?'hidden':'';">
-    <span></span><span></span><span></span>
-  </button>
-  <nav class="nav-menu" id="navMenu">
-    <div class="nav-menu-inner">
-      <div class="nav-menu-label">NAVIGATION</div>
-        <a href="index.html" class="active">HOME</a>
-        <a href="about.html">DOSSIER</a>
-        <a href="cv.html">CV</a>
-        <a href="labs-universe.html">LABS</a>
-        <a href="works.html">WORKS</a>
-        <a href="writing.html">WRITING</a>
-        <a href="transmissions.html">TRANSMISSIONS</a>
-        <a href="confluence.html">CONFLUENCE</a>
-        <a href="contact.html">CONTACT</a>
-    </div>
+  <nav class="nav">
+    <a href="index.html" class="nav-logo">Sinclair Emoghene</a>
+    <button class="nav-menu-btn" id="menuBtn" aria-label="Menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
   </nav>
 
-
-
-  <div class="scanlines"></div>
-  <div class="grid-overlay"></div>
-
-  <div class="live-clock" id="live-clock">00:00:00</div>
-
-  <div class="split-container">
-
-    <!-- LEFT: Identity -->
-    <div class="left-panel">
-      <div class="classification-tag">CLEARANCE LEVEL: OMEGA</div>
-      
-      <div class="identity-section">
-        <div class="name-label">SUBJECT DOSSIER</div>
-        <h1 class="name-main">SINCLAIR<br>OGAGA<br>EMOGHENE</h1>
-        <p class="name-title">
-          ASSISTANT PROFESSOR OF DANCE<br>
-          UNIVERSITY OF TEXAS AT AUSTIN<br>
-          DEPARTMENT OF THEATRE AND DANCE
-        </p>
-        <div class="coords">30.2672°N 97.7431°W — AUSTIN, TX</div>
-        
-        <div class="divider-line"></div>
-        
-        <p class="tagline">
-          Choreographer · Researcher · Archivist · Technologist<br>
-          Building thinking archives for embodied knowledge
-        </p>
-      </div>
-    </div>
-
-    <!-- RIGHT: Access -->
-    <div class="right-panel">
-      <div class="access-label">SECURE ACCESS PORTAL</div>
-      
-      <div class="access-content">
-        <div class="access-icon">
-          <svg viewBox="0 0 24 24">
-            <circle cx="12" cy="8" r="4"/>
-            <path d="M4 20c0-4 4-6 8-6s8 2 8 6"/>
-          </svg>
-        </div>
-        
-        <h2 class="access-title">AUTHENTICATION</h2>
-        <p class="access-subtitle">VERIFY CREDENTIALS TO ACCESS ARCHIVE</p>
-        
-        <!-- Clerk Authentication -->
-        <div id="clerk-auth"></div>
-        
-        <!-- Access Buttons - Hidden until authenticated -->
-        <div class="access-buttons" id="access-buttons" style="display: none;">
-          <a href="about.html" class="access-btn">ACCESS DOSSIER</a>
-          <a href="labs-universe.html" class="access-btn secondary">ENTER LABS</a>
-        </div>
-        
-        <p class="access-note">AUTHENTICATION REQUIRED TO ACCESS ARCHIVE</p>
-        
-        <div class="status-row">
-          <div class="status-item">
-            <span class="status-dot active"></span>
-            SYSTEM ONLINE
-          </div>
-          <div class="status-item">
-            <span class="status-dot active"></span>
-            ARCHIVE SYNCED
-          </div>
-          <div class="status-item">
-            <span class="status-dot"></span>
-            <span id="auth-status">AUTH STANDBY</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
+  <!-- Fullscreen Menu -->
+  <div class="menu-overlay" id="menuOverlay">
+    <ul class="menu-links">
+      <li><a href="about.html"><span class="num">01</span>Dossier</a></li>
+      <li><a href="labs-universe.html"><span class="num">02</span>Labs</a></li>
+      <li><a href="works.html"><span class="num">03</span>Works</a></li>
+      <li><a href="playground.html"><span class="num">04</span>Playground</a></li>
+      <li><a href="writing.html"><span class="num">05</span>Writing</a></li>
+      <li><a href="confluence.html"><span class="num">06</span>Confluence</a></li>
+      <li><a href="cv.html"><span class="num">07</span>CV</a></li>
+      <li><a href="contact.html"><span class="num">08</span>Contact</a></li>
+    </ul>
   </div>
 
-  <!-- Radar -->
-  <div class="radar"></div>
+  <!-- Hero -->
+  <section class="hero">
+    <h1 class="hero-title">
+      <span class="line"><span class="line-inner">Sinclair</span></span>
+      <span class="line"><span class="line-inner gradient-text">Emoghene</span></span>
+    </h1>
+    <div class="hero-subtitle">
+      <span>Choreographer · Researcher · Filmmaker</span>
+      <span>Assistant Professor of Dance</span>
+      <span>University of Texas at Austin</span>
+    </div>
+    <div class="hero-scroll">
+      <div class="hero-scroll-line"></div>
+      <span>Scroll to explore</span>
+    </div>
+  </section>
 
-  <!-- Bottom Nav - Hidden until authenticated -->
-  <nav class="bottom-nav" id="bottom-nav" style="display: none;">
-    <a href="works.html" class="bottom-link">WORKS</a>
-    <a href="writing.html" class="bottom-link">WRITING</a>
-    <a href="confluence.html" class="bottom-link">CONFLUENCE</a>
-    <a href="contact.html" class="bottom-link">CONTACT</a>
-  </nav>
+  <!-- Intro -->
+  <section data-reveal>
+    <p class="intro-text">
+      I build systems for preserving and transmitting <span class="highlight-orange">dance</span> as living knowledge. My work bridges <span class="highlight-purple">archives</span>, <span class="highlight-sage">digital humanities</span>, and <span class="highlight-coral">speculative futures</span>—asking how movement can be remembered, shared, and understood across time and space.
+    </p>
+  </section>
+
+  <!-- Research -->
+  <section>
+    <div class="section-header" data-reveal>
+      <span class="section-label">Research</span>
+      <div class="section-line"></div>
+    </div>
+    <div class="research-grid">
+      <a href="gmr.html" class="research-card" data-reveal>
+        <div class="research-card-label">Archive System</div>
+        <h3 class="research-card-title">Global Movement Research</h3>
+        <p class="research-card-desc">A methodology for documenting, analyzing, and transmitting dance across cultures and generations.</p>
+        <svg class="research-card-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M7 17L17 7M17 7H7M17 7V17"/>
+        </svg>
+      </a>
+      <a href="ten-poem.html" class="research-card" data-reveal>
+        <div class="research-card-label">Film + Poetry</div>
+        <h3 class="research-card-title">The Ten Poem Project</h3>
+        <p class="research-card-desc">Award-winning dance film exploring migration, identity, and embodied memory through poetry.</p>
+        <svg class="research-card-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M7 17L17 7M17 7H7M17 7V17"/>
+        </svg>
+      </a>
+      <a href="sensorium.html" class="research-card" data-reveal>
+        <div class="research-card-label">Installation</div>
+        <h3 class="research-card-title">Sensorium</h3>
+        <p class="research-card-desc">Immersive environments where audiences experience dance through multi-sensory engagement.</p>
+        <svg class="research-card-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M7 17L17 7M17 7H7M17 7V17"/>
+        </svg>
+      </a>
+      <a href="creative.html" class="research-card" data-reveal>
+        <div class="research-card-label">Methodology</div>
+        <h3 class="research-card-title">Creative Practice Research</h3>
+        <p class="research-card-desc">Investigating how artistic practice generates new forms of knowledge and understanding.</p>
+        <svg class="research-card-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M7 17L17 7M17 7H7M17 7V17"/>
+        </svg>
+      </a>
+      <a href="confluence.html" class="research-card" data-reveal>
+        <div class="research-card-label">Technique</div>
+        <h3 class="research-card-title">Dance Confluence</h3>
+        <p class="research-card-desc">A training methodology bridging West African dance traditions with contemporary practice.</p>
+        <svg class="research-card-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M7 17L17 7M17 7H7M17 7V17"/>
+        </svg>
+      </a>
+      <a href="https://mind.thetriadic.studio" target="_blank" class="research-card" data-reveal>
+        <div class="research-card-label">AI Platform</div>
+        <h3 class="research-card-title">Triadic Mind</h3>
+        <p class="research-card-desc">AI-powered research assistant for dance scholarship, archival analysis, and creative exploration.</p>
+        <svg class="research-card-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M7 17L17 7M17 7H7M17 7V17"/>
+        </svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- Stats Marquee -->
+  <div class="stats-marquee">
+    <div class="stats-track">
+      <div class="stat-item"><span class="stat-number">159</span><span class="stat-label">Recordings</span></div>
+      <div class="stat-item"><span class="stat-number">26+</span><span class="stat-label">Countries</span></div>
+      <div class="stat-item"><span class="stat-number">7</span><span class="stat-label">Festivals</span></div>
+      <div class="stat-item"><span class="stat-number">261</span><span class="stat-label">Confluences</span></div>
+      <div class="stat-item"><span class="stat-number">159</span><span class="stat-label">Recordings</span></div>
+      <div class="stat-item"><span class="stat-number">26+</span><span class="stat-label">Countries</span></div>
+      <div class="stat-item"><span class="stat-number">7</span><span class="stat-label">Festivals</span></div>
+      <div class="stat-item"><span class="stat-number">261</span><span class="stat-label">Confluences</span></div>
+    </div>
+  </div>
+
+  <!-- Parallax Text -->
+  <section class="parallax-section">
+    <p class="parallax-text" data-parallax>From Frozen Archives to Thinking Archives</p>
+  </section>
+
+  <!-- Playground Teaser -->
+  <section>
+    <div class="playground-teaser" data-reveal>
+      <div class="playground-teaser-content">
+        <h3>Explore the Playground</h3>
+        <p>Essays, research tools, demos, and experiments in dance and technology.</p>
+      </div>
+      <a href="playground.html" class="btn-primary">
+        Enter Playground
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- Transmissions -->
+  <section>
+    <div class="section-header" data-reveal>
+      <span class="section-label">Latest Transmissions</span>
+      <div class="section-line"></div>
+    </div>
+    <div class="transmissions-list" data-reveal>
+      <a href="playground.html#auntie" class="transmission-item">
+        <div class="transmission-meta">
+          <span class="transmission-tag">Memoir</span>
+          <span class="transmission-title">Auntie</span>
+        </div>
+        <span class="transmission-date">Jan 2026</span>
+      </a>
+      <a href="playground.html#refusal-as-research" class="transmission-item">
+        <div class="transmission-meta">
+          <span class="transmission-tag">Film / Research</span>
+          <span class="transmission-title">Refusal as Research</span>
+        </div>
+        <span class="transmission-date">Jan 2026</span>
+      </a>
+      <a href="playground.html#confluence-technique" class="transmission-item">
+        <div class="transmission-meta">
+          <span class="transmission-tag">Technique</span>
+          <span class="transmission-title">Confluence Dance Technique</span>
+        </div>
+        <span class="transmission-date">Jan 2026</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- Triadic Mind Footer -->
+  <section class="triadic-footer">
+    <div class="triadic-orb triadic-orb-1"></div>
+    <div class="triadic-orb triadic-orb-2"></div>
+    <div class="triadic-orb triadic-orb-3"></div>
+    <div class="triadic-content">
+      <div class="triadic-badge">
+        <span class="triadic-badge-dot"></span>
+        AI for Dance — Live Now
+      </div>
+      <h2 class="triadic-title">Triadic Mind</h2>
+      <p class="triadic-desc">An AI-powered research companion for dance scholarship. Ask questions, explore archives, generate insights, and discover connections across the global movement research database.</p>
+      <a href="https://mind.thetriadic.studio" target="_blank" class="btn-triadic">
+        Launch Triadic Mind
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M7 17L17 7M17 7H7M17 7V17"/>
+        </svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- Slim Footer -->
+  <footer class="footer">
+    <span class="footer-copy">© 2025 Sinclair Emoghene</span>
+    <div class="footer-social">
+      <a href="https://instagram.com/sinclairdance" target="_blank">Instagram</a>
+      <a href="https://twitter.com/sinclairdance" target="_blank">Twitter</a>
+      <a href="https://vimeo.com/sinclairdance" target="_blank">Vimeo</a>
+      <a href="https://github.com/SynckDance" target="_blank">GitHub</a>
+    </div>
+  </footer>
 
   <script>
+    // Lenis Smooth Scroll
+    const lenis = new Lenis({
+      duration: 1.4,
+      easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+      touchMultiplier: 1.5
+    });
 
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add(t => { lenis.raf(t * 1000); });
+    gsap.ticker.lagSmoothing(0);
 
-    // Live Clock
-    function updateClock() {
-      const now = new Date();
-      const h = String(now.getHours()).padStart(2, '0');
-      const m = String(now.getMinutes()).padStart(2, '0');
-      const s = String(now.getSeconds()).padStart(2, '0');
-      document.getElementById('live-clock').textContent = `${h}:${m}:${s}`;
+    // Custom Cursor
+    const cursorDot = document.querySelector('.cursor-dot');
+    const cursorRing = document.querySelector('.cursor-ring');
+
+    if (cursorDot && cursorRing) {
+      let mouseX = 0, mouseY = 0;
+      let ringX = 0, ringY = 0;
+
+      document.addEventListener('mousemove', e => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        cursorDot.style.left = mouseX - 3 + 'px';
+        cursorDot.style.top = mouseY - 3 + 'px';
+      });
+
+      function animateRing() {
+        ringX += (mouseX - ringX) * 0.15;
+        ringY += (mouseY - ringY) * 0.15;
+        cursorRing.style.left = ringX - 20 + 'px';
+        cursorRing.style.top = ringY - 20 + 'px';
+        requestAnimationFrame(animateRing);
+      }
+      animateRing();
+
+      document.querySelectorAll('a, button, .research-card').forEach(el => {
+        el.addEventListener('mouseenter', () => cursorRing.classList.add('hover'));
+        el.addEventListener('mouseleave', () => cursorRing.classList.remove('hover'));
+      });
     }
-    setInterval(updateClock, 1000);
-    updateClock();
 
-    // Clerk Authentication
-    window.addEventListener('load', async () => {
-      const clerkContainer = document.getElementById('clerk-auth');
-      const authStatus = document.getElementById('auth-status');
-      
-      if (window.Clerk) {
-        try {
-          await window.Clerk.load();
-          
-          if (window.Clerk.user) {
-            // User is signed in - show access buttons
-            authStatus.textContent = 'AUTHENTICATED';
-            authStatus.parentElement.querySelector('.status-dot').classList.add('active');
-            document.getElementById('access-buttons').style.display = 'block';
-            document.getElementById('bottom-nav').style.display = 'flex';
-            
-            clerkContainer.innerHTML = `
-              <div style="display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 20px;">
-                <span style="font-size: 10px; letter-spacing: 2px; color: var(--white-dim);">
-                  WELCOME, ${window.Clerk.user.firstName?.toUpperCase() || 'OPERATIVE'}
-                </span>
-                <button onclick="window.Clerk.signOut().then(() => window.location.reload())" style="
-                  background: transparent;
-                  border: 1px solid var(--white-faint);
-                  color: var(--white-dim);
-                  padding: 8px 15px;
-                  font-family: var(--font-mono);
-                  font-size: 9px;
-                  letter-spacing: 2px;
-                  cursor: pointer;
-                  transition: all 0.3s;
-                " onmouseover="this.style.borderColor='var(--white)';this.style.color='var(--white)'" 
-                   onmouseout="this.style.borderColor='var(--white-faint)';this.style.color='var(--white-dim)'">
-                  SIGN OUT
-                </button>
-              </div>
-            `;
-          } else {
-            // User is not signed in - show sign in button
-            clerkContainer.innerHTML = `
-              <button id="sign-in-btn" style="
-                background: transparent;
-                border: 1px solid var(--white-faint);
-                color: var(--white-dim);
-                padding: 12px 30px;
-                font-family: var(--font-mono);
-                font-size: 10px;
-                letter-spacing: 3px;
-                cursor: pointer;
-                transition: all 0.3s;
-                margin-bottom: 20px;
-              " onmouseover="this.style.borderColor='var(--white)';this.style.color='var(--white)'" 
-                 onmouseout="this.style.borderColor='var(--white-faint)';this.style.color='var(--white-dim)'">
-                SIGN IN / REGISTER
-              </button>
-            `;
-            
-            document.getElementById('sign-in-btn').addEventListener('click', () => {
-              window.Clerk.openSignIn();
-            });
-          }
-        } catch (err) {
-          console.log('Clerk not configured:', err);
-          clerkContainer.innerHTML = '<span style="font-size: 9px; color: var(--white-faint); letter-spacing: 2px;">AUTH OFFLINE</span>';
+    // Menu Toggle
+    const menuBtn = document.getElementById('menuBtn');
+    const menuOverlay = document.getElementById('menuOverlay');
+
+    menuBtn.addEventListener('click', () => {
+      menuBtn.classList.toggle('open');
+      menuOverlay.classList.toggle('open');
+      document.body.style.overflow = menuOverlay.classList.contains('open') ? 'hidden' : '';
+    });
+
+    // Hero Animation
+    gsap.to('.hero-title .line-inner', {
+      y: 0,
+      duration: 1.2,
+      ease: 'power4.out',
+      stagger: 0.1,
+      delay: 0.3
+    });
+
+    // Scroll Reveals
+    gsap.utils.toArray('[data-reveal]').forEach(el => {
+      ScrollTrigger.create({
+        trigger: el,
+        start: 'top 85%',
+        onEnter: () => el.classList.add('revealed')
+      });
+    });
+
+    // Parallax Text
+    const parallaxText = document.querySelector('[data-parallax]');
+    if (parallaxText) {
+      gsap.to(parallaxText, {
+        x: -200,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: parallaxText,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 1
         }
-      } else {
-        clerkContainer.innerHTML = '<span style="font-size: 9px; color: var(--white-faint); letter-spacing: 2px;">AUTH OFFLINE</span>';
-      }
-    });
+      });
+    }
 
-    // Page transition
-    document.querySelectorAll('a').forEach(link => {
-      if (link.hostname === window.location.hostname) {
-        link.addEventListener('click', (e) => {
-          const href = link.getAttribute('href');
-          if (href && !href.startsWith('#')) {
-            e.preventDefault();
-            document.body.style.opacity = '0';
-            document.body.style.transition = 'opacity 0.3s';
-            setTimeout(() => window.location.href = href, 300);
-          }
-        });
-      }
-    });
+    // Service Worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js')
+        .then(() => console.log('SW registered'))
+        .catch(err => console.log('SW failed:', err));
+    }
   </script>
-
-
-<!-- Service Worker -->
-<script>
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/service-worker.js')
-        .then(reg => console.log('[PWA] Registered'))
-        .catch(err => console.error('[PWA] Failed:', err));
-}
-</script>
 </body>
 </html>

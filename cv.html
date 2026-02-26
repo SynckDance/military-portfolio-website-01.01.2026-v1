@@ -1,460 +1,471 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Clerk Authentication Protection -->
-  <script async crossorigin="anonymous" data-clerk-publishable-key="pk_test_bmF0aXZlLWFudGVhdGVyLTY3LmNsZXJrLmFjY291bnRzLmRldiQ" src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js" type="text/javascript"></script>
-  <script>window.addEventListener("load", async () => { if (window.Clerk) { try { await window.Clerk.load(); if (!window.Clerk.user) { window.location.href = "index.html"; } } catch (err) { window.location.href = "index.html"; } } else { setTimeout(() => { if (!window.Clerk?.user) { window.location.href = "index.html"; } }, 2000); } });</script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PERSONNEL DOSSIER // EMOGHENE, SINCLAIR // CV</title>
-<!-- PWA -->
-<link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#00ff41">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="SINCLAIR">
-<link rel="apple-touch-icon" href="/icons/icon-192x192.png">
+  <title>Curriculum Vitae | Sinclair Emoghene</title>
+  <!-- PWA -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#000000">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="SINCLAIR">
+  <link rel="apple-touch-icon" href="/icons/icon-192x192.png">
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Syne:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;500;700;900&display=swap');
-
     :root {
-      --black: #000000;
+      --bg: #000000;
       --white: #ffffff;
-      --white-dim: rgba(255, 255, 255, 0.5);
-      --white-faint: rgba(255, 255, 255, 0.15);
-      --font-mono: 'Share Tech Mono', monospace;
-      --font-display: 'Orbitron', sans-serif;
+      --white-90: rgba(255,255,255,0.90);
+      --white-70: rgba(255,255,255,0.70);
+      --white-50: rgba(255,255,255,0.50);
+      --white-30: rgba(255,255,255,0.30);
+      --white-15: rgba(255,255,255,0.15);
+      --white-08: rgba(255,255,255,0.08);
+      --white-04: rgba(255,255,255,0.04);
+      --orange: #f97316;
+      --purple: #a78bfa;
+      --sage: #86efac;
+      --coral: #fb7185;
+      --amber: #fbbf24;
+      --sky: #38bdf8;
     }
-
     * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    html, body {
-      min-height: 100vh;
-      background: var(--black);
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
       color: var(--white);
-      font-family: var(--font-mono);
-      cursor: crosshair;
+      font-family: 'Syne', sans-serif;
+      line-height: 1.6;
+      cursor: none;
+      overflow-x: hidden;
     }
-
-    .scanlines {
+    /* Custom Cursor */
+    .cursor {
+      width: 20px;
+      height: 20px;
+      border: 1px solid var(--white);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 99999;
+      transition: transform 0.15s ease, background 0.15s ease;
+      transform: translate(-50%, -50%);
+      mix-blend-mode: difference;
+    }
+    .cursor.hover {
+      transform: translate(-50%, -50%) scale(1.5);
+      background: var(--white);
+    }
+    /* Noise Overlay */
+    .noise {
       position: fixed;
       inset: 0;
-      background: repeating-linear-gradient(
-        0deg,
-        transparent,
-        transparent 2px,
-        rgba(255, 255, 255, 0.02) 2px,
-        rgba(255, 255, 255, 0.02) 4px
-      );
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+      opacity: 0.03;
       pointer-events: none;
       z-index: 9999;
     }
-
-    /* Header */
-    .command-header {
+    /* Navigation */
+    .nav {
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
-      height: 60px;
-      background: var(--black);
-      display: flex;
-      align-items: center;
-      padding: 0 30px;
-      z-index: 100;
-    }
-
-    .header-left {
-      display: flex;
-      align-items: center;
-      gap: 30px;
-    }
-
-    .back-btn {
-      color: var(--white-dim);
-      text-decoration: none;
-      font-size: 11px;
-      letter-spacing: 2px;
-      transition: color 0.3s;
-    }
-
-    .back-btn:hover {
-      color: var(--white);
-    }
-
-    .header-title {
-      font-family: var(--font-display);
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 4px;
-    }
-
-    /* Main */
-    .main-content { position: relative; z-index: 10;
-      padding: 120px 40px 120px;
-      max-width: 900px;
-      margin: 0 auto;
-    }
-
-    /* Dossier Header */
-    .dossier-header {
-      margin-bottom: 60px;
-    }
-
-    .dossier-label {
-      font-size: 10px;
-      color: var(--white-dim);
-      letter-spacing: 4px;
-      margin-bottom: 15px;
-    }
-
-    .dossier-name {
-      font-family: var(--font-display);
-      font-size: 28px;
-      font-weight: 900;
-      letter-spacing: 6px;
-      margin-bottom: 10px;
-    }
-
-    .dossier-title {
-      font-size: 12px;
-      color: var(--white-dim);
-      letter-spacing: 2px;
-      margin-bottom: 20px;
-    }
-
-    .dossier-links {
-      display: flex;
-      gap: 30px;
-      flex-wrap: wrap;
-      font-size: 11px;
-    }
-
-    .dossier-links a {
-      color: var(--white);
-      text-decoration: none;
-      transition: opacity 0.3s;
-    }
-
-    .dossier-links a:hover {
-      opacity: 0.6;
-    }
-
-    /* Research Statement */
-    .research-statement {
-      margin-bottom: 60px;
-      padding: 25px 0;
-      border-top: 1px solid var(--white-faint);
-      border-bottom: 1px solid var(--white-faint);
-    }
-
-    .research-statement p {
-      font-size: 13px;
-      line-height: 1.9;
-      color: var(--white-dim);
-    }
-
-    /* Sections */
-    .cv-section {
-      margin-bottom: 50px;
-    }
-
-    .section-header {
-      margin-bottom: 25px;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .section-title {
-      font-family: var(--font-display);
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 4px;
-    }
-
-    .typing-dots {
-      display: inline-block;
-      width: 20px;
-      font-family: var(--font-display);
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 2px;
-    }
-
-    .typing-dots::after {
-      content: '';
-      animation: dotCycle 2s infinite;
-    }
-
-    @keyframes dotCycle {
-      0%, 100% { content: ''; }
-      25% { content: '.'; }
-      50% { content: '..'; }
-      75% { content: '...'; }
-    }
-
-    /* Entry */
-    .cv-entry {
-      padding: 12px 0;
-    }
-
-    .entry-header {
+      padding: 24px 48px;
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 6px;
-      gap: 20px;
+      align-items: center;
+      z-index: 1000;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
     }
-
-    .entry-title {
-      font-size: 13px;
+    .nav-logo {
+      font-family: 'Instrument Serif', serif;
+      font-size: 24px;
       color: var(--white);
-    }
-
-    .entry-date {
-      font-size: 10px;
-      color: var(--white-dim);
-      letter-spacing: 1px;
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-
-    .entry-subtitle {
-      font-size: 11px;
-      color: var(--white-dim);
-      margin-bottom: 4px;
-    }
-
-    .entry-desc {
-      font-size: 11px;
-      color: var(--white-dim);
-      line-height: 1.7;
-    }
-
-    .entry-amount {
-      font-family: var(--font-display);
-      font-size: 11px;
-      color: var(--white);
-      margin-top: 4px;
-    }
-
-    /* Navigation */
-    .nav-pills { display: none;
-      position: fixed;
-      bottom: 30px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 30px;
-      z-index: 100;
-      background: var(--black);
-      padding: 10px 20px;
-    }
-
-    .nav-pill {
-      font-size: 10px;
-      letter-spacing: 2px;
-      color: var(--white-dim);
       text-decoration: none;
-      transition: color 0.3s;
+      font-style: italic;
     }
-
-    .nav-pill:hover,
-    .nav-pill.active {
-      color: var(--white);
-    }
-
-    @media (max-width: 768px) {
-      .main-content { position: relative; z-index: 10; padding: 100px 20px 120px; }
-      .entry-header { flex-direction: column; gap: 4px; }
-      .dossier-name { font-size: 22px; letter-spacing: 4px; }
-    }
-  
-    /* Hamburger Menu Button - Bottom Right */
-    .menu-toggle {
-      position: fixed;
-      bottom: 30px;
-      right: 30px;
-      width: 56px;
-      height: 56px;
-      background: rgba(255,255,255,0.1);
-      border: 1px solid rgba(255,255,255,0.3);
+    .nav-toggle {
+      width: 48px;
+      height: 48px;
+      background: var(--white-08);
+      border: 1px solid var(--white-15);
       border-radius: 50%;
       cursor: pointer;
-      z-index: 10001;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
+      gap: 6px;
       transition: all 0.3s ease;
-      backdrop-filter: blur(10px);
     }
-
-    .menu-toggle:hover {
-      background: rgba(255,255,255,0.2);
-      border-color: rgba(255,255,255,0.5);
-      transform: scale(1.05);
+    .nav-toggle:hover {
+      background: var(--white-15);
+      border-color: var(--white-30);
     }
-
-    .menu-toggle span {
+    .nav-toggle span {
       display: block;
-      width: 20px;
-      height: 2px;
-      background: var(--white);
-      position: relative;
-      transition: all 0.3s ease;
-    }
-
-    .menu-toggle span::before,
-    .menu-toggle span::after {
-      content: '';
-      position: absolute;
-      width: 20px;
-      height: 2px;
+      width: 18px;
+      height: 1.5px;
       background: var(--white);
       transition: all 0.3s ease;
     }
-
-    .menu-toggle span::before { top: -6px; }
-    .menu-toggle span::after { top: 6px; }
-
-    .menu-toggle.active span { background: transparent; }
-    .menu-toggle.active span::before { top: 0; transform: rotate(45deg); }
-    .menu-toggle.active span::after { top: 0; transform: rotate(-45deg); }
-
-    /* Full Screen Nav Overlay */
-    .nav-overlay {
+    .nav-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+    .nav-toggle.active span:nth-child(2) { opacity: 0; }
+    .nav-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+    /* Fullscreen Menu */
+    .menu-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.98);
-      z-index: 10000;
+      background: var(--bg);
+      z-index: 999;
       display: flex;
       align-items: center;
       justify-content: center;
       opacity: 0;
       visibility: hidden;
-      transition: all 0.4s ease;
+      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     }
-
-    .nav-overlay.active {
-      opacity: 1;
-      visibility: visible;
+    .menu-overlay.active { opacity: 1; visibility: visible; }
+    .menu-content { text-align: center; }
+    .menu-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: var(--white-50);
+      margin-bottom: 40px;
+      text-transform: uppercase;
     }
-
-    .nav-overlay-content {
-      text-align: center;
-      position: relative;
-      z-index: 10;
+    .menu-links { display: flex; flex-direction: column; gap: 8px; }
+    .menu-links a {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(32px, 6vw, 56px);
+      color: var(--white-30);
+      text-decoration: none;
+      transition: all 0.3s ease;
+      font-style: italic;
     }
-
-    .nav-overlay-links {
+    .menu-links a:hover, .menu-links a.active { color: var(--white); }
+    /* Hero */
+    .hero {
+      min-height: 60vh;
       display: flex;
       flex-direction: column;
-      gap: 5px;
+      justify-content: flex-end;
+      padding: 120px 48px 80px;
+      max-width: 1400px;
+      margin: 0 auto;
     }
-
-    .nav-overlay-links a {
-      font-family: var(--font-display);
-      font-size: 20px;
-      font-weight: 700;
-      letter-spacing: 4px;
-      color: rgba(255,255,255,0.4);
-      text-decoration: none;
-      padding: 12px 30px;
-      transition: all 0.3s ease;
-    }
-
-    .nav-overlay-links a:hover,
-    .nav-overlay-links a.active {
-      color: #fff;
-    }
-
-    .nav-overlay-label {
-      font-family: var(--font-mono);
-      font-size: 9px;
+    .hero-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
       letter-spacing: 3px;
-      color: rgba(255,255,255,0.3);
-      margin-bottom: 30px;
+      color: var(--white-50);
+      text-transform: uppercase;
+      margin-bottom: 24px;
     }
-
+    .hero-title {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(48px, 8vw, 96px);
+      font-weight: 400;
+      line-height: 1.1;
+      margin-bottom: 32px;
+      font-style: italic;
+    }
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px 48px;
+      padding-top: 32px;
+      border-top: 1px solid var(--white-15);
+    }
+    .hero-meta-item {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--white-50);
+    }
+    .hero-meta-item a {
+      color: var(--white-70);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .hero-meta-item a:hover { color: var(--white); }
+    /* Research Statement */
+    .research-statement {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 80px 48px;
+    }
+    .research-statement p {
+      font-size: 18px;
+      line-height: 1.8;
+      color: var(--white-70);
+    }
+    /* CV Content */
+    .cv-content {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 48px 120px;
+    }
+    /* CV Section */
+    .cv-section {
+      margin-bottom: 80px;
+    }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 40px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--white-15);
+    }
+    .section-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 3px;
+      color: var(--white-50);
+      text-transform: uppercase;
+    }
+    .section-accent {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+    .section-accent.orange { background: var(--orange); }
+    .section-accent.purple { background: var(--purple); }
+    .section-accent.sage { background: var(--sage); }
+    .section-accent.coral { background: var(--coral); }
+    .section-accent.amber { background: var(--amber); }
+    .section-accent.sky { background: var(--sky); }
+    /* CV Entry */
+    .cv-entry {
+      padding: 24px 0;
+      border-bottom: 1px solid var(--white-08);
+    }
+    .cv-entry:last-child { border-bottom: none; }
+    .entry-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 24px;
+      margin-bottom: 8px;
+    }
+    .entry-title {
+      font-family: 'Instrument Serif', serif;
+      font-size: 20px;
+      color: var(--white-90);
+      line-height: 1.4;
+    }
+    .entry-date {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--white-50);
+      letter-spacing: 1px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .entry-subtitle {
+      font-size: 14px;
+      color: var(--white-50);
+      margin-bottom: 8px;
+    }
+    .entry-desc {
+      font-size: 14px;
+      color: var(--white-50);
+      line-height: 1.7;
+    }
+    .entry-amount {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      color: var(--sage);
+      margin-top: 8px;
+    }
+    .entry-link {
+      color: var(--white-70);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .entry-link:hover { color: var(--white); }
+    /* Simple list entries */
+    .simple-list {
+      padding: 16px 0;
+    }
+    .simple-list p {
+      font-size: 14px;
+      color: var(--white-70);
+      line-height: 2;
+    }
+    /* Triadic Mind Footer */
+    .triadic-footer {
+      background: var(--white-04);
+      border-top: 1px solid var(--white-08);
+      padding: 120px 48px;
+      position: relative;
+      overflow: hidden;
+    }
+    .triadic-orbs {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+    .triadic-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.3;
+    }
+    .triadic-orb.orange { width: 300px; height: 300px; background: var(--orange); top: -100px; left: 10%; }
+    .triadic-orb.purple { width: 400px; height: 400px; background: var(--purple); bottom: -150px; right: 20%; }
+    .triadic-orb.sage { width: 250px; height: 250px; background: var(--sage); top: 50%; left: 50%; }
+    .triadic-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+    .triadic-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: var(--white-50);
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+    .triadic-title {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(48px, 8vw, 80px);
+      font-weight: 400;
+      font-style: italic;
+      line-height: 1.1;
+      margin-bottom: 32px;
+      background: linear-gradient(135deg, var(--white) 0%, var(--purple) 50%, var(--orange) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .triadic-desc {
+      font-size: 18px;
+      color: var(--white-70);
+      max-width: 600px;
+      line-height: 1.7;
+      margin-bottom: 48px;
+    }
+    .triadic-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 32px;
+    }
+    .triadic-link {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 1px;
+      color: var(--white-50);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .triadic-link:hover { color: var(--white); }
+    /* Slim Footer */
+    .slim-footer {
+      padding: 24px 48px;
+      border-top: 1px solid var(--white-08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .slim-footer-copy {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--white-30);
+    }
+    .slim-footer-links {
+      display: flex;
+      gap: 24px;
+    }
+    .slim-footer-links a {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--white-30);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .slim-footer-links a:hover { color: var(--white-70); }
+    /* Responsive */
     @media (max-width: 768px) {
-      .menu-toggle {
-        bottom: 20px;
-        right: 20px;
-        width: 50px;
-        height: 50px;
-      }
-      .nav-overlay-links a {
-        font-size: 16px;
-        letter-spacing: 3px;
-        padding: 10px 20px;
-      }
+      .nav { padding: 20px 24px; }
+      .hero { padding: 100px 24px 60px; min-height: 50vh; }
+      .research-statement { padding: 60px 24px; }
+      .cv-content { padding: 0 24px 80px; }
+      .cv-section { margin-bottom: 60px; }
+      .entry-header { flex-direction: column; gap: 8px; }
+      .entry-date { order: -1; }
+      .triadic-footer { padding: 80px 24px; }
+      .slim-footer { padding: 20px 24px; flex-direction: column; text-align: center; }
     }
-
   </style>
 </head>
 <body>
+  <!-- Cursor -->
+  <div class="cursor" id="cursor"></div>
+  <!-- Noise -->
+  <div class="noise"></div>
 
-  <!-- Hamburger Menu Button -->
-  <button class="menu-toggle" id="menu-toggle" onclick="toggleNav()">
-    <span></span>
-  </button>
-
-  <!-- Full Screen Nav Overlay -->
-  <nav class="nav-overlay" id="nav-overlay">
-    <div class="nav-overlay-content">
-      <div class="nav-overlay-label">NAVIGATION</div>
-      <div class="nav-overlay-links">
-        <a href="index.html">HOME</a>
-        <a href="about.html">DOSSIER</a>
-        <a href="cv.html" class="active">CV</a>
-        <a href="labs-universe.html">LABS</a>
-        <a href="works.html">WORKS</a>
-        <a href="writing.html">WRITING</a>
-        <a href="transmissions.html">TRANSMISSIONS</a>
-        <a href="confluence.html">CONFLUENCE</a>
-        <a href="contact.html">CONTACT</a>
-      </div>
-    </div>
+  <!-- Navigation -->
+  <nav class="nav">
+    <a href="index.html" class="nav-logo">Sinclair</a>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
   </nav>
 
-
-  <div class="scanlines"></div>
-  <div class="scroll-progress" id="scroll-progress"></div>
-  <canvas id="particle-canvas"></canvas>
-  <div class="grid-overlay"></div>
-  <div class="radar-sweep"><div class="radar-ring"></div><div class="radar-ring"></div><div class="radar-ring"></div></div>
-
-  <header class="command-header">
-    <div class="header-left">
-      <a href="index.html" class="back-btn">← HOME</a>
-      <span class="header-title">PERSONNEL DOSSIER</span>
-    </div>
-  </header>
-
-  <main class="main-content">
-
-    <div class="dossier-header">
-      <div class="dossier-label">PERSONNEL FILE // CLEARANCE LEVEL OMEGA</div>
-      <h1 class="dossier-name">SINCLAIR OGAGA EMOGHENE</h1>
-      <p class="dossier-title">ASSISTANT PROFESSOR · CHOREOGRAPHER · RESEARCHER</p>
-      <div class="dossier-links">
-        <span>University of Texas at Austin</span>
-        <a href="https://sinclair.dance" target="_blank">sinclair.dance</a>
-        <a href="/cdn-cgi/l/email-protection#6a19030409060b0318440f07050d020f040f2a0b1f191e0304441f1e0f120b19440f0e1f"><span class="__cf_email__" data-cfemail="02716b6c616e636b702c676f6d656a676c6742637771766b6c2c7776677a63712c676677">[email&#160;protected]</span></a>
-        <a href="https://orcid.org/0000-0001-9362-3992" target="_blank">ORCID: 0000-0001-9362-3992</a>
+  <!-- Fullscreen Menu -->
+  <div class="menu-overlay" id="menuOverlay">
+    <div class="menu-content">
+      <div class="menu-label">Navigation</div>
+      <div class="menu-links">
+        <a href="index.html">Index</a>
+        <a href="about.html">About</a>
+        <a href="cv.html" class="active">CV</a>
+        <a href="playground.html">Playground</a>
+        <a href="writing.html">Writing</a>
+        <a href="contact.html">Contact</a>
       </div>
     </div>
+  </div>
 
-    <div class="research-statement">
-      <p>My research investigates the intersections of dance, technology, and cultural memory, focusing on how embodied knowledge is archived, transmitted, and reactivated through digital, material, and affective systems. Central to my work are projects such as Global Movement Research (GMR) and The Thinking Archive, which examine the transformation of archival practice through artificial embodied intelligence (AEI), motion capture, and ethical design.</p>
+  <!-- Hero -->
+  <section class="hero">
+    <span class="hero-label">Personnel Dossier</span>
+    <h1 class="hero-title">Curriculum Vitae</h1>
+    <div class="hero-meta">
+      <div class="hero-meta-item">Sinclair Ogaga Emoghene</div>
+      <div class="hero-meta-item">Assistant Professor / Choreographer / Researcher</div>
+      <div class="hero-meta-item">University of Texas at Austin</div>
+      <div class="hero-meta-item"><a href="https://sinclair.dance" target="_blank">sinclair.dance</a></div>
+      <div class="hero-meta-item"><a href="https://orcid.org/0000-0001-9362-3992" target="_blank">ORCID: 0000-0001-9362-3992</a></div>
     </div>
+  </section>
 
-    <!-- EDUCATION -->
+  <!-- Research Statement -->
+  <section class="research-statement">
+    <p>My research investigates the intersections of dance, technology, and cultural memory, focusing on how embodied knowledge is archived, transmitted, and reactivated through digital, material, and affective systems. Central to my work are projects such as Global Movement Research (GMR) and The Thinking Archive, which examine the transformation of archival practice through artificial embodied intelligence (AEI), motion capture, and ethical design.</p>
+  </section>
+
+  <!-- CV Content -->
+  <div class="cv-content">
+
+    <!-- Education -->
     <section class="cv-section">
       <div class="section-header">
-        <span class="section-title">EDUCATION</span>
-        <span class="typing-dots"></span>
+        <span class="section-accent orange"></span>
+        <span class="section-title">Education</span>
       </div>
       <div class="cv-entry">
         <div class="entry-header">
@@ -462,7 +473,7 @@
           <span class="entry-date">2016</span>
         </div>
         <p class="entry-subtitle">University of Maryland, College Park, MD</p>
-        <p class="entry-desc">Thesis: Nyam Chiem – Reconstructing and Performing Nightmare: A Dance Research in Performance of Sleep Paralysis</p>
+        <p class="entry-desc">Thesis: Nyam Chiem - Reconstructing and Performing Nightmare: A Dance Research in Performance of Sleep Paralysis</p>
       </div>
       <div class="cv-entry">
         <div class="entry-header">
@@ -470,92 +481,92 @@
           <span class="entry-date">2007</span>
         </div>
         <p class="entry-subtitle">Federal University of Benin, Benin City, Edo State, Nigeria</p>
-        <p class="entry-desc">Major – Dance, Theatre, Acting, Costume and Directing</p>
+        <p class="entry-desc">Major - Dance, Theatre, Acting, Costume and Directing</p>
       </div>
     </section>
 
-    <!-- ACADEMIC POSITIONS -->
+    <!-- Academic Positions -->
     <section class="cv-section">
       <div class="section-header">
-        <span class="section-title">ACADEMIC POSITIONS</span>
-        <span class="typing-dots"></span>
+        <span class="section-accent purple"></span>
+        <span class="section-title">Academic Positions</span>
       </div>
       <div class="cv-entry">
         <div class="entry-header">
           <span class="entry-title">Assistant Professor of Theatre and Dance (Tenure-Track)</span>
-          <span class="entry-date">2024–PRESENT</span>
+          <span class="entry-date">2024-Present</span>
         </div>
         <p class="entry-subtitle">The University of Texas at Austin, Austin, TX</p>
       </div>
       <div class="cv-entry">
         <div class="entry-header">
           <span class="entry-title">Assistant Professor of Dance and Choreography (Tenure-Track)</span>
-          <span class="entry-date">2019–2024</span>
+          <span class="entry-date">2019-2024</span>
         </div>
         <p class="entry-subtitle">Virginia Commonwealth University, Richmond, VA</p>
       </div>
     </section>
 
-    <!-- CREATIVE LABS -->
+    <!-- Creative Labs -->
     <section class="cv-section">
       <div class="section-header">
-        <span class="section-title">CREATIVE LABS</span>
-        <span class="typing-dots"></span>
+        <span class="section-accent sage"></span>
+        <span class="section-title">Creative Labs</span>
       </div>
       <div class="cv-entry">
         <div class="entry-header">
           <span class="entry-title">The Sensorium Project - Integrated Lab</span>
-          <span class="entry-date">2025–PRESENT</span>
+          <span class="entry-date">2025-Present</span>
         </div>
         <p class="entry-subtitle">Creator, Lead Researcher & Choreographer</p>
         <p class="entry-desc">First full-scale performance experiment integrating soft-robotic fluidic sensors with live choreography. Cross-disciplinary collaboration with engineering and media design teams.</p>
       </div>
       <div class="cv-entry">
         <div class="entry-header">
-          <span class="entry-title">Global Movement Research (GMR) Laboratory – Phase II</span>
-          <span class="entry-date">2024–PRESENT</span>
+          <span class="entry-title">Global Movement Research (GMR) Laboratory - Phase II</span>
+          <span class="entry-date">2024-Present</span>
         </div>
-        <p class="entry-subtitle">Principal Investigator – Lab Director</p>
+        <p class="entry-subtitle">Principal Investigator - Lab Director</p>
         <p class="entry-desc">Advanced research on Artificial Embodied Intelligence (AEI) and multimodal data fusion through motion capture and haptic visualization. Institutional Affiliation: The University of Texas at Austin.</p>
       </div>
       <div class="cv-entry">
         <div class="entry-header">
-          <span class="entry-title">Global Movement Research (GMR) Lab – Phase I</span>
-          <span class="entry-date">2023–2024</span>
+          <span class="entry-title">Global Movement Research (GMR) Lab - Phase I</span>
+          <span class="entry-date">2023-2024</span>
         </div>
-        <p class="entry-subtitle">Principal Investigator – Lab Director</p>
+        <p class="entry-subtitle">Principal Investigator - Lab Director</p>
         <p class="entry-desc">Data Capture, Annotation, and Experimental documentation of African and diasporic dance forms. Motion Capture Trials and Early Prototypes for the Thinking Archive (A.I. model).</p>
       </div>
       <div class="cv-entry">
         <div class="entry-header">
           <span class="entry-title">The Dance Confluence (MVP in production)</span>
-          <span class="entry-date">2025–PRESENT</span>
+          <span class="entry-date">2025-Present</span>
         </div>
-        <p class="entry-subtitle">The University of Texas at Austin – Lead Mobile Application Designer</p>
+        <p class="entry-subtitle">The University of Texas at Austin - Lead Mobile Application Designer</p>
         <p class="entry-desc">First-of-its-kind mobile app containing motion-capture data from GMR, geo-spatial detailing and remote sensing information.</p>
       </div>
       <div class="cv-entry">
         <div class="entry-header">
           <span class="entry-title">Global Movement Research (GMR): Creating an AEI</span>
-          <span class="entry-date">2024–PRESENT</span>
+          <span class="entry-date">2024-Present</span>
         </div>
-        <p class="entry-subtitle">The University of Texas at Austin – Lead Researcher and Project Lead</p>
+        <p class="entry-subtitle">The University of Texas at Austin - Lead Researcher and Project Lead</p>
         <p class="entry-desc">Assembled over 59 dances and thousands of metadata body-point materials. Metadata used for AI training within the GMR Dance Confluence app.</p>
       </div>
     </section>
 
-    <!-- PUBLICATIONS -->
+    <!-- Publications -->
     <section class="cv-section">
       <div class="section-header">
-        <span class="section-title">PUBLICATIONS</span>
-        <span class="typing-dots"></span>
+        <span class="section-accent coral"></span>
+        <span class="section-title">Publications</span>
       </div>
       <div class="cv-entry">
         <div class="entry-header">
           <span class="entry-title">Global Movement Research (GMR): Dance Technology and Process Documentation</span>
           <span class="entry-date">2025</span>
         </div>
-        <p class="entry-subtitle">Book Proposal under review – Routledge Taylor & Francis (~70,000 words)</p>
+        <p class="entry-subtitle">Book Proposal under review - Routledge Taylor & Francis (~70,000 words)</p>
       </div>
       <div class="cv-entry">
         <div class="entry-header">
@@ -575,17 +586,17 @@
       <div class="cv-entry">
         <div class="entry-header">
           <span class="entry-title">Shaping Southern Shifts: Provocations in/through Laban Bartenieff Movement Studies</span>
-          <span class="entry-date">2024–PRESENT</span>
+          <span class="entry-date">2024-Present</span>
         </div>
-        <p class="entry-subtitle">ESI Publications, South Africa – Book Editor (one of 4)</p>
+        <p class="entry-subtitle">ESI Publications, South Africa - Book Editor (one of 4)</p>
       </div>
     </section>
 
-    <!-- CHOREOGRAPHY (FILM) -->
+    <!-- Choreography Film -->
     <section class="cv-section">
       <div class="section-header">
-        <span class="section-title">CHOREOGRAPHY // FILM</span>
-        <span class="typing-dots"></span>
+        <span class="section-accent amber"></span>
+        <span class="section-title">Choreography / Film</span>
       </div>
       <div class="cv-entry">
         <div class="entry-header">
@@ -621,7 +632,7 @@
       </div>
       <div class="cv-entry">
         <div class="entry-header">
-          <span class="entry-title">International Dance Music Video – Tony Harmony</span>
+          <span class="entry-title">International Dance Music Video - Tony Harmony</span>
           <span class="entry-date">2008</span>
         </div>
         <p class="entry-subtitle">Nigeria</p>
@@ -629,11 +640,11 @@
       </div>
     </section>
 
-    <!-- CHOREOGRAPHY (STAGE) -->
+    <!-- Choreography Stage -->
     <section class="cv-section">
       <div class="section-header">
-        <span class="section-title">CHOREOGRAPHY // STAGE</span>
-        <span class="typing-dots"></span>
+        <span class="section-accent sky"></span>
+        <span class="section-title">Choreography / Stage</span>
       </div>
       <div class="cv-entry">
         <div class="entry-header">
@@ -672,7 +683,7 @@
           <span class="entry-title">Nyam Chiem (Thesis Performance)</span>
           <span class="entry-date">2016</span>
         </div>
-        <p class="entry-subtitle">Dance Theater, The Clarice – University of Maryland</p>
+        <p class="entry-subtitle">Dance Theater, The Clarice - University of Maryland</p>
         <p class="entry-desc">Reconstructing and Performing Nightmare: A Dance Research in Performance of Sleep Paralysis.</p>
       </div>
       <div class="cv-entry">
@@ -680,16 +691,16 @@
           <span class="entry-title">Love + Peace = Bad Names</span>
           <span class="entry-date">2016</span>
         </div>
-        <p class="entry-subtitle">Dance Theater, The Clarice – University of Maryland</p>
+        <p class="entry-subtitle">Dance Theater, The Clarice - University of Maryland</p>
         <p class="entry-desc">NextDANCE Alumni Commission, NextNOW Festival ($2,500 commission).</p>
       </div>
     </section>
 
-    <!-- SITE-SPECIFIC & INSTALLATIONS -->
+    <!-- Site-Specific & Installations -->
     <section class="cv-section">
       <div class="section-header">
-        <span class="section-title">SITE-SPECIFIC & INSTALLATIONS</span>
-        <span class="typing-dots"></span>
+        <span class="section-accent orange"></span>
+        <span class="section-title">Site-Specific & Installations</span>
       </div>
       <div class="cv-entry">
         <div class="entry-header">
@@ -736,23 +747,23 @@
           <span class="entry-title">Rooted on a Moving Spot (ROAMS)</span>
           <span class="entry-date">2016</span>
         </div>
-        <p class="entry-subtitle">Arts and Sociology Building – University of Maryland</p>
+        <p class="entry-subtitle">Arts and Sociology Building - University of Maryland</p>
         <p class="entry-desc">Self-produced dance and live-art collaboration with Pablo Salazar and Beki Bausch.</p>
       </div>
     </section>
 
-    <!-- EXTERNAL GRANTS & AWARDS -->
+    <!-- External Grants & Awards -->
     <section class="cv-section">
       <div class="section-header">
-        <span class="section-title">EXTERNAL GRANTS & AWARDS</span>
-        <span class="typing-dots"></span>
+        <span class="section-accent purple"></span>
+        <span class="section-title">External Grants & Awards</span>
       </div>
       <div class="cv-entry">
         <div class="entry-header">
           <span class="entry-title">Dancing in the World: Revealing Cultural Confluences (Podcast)</span>
           <span class="entry-date">2022</span>
         </div>
-        <p class="entry-subtitle">Maryland State Arts Council – Creativity Grant</p>
+        <p class="entry-subtitle">Maryland State Arts Council - Creativity Grant</p>
         <p class="entry-amount">$4,000</p>
       </div>
       <div class="cv-entry">
@@ -773,50 +784,50 @@
       </div>
       <div class="cv-entry">
         <div class="entry-header">
-          <span class="entry-title">Facets of Esoterics – Office Hours Award</span>
+          <span class="entry-title">Facets of Esoterics - Office Hours Award</span>
           <span class="entry-date">2019</span>
         </div>
-        <p class="entry-subtitle">The REACH at The John F. Kennedy Center – First dance artist selected</p>
+        <p class="entry-subtitle">The REACH at The John F. Kennedy Center - First dance artist selected</p>
         <p class="entry-amount">$10,000</p>
       </div>
     </section>
 
-    <!-- INTERNAL RESEARCH FUNDING -->
+    <!-- Internal Research Funding -->
     <section class="cv-section">
       <div class="section-header">
-        <span class="section-title">INTERNAL RESEARCH FUNDING</span>
-        <span class="typing-dots"></span>
+        <span class="section-accent sage"></span>
+        <span class="section-title">Internal Research Funding</span>
       </div>
       <div class="cv-entry">
         <div class="entry-header">
           <span class="entry-title">The Ten Poem Project</span>
           <span class="entry-date">2025</span>
         </div>
-        <p class="entry-subtitle">University of Texas at Austin – College of Fine Arts Creative Research Grant</p>
+        <p class="entry-subtitle">University of Texas at Austin - College of Fine Arts Creative Research Grant</p>
         <p class="entry-amount">$9,845</p>
       </div>
       <div class="cv-entry">
         <div class="entry-header">
           <span class="entry-title">Global Movement Research (GMR)</span>
-          <span class="entry-date">2024–PRESENT</span>
+          <span class="entry-date">2024-Present</span>
         </div>
-        <p class="entry-subtitle">University of Texas at Austin – Faculty Start-Up Fund</p>
+        <p class="entry-subtitle">University of Texas at Austin - Faculty Start-Up Fund</p>
         <p class="entry-amount">$3,000</p>
       </div>
       <div class="cv-entry">
         <div class="entry-header">
           <span class="entry-title">Theatre and Dance Chair Fellowship</span>
-          <span class="entry-date">2024–PRESENT</span>
+          <span class="entry-date">2024-Present</span>
         </div>
-        <p class="entry-subtitle">University of Texas at Austin – Faculty Research Fund</p>
+        <p class="entry-subtitle">University of Texas at Austin - Faculty Research Fund</p>
         <p class="entry-amount">$3,000</p>
       </div>
       <div class="cv-entry">
         <div class="entry-header">
           <span class="entry-title">Living Archive / Global Movement Research</span>
-          <span class="entry-date">2022–2023</span>
+          <span class="entry-date">2022-2023</span>
         </div>
-        <p class="entry-subtitle">Virginia Commonwealth University – Arts, Humanities, and Social Sciences Fund</p>
+        <p class="entry-subtitle">Virginia Commonwealth University - Arts, Humanities, and Social Sciences Fund</p>
         <p class="entry-amount">$9,883</p>
       </div>
       <div class="cv-entry">
@@ -824,7 +835,7 @@
           <span class="entry-title">Dancing in the World (Book Writing Grant)</span>
           <span class="entry-date">2022</span>
         </div>
-        <p class="entry-subtitle">Virginia Commonwealth University – Dean's Research Grant</p>
+        <p class="entry-subtitle">Virginia Commonwealth University - Dean's Research Grant</p>
         <p class="entry-amount">$5,000</p>
       </div>
       <div class="cv-entry">
@@ -832,7 +843,7 @@
           <span class="entry-title">Living Archives Research</span>
           <span class="entry-date">2021</span>
         </div>
-        <p class="entry-subtitle">Virginia Commonwealth University – Dean's Research Grant</p>
+        <p class="entry-subtitle">Virginia Commonwealth University - Dean's Research Grant</p>
         <p class="entry-amount">$4,500</p>
       </div>
       <div class="cv-entry">
@@ -840,20 +851,20 @@
           <span class="entry-title">Kaleidoscope of Tuts</span>
           <span class="entry-date">2020</span>
         </div>
-        <p class="entry-subtitle">Virginia Commonwealth University – Dean's Research Grant</p>
+        <p class="entry-subtitle">Virginia Commonwealth University - Dean's Research Grant</p>
         <p class="entry-amount">$5,000</p>
       </div>
     </section>
 
-    <!-- AWARDS & HONORS -->
+    <!-- Awards & Honors -->
     <section class="cv-section">
       <div class="section-header">
-        <span class="section-title">AWARDS & HONORS</span>
-        <span class="typing-dots"></span>
+        <span class="section-accent coral"></span>
+        <span class="section-title">Awards & Honors</span>
       </div>
       <div class="cv-entry">
         <div class="entry-header">
-          <span class="entry-title">NextLOOK Alumni Award – Distinguished Award for Alumni of the Year</span>
+          <span class="entry-title">NextLOOK Alumni Award - Distinguished Award for Alumni of the Year</span>
           <span class="entry-date">2016</span>
         </div>
         <p class="entry-subtitle">University of Maryland</p>
@@ -863,14 +874,14 @@
           <span class="entry-title">International Teaching Fellowship Program</span>
           <span class="entry-date">2015</span>
         </div>
-        <p class="entry-subtitle">University of Maryland – Teaching & Learning Transformation Center</p>
+        <p class="entry-subtitle">University of Maryland - Teaching & Learning Transformation Center</p>
       </div>
       <div class="cv-entry">
         <div class="entry-header">
           <span class="entry-title">Dean Fellowship</span>
           <span class="entry-date">2013</span>
         </div>
-        <p class="entry-subtitle">University of Maryland, College Park – Department of Theater, Dance and Performance Studies</p>
+        <p class="entry-subtitle">University of Maryland, College Park - Department of Theater, Dance and Performance Studies</p>
       </div>
       <div class="cv-entry">
         <div class="entry-header">
@@ -882,29 +893,29 @@
       <div class="cv-entry">
         <div class="entry-header">
           <span class="entry-title">Best Dancer Award</span>
-          <span class="entry-date">2005–2006</span>
+          <span class="entry-date">2005-2006</span>
         </div>
         <p class="entry-subtitle">University of Benin, Department of Theatre Arts</p>
       </div>
     </section>
 
-    <!-- TEACHING -->
+    <!-- Teaching -->
     <section class="cv-section">
       <div class="section-header">
-        <span class="section-title">TEACHING</span>
-        <span class="typing-dots"></span>
+        <span class="section-accent amber"></span>
+        <span class="section-title">Teaching</span>
       </div>
       <div class="cv-entry">
         <div class="entry-header">
           <span class="entry-title">University of Texas at Austin</span>
-          <span class="entry-date">2024–PRESENT</span>
+          <span class="entry-date">2024-Present</span>
         </div>
         <p class="entry-desc">Dance History I (TD 317M), Choreography II (TD 332N), Advanced Contemporary Dance (TD 322E), Intermediate Contemporary Dance (TD 322D), Projects in Dance Performance and Repertory (TD 232P/332P)</p>
       </div>
       <div class="cv-entry">
         <div class="entry-header">
           <span class="entry-title">Virginia Commonwealth University</span>
-          <span class="entry-date">2019–2024</span>
+          <span class="entry-date">2019-2024</span>
         </div>
         <p class="entry-desc">Dance in World Cultures (DANC 313), West African Dance (DANC 191), Modern Dance II-IV (DANC 202-401), Dance History (DANC 104), Composition (DANC 206)</p>
       </div>
@@ -917,25 +928,25 @@
       </div>
     </section>
 
-    <!-- GUEST LECTURES -->
+    <!-- Guest Lectures -->
     <section class="cv-section">
       <div class="section-header">
-        <span class="section-title">GUEST LECTURES & PRESENTATIONS</span>
-        <span class="typing-dots"></span>
+        <span class="section-accent sky"></span>
+        <span class="section-title">Guest Lectures & Presentations</span>
       </div>
       <div class="cv-entry">
         <div class="entry-header">
           <span class="entry-title">West African Dance Masterclass</span>
           <span class="entry-date">2025</span>
         </div>
-        <p class="entry-subtitle">American College Dance Association (ACDA) – Texas State University, San Marcos, TX</p>
+        <p class="entry-subtitle">American College Dance Association (ACDA) - Texas State University, San Marcos, TX</p>
       </div>
       <div class="cv-entry">
         <div class="entry-header">
           <span class="entry-title">Contemporary West African Dance Masterclass</span>
           <span class="entry-date">2024</span>
         </div>
-        <p class="entry-subtitle">American College Dance Association (ACDA) – Meredith College, Raleigh, NC</p>
+        <p class="entry-subtitle">American College Dance Association (ACDA) - Meredith College, Raleigh, NC</p>
       </div>
       <div class="cv-entry">
         <div class="entry-header">
@@ -949,7 +960,7 @@
           <span class="entry-title">Conversations in the Atlantic Theory: Dancing in the World</span>
           <span class="entry-date">2023</span>
         </div>
-        <p class="entry-subtitle">Journal of French and Francophone Philosophy – Online Interview</p>
+        <p class="entry-subtitle">Journal of French and Francophone Philosophy - Online Interview</p>
       </div>
       <div class="cv-entry">
         <div class="entry-header">
@@ -960,11 +971,11 @@
       </div>
     </section>
 
-    <!-- PRESS & MEDIA -->
+    <!-- Press & Media -->
     <section class="cv-section">
       <div class="section-header">
-        <span class="section-title">PRESS & MEDIA</span>
-        <span class="typing-dots"></span>
+        <span class="section-accent orange"></span>
+        <span class="section-title">Press & Media</span>
       </div>
       <div class="cv-entry">
         <div class="entry-header">
@@ -1014,134 +1025,193 @@
       </div>
     </section>
 
-    <!-- SERVICE TO THE FIELD -->
+    <!-- Service to the Field -->
     <section class="cv-section">
       <div class="section-header">
-        <span class="section-title">SERVICE TO THE FIELD</span>
-        <span class="typing-dots"></span>
+        <span class="section-accent purple"></span>
+        <span class="section-title">Service to the Field</span>
       </div>
       <div class="cv-entry">
         <div class="entry-header">
-          <span class="entry-title">Curator – <a href="https://dancefilmmaking.com" target="_blank" style="color: var(--white);">DanceFilmmaking.com</a></span>
-          <span class="entry-date">2023–PRESENT</span>
+          <span class="entry-title">Curator - <a href="https://dancefilmmaking.com" target="_blank" class="entry-link">DanceFilmmaking.com</a></span>
+          <span class="entry-date">2023-Present</span>
         </div>
         <p class="entry-subtitle">International Dance Film Platform</p>
       </div>
       <div class="cv-entry">
         <div class="entry-header">
-          <span class="entry-title">Faculty Representative – ACDA</span>
-          <span class="entry-date">2024–2025</span>
+          <span class="entry-title">Faculty Representative - ACDA</span>
+          <span class="entry-date">2024-2025</span>
         </div>
-        <p class="entry-subtitle">American College Dance Association – Texas State & Meredith College</p>
+        <p class="entry-subtitle">American College Dance Association - Texas State & Meredith College</p>
       </div>
     </section>
 
-    <!-- PROFESSIONAL AFFILIATIONS -->
+    <!-- Professional Affiliations -->
     <section class="cv-section">
       <div class="section-header">
-        <span class="section-title">PROFESSIONAL AFFILIATIONS</span>
-        <span class="typing-dots"></span>
+        <span class="section-accent sage"></span>
+        <span class="section-title">Professional Affiliations</span>
       </div>
       <div class="cv-entry">
         <div class="entry-header">
           <span class="entry-title">StepMate Dance Outfit</span>
-          <span class="entry-date">2025–PRESENT</span>
+          <span class="entry-date">2025-Present</span>
         </div>
-        <p class="entry-subtitle">Director, Lead Instructor, Choreographer, Artistic Director & Founder – Austin, TX</p>
+        <p class="entry-subtitle">Director, Lead Instructor, Choreographer, Artistic Director & Founder - Austin, TX</p>
       </div>
       <div class="cv-entry">
         <div class="entry-header">
           <span class="entry-title">Sinclair Dance / WXYZ Art Factory</span>
-          <span class="entry-date">2010–2024</span>
+          <span class="entry-date">2010-2024</span>
         </div>
-        <p class="entry-subtitle">Director – Benin City, Nigeria & Richmond, Virginia</p>
+        <p class="entry-subtitle">Director - Benin City, Nigeria & Richmond, Virginia</p>
       </div>
     </section>
 
-    <!-- MEMBERSHIPS -->
+    <!-- Memberships -->
     <section class="cv-section">
       <div class="section-header">
-        <span class="section-title">MEMBERSHIPS</span>
-        <span class="typing-dots"></span>
+        <span class="section-accent coral"></span>
+        <span class="section-title">Memberships</span>
       </div>
-      <div class="cv-entry">
-        <p class="entry-desc">Dance Studies Association (DSA) · 2019–Present<br>
-        National Dance Education Organization (NDEO) · 2014–Present<br>
-        National Association for Nigerian Theatre Arts Practitioners (NANTAP) · 2010–2011<br>
-        Dance Guild of Nigeria / International Dance Council (CID), UNESCO · 2010–2011</p>
+      <div class="simple-list">
+        <p>Dance Studies Association (DSA) - 2019-Present<br>
+        National Dance Education Organization (NDEO) - 2014-Present<br>
+        National Association for Nigerian Theatre Arts Practitioners (NANTAP) - 2010-2011<br>
+        Dance Guild of Nigeria / International Dance Council (CID), UNESCO - 2010-2011</p>
       </div>
     </section>
 
-    <!-- INSTITUTIONAL COLLABORATIONS -->
+    <!-- Institutional Collaborations -->
     <section class="cv-section">
       <div class="section-header">
-        <span class="section-title">INSTITUTIONAL COLLABORATIONS</span>
-        <span class="typing-dots"></span>
+        <span class="section-accent amber"></span>
+        <span class="section-title">Institutional Collaborations</span>
       </div>
-      <div class="cv-entry">
-        <p class="entry-desc">U.S. Library of Congress – Washington D.C. – GMR Research Support<br>
-        Association for Cultural Equity – New York, New York – Alan Lomax Archive<br>
-        Mount Holyoke College – South Hadley, Massachusetts<br>
-        University of Maryland, College Park – Institutional Partnership</p>
+      <div class="simple-list">
+        <p>U.S. Library of Congress - Washington D.C. - GMR Research Support<br>
+        Association for Cultural Equity - New York, New York - Alan Lomax Archive<br>
+        Mount Holyoke College - South Hadley, Massachusetts<br>
+        University of Maryland, College Park - Institutional Partnership</p>
       </div>
     </section>
 
-  </main>
+  </div>
 
+  <!-- Triadic Mind Footer -->
+  <footer class="triadic-footer">
+    <div class="triadic-orbs">
+      <div class="triadic-orb orange"></div>
+      <div class="triadic-orb purple"></div>
+      <div class="triadic-orb sage"></div>
+    </div>
+    <div class="triadic-content">
+      <span class="triadic-label">The Triadic Mind</span>
+      <h2 class="triadic-title">Research. Movement. Technology.</h2>
+      <p class="triadic-desc">Exploring the convergence of embodied knowledge, digital archives, and cultural memory through dance and emerging technologies.</p>
+      <div class="triadic-links">
+        <a href="index.html" class="triadic-link">Index</a>
+        <a href="about.html" class="triadic-link">About</a>
+        <a href="cv.html" class="triadic-link">CV</a>
+        <a href="playground.html" class="triadic-link">Playground</a>
+        <a href="writing.html" class="triadic-link">Writing</a>
+        <a href="contact.html" class="triadic-link">Contact</a>
+      </div>
+    </div>
+  </footer>
 
-  <nav class="nav-pills">
-    <a href="index.html" class="nav-pill">HOME</a>
-    <a href="about.html" class="nav-pill">BRIEFING</a>
-    <a href="labs-universe.html" class="nav-pill">LABS</a>
-    <a href="works.html" class="nav-pill">WORKS</a>
-    <a href="writing.html" class="nav-pill">WRITING</a>
-    <a href="confluence.html" class="nav-pill">CONFLUENCE</a>
-    <a href="contact.html" class="nav-pill">CONTACT</a>
-  </nav>
+  <!-- Slim Footer -->
+  <div class="slim-footer">
+    <span class="slim-footer-copy">&copy; 2025 Sinclair Emoghene. All rights reserved.</span>
+    <div class="slim-footer-links">
+      <a href="https://sinclair.dance" target="_blank">sinclair.dance</a>
+      <a href="https://orcid.org/0000-0001-9362-3992" target="_blank">ORCID</a>
+    </div>
+  </div>
 
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.0.42/dist/lenis.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
   <script>
+    // Lenis Smooth Scroll
+    const lenis = new Lenis({
+      duration: 1.4,
+      easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+      touchMultiplier: 1.5
+    });
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add(t => { lenis.raf(t * 1000); });
+    gsap.ticker.lagSmoothing(0);
 
-    // Nav Toggle
-    function toggleNav() {
-      const toggle = document.getElementById('menu-toggle');
-      const overlay = document.getElementById('nav-overlay');
-      toggle.classList.toggle('active');
-      overlay.classList.toggle('active');
-      document.body.style.overflow = overlay.classList.contains('active') ? 'hidden' : '';
-    }
+    // Custom Cursor
+    const cursor = document.getElementById('cursor');
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+    });
+    document.querySelectorAll('a, button').forEach(el => {
+      el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+      el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+    });
 
+    // Menu Toggle
+    const navToggle = document.getElementById('navToggle');
+    const menuOverlay = document.getElementById('menuOverlay');
+    navToggle.addEventListener('click', () => {
+      navToggle.classList.toggle('active');
+      menuOverlay.classList.toggle('active');
+      document.body.style.overflow = menuOverlay.classList.contains('active') ? 'hidden' : '';
+    });
 
-    // Loading animation - auto-init after brief delay
-    setTimeout(() => { initAnimations(); }, 500);
+    // GSAP Animations
+    gsap.registerPlugin(ScrollTrigger);
 
-    // === ANIMATION SYSTEM ===
-    function initAnimations() { initParticles(); initScrollReveal(); initScrollProgress(); initPageTransitions(); }
-    function initParticles() {
-      const canvas = document.getElementById('particle-canvas'); if (!canvas) return;
-      const ctx = canvas.getContext('2d');
-      function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-      resize(); window.addEventListener('resize', resize);
-      const particles = [];
-      for (let i = 0; i < 50; i++) particles.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, vx: (Math.random() - 0.5) * 0.3, vy: (Math.random() - 0.5) * 0.3, size: Math.random() * 2 + 0.5, opacity: Math.random() * 0.5 + 0.2 });
-      function animate() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        particles.forEach(p => { p.x += p.vx; p.y += p.vy; if (p.x < 0) p.x = canvas.width; if (p.x > canvas.width) p.x = 0; if (p.y < 0) p.y = canvas.height; if (p.y > canvas.height) p.y = 0; ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fillStyle = 'rgba(255,255,255,' + p.opacity + ')'; ctx.fill(); });
-        requestAnimationFrame(animate);
-      }
-      animate();
-    }
-    function initScrollReveal() { const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('revealed'); }); }, { threshold: 0.1 }); document.querySelectorAll('.reveal').forEach(el => observer.observe(el)); }
-    function initScrollProgress() { const bar = document.getElementById('scroll-progress'); if (!bar) return; window.addEventListener('scroll', () => { bar.style.width = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100 + '%'; }); }
-    function initPageTransitions() { document.querySelectorAll('a').forEach(link => { if (link.hostname === window.location.hostname && !link.hasAttribute('target')) { link.addEventListener('click', (e) => { const href = link.getAttribute('href'); if (href && !href.startsWith('#')) { e.preventDefault(); document.body.style.opacity = '0'; document.body.style.transition = 'opacity 0.3s'; setTimeout(() => window.location.href = href, 300); } }); } }); }
+    // Hero animation
+    gsap.from('.hero-label', { opacity: 0, y: 30, duration: 1, delay: 0.2 });
+    gsap.from('.hero-title', { opacity: 0, y: 50, duration: 1.2, delay: 0.4 });
+    gsap.from('.hero-meta', { opacity: 0, y: 30, duration: 1, delay: 0.7 });
+
+    // Research statement animation
+    gsap.from('.research-statement', {
+      scrollTrigger: { trigger: '.research-statement', start: 'top 80%' },
+      opacity: 0,
+      y: 40,
+      duration: 1
+    });
+
+    // Section animations
+    gsap.utils.toArray('.cv-section').forEach(section => {
+      gsap.from(section, {
+        scrollTrigger: { trigger: section, start: 'top 85%' },
+        opacity: 0,
+        y: 40,
+        duration: 0.8
+      });
+    });
+
+    // Entry stagger animations
+    gsap.utils.toArray('.cv-section').forEach(section => {
+      const entries = section.querySelectorAll('.cv-entry');
+      gsap.from(entries, {
+        scrollTrigger: { trigger: section, start: 'top 80%' },
+        opacity: 0,
+        x: -20,
+        duration: 0.5,
+        stagger: 0.1
+      });
+    });
   </script>
 
-<!-- Service Worker -->
-<script>
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/service-worker.js')
+  <!-- Service Worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/service-worker.js')
         .then(reg => console.log('[PWA] Registered'))
         .catch(err => console.error('[PWA] Failed:', err));
-}
-</script>
+    }
+  </script>
 </body>
 </html>
