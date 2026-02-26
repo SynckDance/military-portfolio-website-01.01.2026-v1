@@ -98,7 +98,7 @@
     @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
     .hero-title { font-family: 'Instrument Serif', serif; font-size: clamp(48px, 12vw, 140px); font-weight: 400; font-style: italic; line-height: 0.95; letter-spacing: -0.02em; margin-bottom: 32px; }
     .hero-title .line { display: block; overflow: hidden; }
-    .hero-title .line-inner { display: block; transform: translateY(110%); }
+    .hero-title .line-inner { display: block;  }
     .hero-desc { font-family: 'Syne', sans-serif; font-size: clamp(16px, 2vw, 20px); color: var(--white-50); max-width: 600px; line-height: 1.7; }
 
     /* Section */
@@ -714,7 +714,7 @@
     const menuOverlay = document.getElementById('menuOverlay');
     menuBtn.addEventListener('click', () => { menuBtn.classList.toggle('open'); menuOverlay.classList.toggle('open'); document.body.style.overflow = menuOverlay.classList.contains('open') ? 'hidden' : ''; });
 
-    gsap.to('.hero-title .line-inner', { y: 0, duration: 1.2, ease: 'power4.out', stagger: 0.1, delay: 0.3 });
+    gsap.fromTo('.hero-title .line-inner', { y: '110%' }, { y: 0, duration: 1.2, ease: 'power4.out', stagger: 0.1, delay: 0.3 });
     gsap.utils.toArray('[data-reveal]').forEach(el => { ScrollTrigger.create({ trigger: el, start: 'top 85%', onEnter: () => el.classList.add('revealed') }); });
 
     // Filter functionality

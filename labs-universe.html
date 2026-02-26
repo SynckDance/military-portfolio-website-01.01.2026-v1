@@ -283,7 +283,7 @@
 
     .hero-title .line-inner {
       display: block;
-      transform: translateY(110%);
+      
     }
 
     .hero-title .gradient-text {
@@ -930,7 +930,7 @@
     });
 
     // Hero Animation
-    gsap.to('.hero-title .line-inner', {
+    gsap.fromTo('.hero-title .line-inner', { y: '110%' }, {
       y: 0,
       duration: 1.2,
       ease: 'power4.out',
