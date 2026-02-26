@@ -142,7 +142,7 @@
     }
     .menu-links { list-style: none; text-align: center; }
     .menu-links li { overflow: hidden; }
-    .menu-links a { display: inline-block; font-family: 'Instrument Serif', serif; font-size: clamp(32px, 6vw, 64px); font-style: italic; color: var(--white-30); text-decoration: none; padding: 8px 0; transition: color 0.3s ease, transform 0.3s ease; transform: translateY(100%); }
+    .menu-links a { display: inline-block; font-family: 'Instrument Serif', serif; font-size: clamp(24px, 4vw, 44px); font-style: italic; color: var(--white-30); text-decoration: none; padding: 4px 0; transition: color 0.3s ease, transform 0.3s ease; transform: translateY(100%); }
     .menu-overlay.open .menu-links a { transform: translateY(0); }
     .menu-links li:nth-child(1) a { transition-delay: 0.05s; }
     .menu-links li:nth-child(2) a { transition-delay: 0.1s; }
@@ -1148,10 +1148,11 @@
     // Lenis Smooth Scroll
     try {
       const lenis = new Lenis({
-        duration: 1.4,
-        easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        duration: 0.8,
+        easing: t => 1 - Math.pow(1 - t, 4),
         smoothWheel: true,
-        touchMultiplier: 1.5
+        wheelMultiplier: 1,
+        touchMultiplier: 2
       });
       lenis.on('scroll', ScrollTrigger.update);
       gsap.ticker.add(t => { lenis.raf(t * 1000); });

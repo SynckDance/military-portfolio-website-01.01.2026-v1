@@ -175,11 +175,11 @@
     .menu-links a {
       display: inline-block;
       font-family: 'Instrument Serif', serif;
-      font-size: clamp(32px, 6vw, 64px);
+      font-size: clamp(24px, 4vw, 44px);
       font-style: italic;
       color: var(--white-30);
       text-decoration: none;
-      padding: 8px 0;
+      padding: 4px 0;
       transition: color 0.3s ease, transform 0.3s ease;
       transform: translateY(100%);
     }
@@ -1048,6 +1048,20 @@
         </svg>
       </a>
 
+      <!-- Recipra -->
+      <a href="https://recipra.thetriadic.studio" target="_blank" class="card" data-category="tools" data-reveal>
+        <div class="card-tag">Platform</div>
+        <h3 class="card-title">Recipra</h3>
+        <p class="card-desc">Collaborative research tool for dance scholars and practitioners to share knowledge and build connections.</p>
+        <div class="card-meta">
+          <span>Web Platform</span>
+          <span>Live</span>
+        </div>
+        <svg class="card-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M7 17L17 7M17 7H7M17 7V17"/>
+        </svg>
+      </a>
+
       <!-- Motion Capture Demo -->
       <div class="card" data-category="demos" data-reveal>
         <div class="card-tag">Demo</div>
@@ -1142,9 +1156,9 @@
   <footer class="footer">
     <span class="footer-copy">© 2025 Sinclair Emoghene</span>
     <div class="footer-social">
-      <a href="https://instagram.com/sinclairdance" target="_blank">Instagram</a>
-      <a href="https://twitter.com/sinclairdance" target="_blank">Twitter</a>
-      <a href="https://vimeo.com/sinclairdance" target="_blank">Vimeo</a>
+      <a href="https://instagram.com/so_gaga" target="_blank">Instagram</a>
+      <a href="https://vimeo.com/thetriadicstudio" target="_blank">Vimeo</a>
+      <a href="https://thetriadic.studio" target="_blank">Platform</a>
       <a href="https://github.com/SynckDance" target="_blank">GitHub</a>
     </div>
   </footer>
@@ -1537,10 +1551,11 @@
     // Lenis Smooth Scroll
     try {
       const lenis = new Lenis({
-        duration: 1.4,
-        easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        duration: 0.8,
+        easing: t => 1 - Math.pow(1 - t, 4),
         smoothWheel: true,
-        touchMultiplier: 1.5
+        wheelMultiplier: 1,
+        touchMultiplier: 2
       });
 
       lenis.on('scroll', ScrollTrigger.update);
